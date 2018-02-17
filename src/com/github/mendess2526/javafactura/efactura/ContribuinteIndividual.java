@@ -1,4 +1,4 @@
-package com.github.mendess2526.javafactura.datamodel;
+package com.github.mendess2526.javafactura.efactura;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -67,7 +67,7 @@ public class ContribuinteIndividual extends Contribuinte {
 
     @Override
     public String toString(){
-        return "ContribuinteIndividual{" +
+        return super.toString() + "ContribuinteIndividual{" +
                 "dependant_num=" + dependant_num +
                 ", dependants=" + dependants +
                 ", fiscal_coefficient=" + fiscal_coefficient +

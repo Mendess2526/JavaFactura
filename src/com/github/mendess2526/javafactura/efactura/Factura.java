@@ -1,4 +1,4 @@
-package com.github.mendess2526.javafactura.datamodel;
+package com.github.mendess2526.javafactura.efactura;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -11,10 +11,10 @@ public class Factura {
     private final String clientNif;
     private final String description;
     private final EconActivity type;
-    private final double value;
+    private final float value;
 
     public Factura(String issuerNif, String issuerName, LocalDateTime date, String clientNif,
-                   String description, EconActivity type, double value){
+                   String description, EconActivity type, float value){
         this.issuerNif = issuerNif;
         this.issuerName = issuerName;
         this.date = date;
@@ -58,7 +58,7 @@ public class Factura {
         return type;
     }
 
-    public double getValue(){
+    public float getValue(){
         return value;
     }
 

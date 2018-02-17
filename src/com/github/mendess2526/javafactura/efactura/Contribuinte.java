@@ -1,4 +1,4 @@
-package com.github.mendess2526.javafactura.datamodel;
+package com.github.mendess2526.javafactura.efactura;
 
 import java.util.Objects;
 
@@ -6,14 +6,14 @@ public abstract class Contribuinte {
 
     private final String nif;
     private String email;
-    private final String nome;
+    private final String name;
     private String address;
     private String password;
 
     public Contribuinte(String nif, String email, String nome, String address, String password){
         this.nif = nif;
         this.email = email;
-        this.nome = nome;
+        this.name = nome;
         this.address = address;
         this.password = password;
     }
@@ -30,8 +30,8 @@ public abstract class Contribuinte {
         this.email = email;
     }
 
-    public String getNome(){
-        return nome;
+    public String getName(){
+        return name;
     }
 
     public String getAddress(){
@@ -57,7 +57,7 @@ public abstract class Contribuinte {
         Contribuinte that = (Contribuinte) o;
         return Objects.equals(getNif(), that.getNif()) &&
                 Objects.equals(getEmail(), that.getEmail()) &&
-                Objects.equals(getNome(), that.getNome()) &&
+                Objects.equals(getName(), that.getName()) &&
                 Objects.equals(getAddress(), that.getAddress()) &&
                 Objects.equals(getPassword(), that.getPassword());
     }
@@ -67,7 +67,7 @@ public abstract class Contribuinte {
         return "Contribuinte{" +
                 "nif='" + nif + '\'' +
                 ", email='" + email + '\'' +
-                ", nome='" + nome + '\'' +
+                ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", password='" + password + '\'' +
                 '}';
