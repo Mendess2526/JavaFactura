@@ -1,16 +1,16 @@
 package com.github.mendess2526.javafactura.userInterface.screens;
 
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Scanner;
+
 /**
  * Esta classe implementa um menu em modo texto.
  *
  * @author Pedro Mendes Félix da Costa
  * @version 3/6/2017
  */
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
-
-public class Menu implements Screen{
+public class Menu implements Screen<Integer>{
 
     /**
      * Menu name
@@ -89,10 +89,8 @@ public class Menu implements Screen{
         return op;
     }
 
-    /**
-     * Returns the picked option
-     */
-    int getOption() {
+    @Override
+    public Integer getResult(){
         return this.op;
     }
 }

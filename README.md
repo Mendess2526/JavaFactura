@@ -10,4 +10,5 @@ a variaveis? O mesmo para `equals` `hashCode`
 * Posso escrever o codigo em ingles? Os nomes das classes tb? E a documentação
 * `@Override`
 * package access modifiers
+* Posso usar Generics
 * O que não posso usar?

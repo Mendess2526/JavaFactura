@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class Form implements Screen{
+public class Form implements Screen<Map<Integer,String>>{
     private String name;
     private Map<Integer,String> fields;
     private Map<Integer,String> answers;
@@ -26,13 +26,14 @@ public class Form implements Screen{
         }
     }
 
-    private String readField() {
+    private String readField(){
         try(Scanner is = new Scanner(System.in)){
             return is.nextLine();
         }
     }
 
-    public Map<Integer,String> getAnswers(){
-        return this.answers;
+    @Override
+    public Map<Integer,String> getResult(){
+        return new HashMap<>(this.answers);
     }
 }

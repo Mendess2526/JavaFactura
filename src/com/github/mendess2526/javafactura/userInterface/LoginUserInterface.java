@@ -35,7 +35,7 @@ public class LoginUserInterface implements UserInterface {
         fields.put(1,"Password: ");
         Form login = new Form("Login",fields);
         login.execute();
-        Map<Integer,String> answers = login.getAnswers();
+        Map<Integer,String> answers = login.getResult();
         return new String[]{answers.get(0), answers.get(1)};
     }
 }
