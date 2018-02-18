@@ -11,4 +11,5 @@ a variaveis? O mesmo para `equals` `hashCode`
 * `@Override`
 * package access modifiers
 * Posso usar Generics
+* Posso usar jsons para guardar algumas coisas (não todo o estado)
 * O que não posso usar?

@@ -36,9 +36,7 @@ public class Menu implements Screen<Integer>{
         this.op = 0;
     }
 
-    /**
-     * Runs the menu
-     */
+    @Override
     public void execute() {
         do {
             showMenu();
@@ -63,7 +61,7 @@ public class Menu implements Screen<Integer>{
     /**
      * Clears the screen
      */
-    private static void clearScreen() {
+    private void clearScreen() {
         System.out.print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
         System.out.flush();
     }

@@ -18,17 +18,14 @@ public class Form implements Screen<Map<Integer,String>>{
         }
     }
 
+    @Override
     public void execute(){
-        System.out.println("**** "+this.name+" ****");
-        for(Integer key: fields.keySet()){
-            System.out.println(this.fields.get(key));
-            this.answers.replace(key,readField());
-        }
-    }
-
-    private String readField(){
+        System.out.println("**** " + this.name + " ****");
         try(Scanner is = new Scanner(System.in)){
-            return is.nextLine();
+            for(Integer key : fields.keySet()){
+                System.out.println(this.fields.get(key));
+                this.answers.replace(key, is.nextLine());
+            }
         }
     }
 

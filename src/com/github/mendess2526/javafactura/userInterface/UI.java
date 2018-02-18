@@ -1,5 +1,5 @@
 package com.github.mendess2526.javafactura.userInterface;
 
-public interface UserInterface {
+public interface UI {
     void run();
 }

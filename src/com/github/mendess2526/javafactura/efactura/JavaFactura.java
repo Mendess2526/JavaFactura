@@ -12,22 +12,25 @@ public class JavaFactura {
 
     private List<Factura> facturas;
 
-    private String loggedInUser;
+    private User loggedInUser;
 
     private String adminPassword;
 
-    private boolean isAdmin;
 
     public JavaFactura(){
         this.contribuintes = loadContribuintes();
         this.facturas = loadFacturas();
-        this.isAdmin = false;
+        this.loggedInUser = null;
         this.adminPassword = getAdminPassword();
 
     }
 
+    public User getLoggedInUser(){
+        return this.loggedInUser;
+    }
+
     private String getAdminPassword(){
-        return "admin";//TODO read from file
+        return "admin";
     }
 
     public void setAdminPassword(String adminPassword){
@@ -35,18 +38,14 @@ public class JavaFactura {
         //TODO update file
     }
 
-    public boolean isAdmin(){
-        return isAdmin;
-    }
-
     public void login(String nif, String password) throws InvalidCredentialsException{
         if(nif.equals("admin") && password.equals(this.adminPassword)){
-            this.isAdmin = true;
+            this.loggedInUser = new Admin();
         }else{
             Contribuinte user = this.contribuintes.get(nif);
             if(user == null || ! user.getPassword().equals(password))
                 throw new InvalidCredentialsException();
-            this.loggedInUser = nif;
+            this.loggedInUser = user;
         }
     }
 
