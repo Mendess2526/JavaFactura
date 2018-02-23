@@ -10,9 +10,11 @@ public class ContribuinteIndividual extends Contribuinte {
     private double fiscal_coefficient;
     private EnumSet<EconActivity> econActivities;
 
-    public ContribuinteIndividual(String nif, String email, String nome, String address, String password,
-                                  int dependant_num, List<String> dependants, double fiscal_coefficient,
-                                  EnumSet<EconActivity> econActivities){
+
+
+    public ContribuinteIndividual(String nif, String email, String nome, String address,
+                                  String password, int dependant_num, List<String> dependants,
+                                  double fiscal_coefficient, EnumSet<EconActivity> econActivities){
         super(nif, email, nome, address, password);
 
         this.dependant_num = dependant_num;
@@ -20,6 +22,15 @@ public class ContribuinteIndividual extends Contribuinte {
         this.fiscal_coefficient = fiscal_coefficient;
         this.econActivities = econActivities;
     }
+
+    public ContribuinteIndividual(ContribuinteIndividual contribuinteIndividual){
+        super(contribuinteIndividual);
+        this.dependant_num = contribuinteIndividual.getDependant_num();
+        this.dependants = contribuinteIndividual.getDependants();
+        this.fiscal_coefficient = contribuinteIndividual.getFiscal_coefficient();
+        this.econActivities = contribuinteIndividual.getEconActivities();
+    }
+
 
     public int getDependant_num(){
         return dependant_num;
@@ -56,22 +67,26 @@ public class ContribuinteIndividual extends Contribuinte {
     @Override
     public boolean equals(Object o){
         if(this == o) return true;
+
         if(o == null || getClass() != o.getClass()) return false;
+
         if(! super.equals(o)) return false;
-        ContribuinteIndividual c = (ContribuinteIndividual) o;
-        return dependant_num == c.getDependant_num() &&
-                this.fiscal_coefficient == c.getFiscal_coefficient() &&
-                this.dependants.equals(c.getDependants()) &&
-                this.econActivities.equals(c.getEconActivities());
+
+        ContribuinteIndividual that = (ContribuinteIndividual) o;
+        return dependant_num == that.getDependant_num() &&
+                this.fiscal_coefficient == that.getFiscal_coefficient() &&
+                this.dependants.equals(that.getDependants()) &&
+                this.econActivities.equals(that.getEconActivities());
     }
 
     @Override
     public String toString(){
-        return super.toString() + "ContribuinteIndividual{" +
-                "dependant_num=" + dependant_num +
-                ", dependants=" + dependants +
-                ", fiscal_coefficient=" + fiscal_coefficient +
-                ", econActivities=" + econActivities +
-                '}';
+        return new StringBuilder().append(super.toString())
+                .append("ContribuinteIndividual{")
+                .append("dependant_num=").append(this.dependant_num)
+                .append(", dependants=").append(this.dependants)
+                .append(", fiscal_coefficient=").append(this.fiscal_coefficient)
+                .append(", econActivities=").append(this.econActivities)
+                .append('}').toString();
     }
 }

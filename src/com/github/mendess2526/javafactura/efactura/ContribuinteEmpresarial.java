@@ -6,14 +6,29 @@ import java.util.Objects;
 public class ContribuinteEmpresarial extends Contribuinte{
 
     private EnumSet<EconActivity> econActivities;
-    private double fiscal_coefficient;
+    private double fiscalCoefficient;
 
-    public ContribuinteEmpresarial(String nif, String email, String nome, String address, String password,
-                                   double fiscal_coefficient, EnumSet<EconActivity> econActivities){
+    public ContribuinteEmpresarial(){
+        super();
+        econActivities = EnumSet.noneOf(EconActivity.class);
+        fiscalCoefficient = 0;
+    }
+
+    public ContribuinteEmpresarial(String nif, String email, String nome,
+                                   String address, String password,
+                                   double fiscalCoefficient,
+                                   EnumSet<EconActivity> econActivities){
         super(nif, email, nome, address, password);
         this.econActivities = econActivities;
-        this.fiscal_coefficient = fiscal_coefficient;
+        this.fiscalCoefficient = fiscalCoefficient;
     }
+
+    public ContribuinteEmpresarial(ContribuinteEmpresarial contribuinteEmpresarial){
+        super(contribuinteEmpresarial);
+        this.econActivities = contribuinteEmpresarial.getEconActivities();
+        this.fiscalCoefficient = contribuinteEmpresarial.getFiscalCoefficient();
+    }
+
 
     public EnumSet<EconActivity> getEconActivities(){
         return econActivities;
@@ -23,12 +38,12 @@ public class ContribuinteEmpresarial extends Contribuinte{
         this.econActivities = econActivities;
     }
 
-    public double getFiscal_coefficient(){
-        return fiscal_coefficient;
+    public double getFiscalCoefficient(){
+        return fiscalCoefficient;
     }
 
-    public void setFiscal_coefficient(double fiscal_coefficient){
-        this.fiscal_coefficient = fiscal_coefficient;
+    public void setFiscalCoefficient(double fiscalCoefficient){
+        this.fiscalCoefficient = fiscalCoefficient;
     }
 
     @Override
@@ -40,21 +55,23 @@ public class ContribuinteEmpresarial extends Contribuinte{
         if(! super.equals(o)) return false;
 
         ContribuinteEmpresarial that = (ContribuinteEmpresarial) o;
-        return Double.compare(that.getFiscal_coefficient(), getFiscal_coefficient()) == 0 &&
-                Objects.equals(getEconActivities(), that.getEconActivities());
+        return  this.fiscalCoefficient == that.getFiscalCoefficient() &&
+                this.econActivities.equals(that.getEconActivities());
     }
 
     @Override
     public int hashCode(){
 
-        return Objects.hash(getEconActivities(), getFiscal_coefficient());
+        return Objects.hash(getEconActivities(), getFiscalCoefficient());
     }
 
     @Override
     public String toString(){
-        return super.toString() + "ContribuinteEmpresarial{" +
-                "econActivities=" + econActivities +
-                ", fiscal_coefficient=" + fiscal_coefficient +
-                '}';
+        return new StringBuilder()
+                .append(super.toString())
+                .append("ContribuinteEmpresarial{")
+                .append("econActivities=").append(this.econActivities)
+                .append(", fiscalCoefficient=").append(this.fiscalCoefficient)
+                .append('}').toString();
     }
 }

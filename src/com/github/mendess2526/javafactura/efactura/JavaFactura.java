@@ -25,7 +25,7 @@ public class JavaFactura {
 
     }
 
-    public User getLoggedInUser(){
+    public User getLoggedUser(){
         return this.loggedInUser;
     }
 

@@ -4,11 +4,37 @@ import java.util.Objects;
 
 public abstract class Contribuinte implements User{
 
+    /**
+     * The NIF of the Contribuinte
+     */
     private final String nif;
+    /**
+     * The email of the Contribuinte
+     */
     private String email;
+    /**
+     * The name of the Contribuinte
+     */
     private final String name;
+    /**
+     * The address of the Contribuinte
+     */
     private String address;
+    /**
+     * The password of the Contribuinte
+     */
     private String password;
+
+    /**
+     * The empty <i></i>
+     */
+    public Contribuinte(){
+        nif = "";
+        email = "";
+        name = "";
+        address = "";
+        password = "";
+    }
 
     public Contribuinte(String nif, String email, String nome, String address, String password){
         this.nif = nif;
@@ -17,6 +43,15 @@ public abstract class Contribuinte implements User{
         this.address = address;
         this.password = password;
     }
+
+    public Contribuinte(Contribuinte contribuinte){
+        this.nif = contribuinte.getNif();
+        this.email = contribuinte.getEmail();
+        this.name = contribuinte.getName();
+        this.address = contribuinte.getAddress();
+        this.password = contribuinte.getPassword();
+    }
+
 
     public String getNif(){
         return nif;
@@ -53,23 +88,26 @@ public abstract class Contribuinte implements User{
     @Override
     public boolean equals(Object o){
         if(this == o) return true;
+
         if(o == null || getClass() != o.getClass()) return false;
+
         Contribuinte that = (Contribuinte) o;
-        return Objects.equals(getNif(), that.getNif()) &&
-                Objects.equals(getEmail(), that.getEmail()) &&
-                Objects.equals(getName(), that.getName()) &&
-                Objects.equals(getAddress(), that.getAddress()) &&
-                Objects.equals(getPassword(), that.getPassword());
+        return this.nif.equals(that.getNif()) &&
+                this.email.equals(that.getEmail()) &&
+                this.name.equals(that.getName()) &&
+                this.address.equals(that.getAddress()) &&
+                this.password.equals(that.getPassword());
     }
 
     @Override
     public String toString(){
-        return "Contribuinte{" +
-                "nif='" + nif + '\'' +
-                ", email='" + email + '\'' +
-                ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+        return new StringBuilder()
+                .append("Contribuinte{")
+                .append("nif='").append(nif).append('\'')
+                .append(", email='").append(email).append('\'')
+                .append(", name='").append(name).append('\'')
+                .append(", address='").append(address).append('\'')
+                .append(", password='").append(password).append('\'')
+                .append('}').toString();
     }
 }

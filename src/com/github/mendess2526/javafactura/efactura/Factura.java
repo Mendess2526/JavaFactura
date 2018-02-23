@@ -39,6 +39,19 @@ public class Factura {
     private boolean pending;
 
     /**
+     * Empty constructor
+     */
+    public Factura(){
+        this.issuerNif = "";
+        this.issuerName = "";
+        this.date = null;
+        this.clientNif = "";
+        this.description = "";
+        this.type = null;
+        this.value = 0.0f;
+    }
+
+    /**
      * \brief Fully parameterised constructor for <tt>Factura</tt>
      * @param issuerNif The NIF of the entity that issued this Receipt
      * @param issuerName The name of the entity that issued this Receipt
@@ -62,17 +75,17 @@ public class Factura {
 
     /**
      * Copy constructor for <tt>Factura</tt>
-     * @param other the <tt>Factura</tt> to copy
+     * @param factura the <tt>Factura</tt> to copy
      */
-    public Factura(Factura other){
-        this.issuerNif = other.getIssuerNif();
-        this.issuerName = other.getIssuerName();
-        this.date = other.getDate();
-        this.clientNif = other.getClientNif();
-        this.description = other.getDescription();
-        this.type = other.getType();
-        this.value = other.getValue();
-        this.pending = other.isPending();
+    public Factura(Factura factura){
+        this.issuerNif = factura.getIssuerNif();
+        this.issuerName = factura.getIssuerName();
+        this.date = factura.getDate();
+        this.clientNif = factura.getClientNif();
+        this.description = factura.getDescription();
+        this.type = factura.getType();
+        this.value = factura.getValue();
+        this.pending = factura.isPending();
     }
 
     /**
@@ -80,40 +93,74 @@ public class Factura {
      * @return The NIF of the entity that issued this Receipt
      */
     public String getIssuerNif(){
-        return issuerNif;
+        return this.issuerNif;
     }
 
+    /**
+     * Returns the Name of the company that issued the receipt
+     * @return The Name of the company that issued the receipt
+     */
     public String getIssuerName(){
-        return issuerName;
+        return this.issuerName;
     }
 
+    /**
+     * Returns the date of the receipt
+     * @return The date of the receipt
+     */
     public LocalDateTime getDate(){
-        return date;
+        return this.date;
     }
 
+    /**
+     * Returns the NIF of the client
+     * @return The NIF of the client
+     */
     public String getClientNif(){
-        return clientNif;
+        return this.clientNif;
     }
 
+    /**
+     * Returns the description of the purchase
+     * @return The description of the purchase
+     */
     public String getDescription(){
-        return description;
+        return this.description;
     }
 
+    /**
+     * Returns the type of the receipt
+     * @return The type of the receipt
+     */
     public EconActivity getType(){
-        return type;
+        return this.type;
     }
 
+    /**
+     * Returns the value of the purchase
+     * @return The value of the purchase
+     */
     public float getValue(){
-        return value;
+        return this.value;
     }
 
+    /**
+     * Returns if the receipt is pending
+     * @return <tt>true</tt> if the receipt is pending
+     */
     public boolean isPending(){
-        return pending;
+        return this.pending;
     }
 
+    /**
+     * Changes the type of the receipt
+     * @param type the new type
+     */
     public void setType(EconActivity type){
-        this.type = type;
-        this.pending = type == null;
+        if(this.pending){
+            this.type = type;
+            this.pending = type == null;
+        }
     }
 
     @Override
@@ -122,28 +169,43 @@ public class Factura {
 
         if(o == null || getClass() != o.getClass()) return false;
 
-        Factura factura = (Factura) o;
-        return factura.getValue() == this.value &&
-                Objects.equals(this.issuerNif, factura.issuerNif) &&
-                Objects.equals(this.issuerName, factura.issuerName) &&
-                Objects.equals(this.date, factura.date) &&
-                Objects.equals(this.clientNif, factura.clientNif) &&
-                Objects.equals(this.description, factura.description) &&
-                this.type == factura.getType();
+        Factura that = (Factura) o;
+        return  this.value == that.getValue() &&
+                this.issuerNif.equals(that.getIssuerNif()) &&
+                this.issuerName.equals(that.getIssuerName()) &&
+                this.date.equals(that.getDate()) &&
+                this.clientNif.equals(that.getClientNif()) &&
+                this.description.equals(that.getDescription()) &&
+                this.type == that.getType();
     }
 
     @Override
     public String toString(){
         return "Factura{" +
-                "issuerNif='" + issuerNif + '\'' +
-                ", issuerName='" + issuerName + '\'' +
-                ", date=" + date +
-                ", clientNif='" + clientNif + '\'' +
-                ", description='" + description + '\'' +
-                ", type=" + type +
-                ", value=" + value +
+                "issuerNif='" + this.issuerNif + '\'' +
+                ", issuerName='" + this.issuerName + '\'' +
+                ", date=" + this.date +
+                ", clientNif='" + this.clientNif + '\'' +
+                ", description='" + this.description + '\'' +
+                ", type=" + this.type +
+                ", value=" + this.value +
                 '}';
     }
+
+    /*
+    @Override
+    public String toString(){
+        return new StringBuilder().append("Factura{")
+                .append("issuerNif='").append(this.issuerNif).append('\'')
+                .append(", issuerName='").append(this.issuerName).append('\'')
+                .append(", date=").append(this.date)
+                .append(", clientNif='").append(this.clientNif).append('\'')
+                .append(", description='").append(this.description).append('\'')
+                .append(", type=").append(this.type)
+                .append(", value=").append(this.value)
+                .append('}').toString();
+    }
+     */
 
     public Factura clone(){
         return new Factura(this);

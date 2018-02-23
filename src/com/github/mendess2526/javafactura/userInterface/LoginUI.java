@@ -12,6 +12,10 @@ public class LoginUI implements UI {
 
     private JavaFactura javaFactura;
 
+    /**
+     * \brief Constructor for the loginUI
+     * @param javaFactura The instance of the business logic
+     */
     LoginUI(JavaFactura javaFactura){
         this.javaFactura = javaFactura;
     }
@@ -27,7 +31,7 @@ public class LoginUI implements UI {
             System.out.println("Invalid credentials");
             return;
         }
-        User u = this.javaFactura.getLoggedInUser();
+        User u = this.javaFactura.getLoggedUser();
         if(u instanceof Admin){
             new AdminUI(javaFactura).run();
         }else if(u instanceof ContribuinteIndividual){
@@ -54,7 +58,7 @@ public class LoginUI implements UI {
     /**
      * \brief Wrapper class to pass the credentials gotten from the form
      */
-    private class Credentials{
+    private final class Credentials{
         private String nif;
         private String pass;
 
