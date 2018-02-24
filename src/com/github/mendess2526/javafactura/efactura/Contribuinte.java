@@ -1,7 +1,5 @@
 package com.github.mendess2526.javafactura.efactura;
 
-import java.util.Objects;
-
 public abstract class Contribuinte implements User{
 
     /**

@@ -1,7 +1,6 @@
 package com.github.mendess2526.javafactura.efactura;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 public class Factura {
 
@@ -52,7 +51,7 @@ public class Factura {
     }
 
     /**
-     * \brief Fully parameterised constructor for <tt>Factura</tt>
+     * \brief Fully parametrised constructor for <tt>Factura</tt>
      * @param issuerNif The NIF of the entity that issued this Receipt
      * @param issuerName The name of the entity that issued this Receipt
      * @param date The date this Receipt was issued

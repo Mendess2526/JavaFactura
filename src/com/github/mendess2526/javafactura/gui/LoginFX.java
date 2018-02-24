@@ -2,9 +2,6 @@ package com.github.mendess2526.javafactura.gui;
 
 import com.github.mendess2526.javafactura.efactura.*;
 import com.github.mendess2526.javafactura.efactura.exceptions.InvalidCredentialsException;
-import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;

@@ -2,9 +2,6 @@ package com.github.mendess2526.javafactura.gui;
 
 import com.github.mendess2526.javafactura.efactura.JavaFactura;
 import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class Main extends Application {

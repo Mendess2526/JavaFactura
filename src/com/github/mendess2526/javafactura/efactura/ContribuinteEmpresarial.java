@@ -1,7 +1,6 @@
 package com.github.mendess2526.javafactura.efactura;
 
 import java.util.EnumSet;
-import java.util.Objects;
 
 public class ContribuinteEmpresarial extends Contribuinte{
 
@@ -57,12 +56,6 @@ public class ContribuinteEmpresarial extends Contribuinte{
         ContribuinteEmpresarial that = (ContribuinteEmpresarial) o;
         return  this.fiscalCoefficient == that.getFiscalCoefficient() &&
                 this.econActivities.equals(that.getEconActivities());
-    }
-
-    @Override
-    public int hashCode(){
-
-        return Objects.hash(getEconActivities(), getFiscalCoefficient());
     }
 
     @Override

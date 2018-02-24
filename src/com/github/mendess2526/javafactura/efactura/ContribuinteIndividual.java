@@ -1,26 +1,51 @@
 package com.github.mendess2526.javafactura.efactura;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 
 public class ContribuinteIndividual extends Contribuinte {
 
+    /**
+     * The number of people dependent of this Contribuinte
+     */
     private int dependant_num;
+    /**
+     * The NIFs of the people dependant of this Contribuinte
+     */
     private List<String> dependants;
+    /**
+     * The fiscal coefficient of this Contribuinte
+     */
     private double fiscal_coefficient;
+    /**
+     * The list of Economic Activities this Contribuinte is eligible to do
+     */
     private EnumSet<EconActivity> econActivities;
 
 
-
+    /**
+     * Fully parametrised constructor for <tt>Contribuinte Individual</tt>
+     * @param nif The NIF
+     * @param email The email
+     * @param nome The name
+     * @param address The address
+     * @param password The password
+     * @param dependant_num The number of dependants on this Contribuinte
+     * @param dependants The list of NIF of the dependants
+     * @param fiscal_coefficient The fiscal coefficient of the Contribuinte
+     * @param econActivities The economic activities eligible
+     */
     public ContribuinteIndividual(String nif, String email, String nome, String address,
-                                  String password, int dependant_num, List<String> dependants,
+                                  String password, int dependant_num, Collection<String> dependants,
                                   double fiscal_coefficient, EnumSet<EconActivity> econActivities){
         super(nif, email, nome, address, password);
 
         this.dependant_num = dependant_num;
-        this.dependants = dependants;
+        this.dependants = new ArrayList<>(dependants);
         this.fiscal_coefficient = fiscal_coefficient;
-        this.econActivities = econActivities;
+        this.econActivities = EnumSet.copyOf(econActivities);
     }
 
     public ContribuinteIndividual(ContribuinteIndividual contribuinteIndividual){
