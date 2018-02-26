@@ -1,7 +1,5 @@
 package com.github.mendess2526.javafactura.efactura;
 
-import java.util.Objects;
-
 public abstract class Contribuinte implements User{
 
     /**
@@ -26,7 +24,7 @@ public abstract class Contribuinte implements User{
     private String password;
 
     /**
-     * The empty <i></i>
+     * The empty constructor
      */
     public Contribuinte(){
         nif = "";
@@ -36,14 +34,26 @@ public abstract class Contribuinte implements User{
         password = "";
     }
 
-    public Contribuinte(String nif, String email, String nome, String address, String password){
+    /**
+     * Parameterized constructor
+     * @param nif The NIF
+     * @param email The email
+     * @param name The Name
+     * @param address The Address
+     * @param password The Password
+     */
+    public Contribuinte(String nif, String email, String name, String address, String password){
         this.nif = nif;
         this.email = email;
-        this.name = nome;
+        this.name = name;
         this.address = address;
         this.password = password;
     }
 
+    /**
+     * Copy constructor
+     * @param contribuinte The Contribuinte to copy
+     */
     public Contribuinte(Contribuinte contribuinte){
         this.nif = contribuinte.getNif();
         this.email = contribuinte.getEmail();
@@ -52,35 +62,66 @@ public abstract class Contribuinte implements User{
         this.password = contribuinte.getPassword();
     }
 
-
+    /**
+     * Returns the NIF
+     * @return The NIF
+     */
     public String getNif(){
         return nif;
     }
 
+    /**
+     * Returns the email
+     * @return The email
+     */
     public String getEmail(){
         return email;
     }
 
+    /**
+     * Sets the email
+     * @param email the new email
+     */
     public void setEmail(String email){
         this.email = email;
     }
 
+    /**
+     * Returns the name
+     * @return The name
+     */
     public String getName(){
         return name;
     }
 
+    /**
+     * Returns the address
+     * @return The address
+     */
     public String getAddress(){
         return address;
     }
 
+    /**
+     * Sets the new address
+     * @param address the new address
+     */
     public void setAddress(String address){
         this.address = address;
     }
 
+    /**
+     * Returns the password
+     * @return The password
+     */
     public String getPassword(){
         return password;
     }
 
+    /**
+     * Changes the password
+     * @param password The new password
+     */
     public void setPassword(String password){
         this.password = password;
     }
@@ -101,13 +142,12 @@ public abstract class Contribuinte implements User{
 
     @Override
     public String toString(){
-        return new StringBuilder()
-                .append("Contribuinte{")
-                .append("nif='").append(nif).append('\'')
-                .append(", email='").append(email).append('\'')
-                .append(", name='").append(name).append('\'')
-                .append(", address='").append(address).append('\'')
-                .append(", password='").append(password).append('\'')
-                .append('}').toString();
+        return "Contribuinte{" +
+                "nif='" + nif + '\'' +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }

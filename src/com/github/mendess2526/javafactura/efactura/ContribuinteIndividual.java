@@ -1,26 +1,25 @@
 package com.github.mendess2526.javafactura.efactura;
 
-import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ContribuinteIndividual extends Contribuinte {
 
     private int dependant_num;
     private List<String> dependants;
     private double fiscal_coefficient;
-    private EnumSet<EconActivity> econActivities;
-
-
+    private Set<String> econActivities;
 
     public ContribuinteIndividual(String nif, String email, String nome, String address,
                                   String password, int dependant_num, List<String> dependants,
-                                  double fiscal_coefficient, EnumSet<EconActivity> econActivities){
+                                  double fiscal_coefficient, Set<String> econActivities){
         super(nif, email, nome, address, password);
 
         this.dependant_num = dependant_num;
         this.dependants = dependants;
         this.fiscal_coefficient = fiscal_coefficient;
-        this.econActivities = econActivities;
+        this.econActivities = new HashSet<>(econActivities);
     }
 
     public ContribuinteIndividual(ContribuinteIndividual contribuinteIndividual){
@@ -56,11 +55,11 @@ public class ContribuinteIndividual extends Contribuinte {
         this.fiscal_coefficient = fiscal_coefficient;
     }
 
-    public EnumSet<EconActivity> getEconActivities(){
+    public Set<String> getEconActivities(){
         return econActivities;
     }
 
-    public void setEconActivities(EnumSet<EconActivity> econActivities){
+    public void setEconActivities(Set<String> econActivities){
         this.econActivities = econActivities;
     }
 
@@ -81,12 +80,12 @@ public class ContribuinteIndividual extends Contribuinte {
 
     @Override
     public String toString(){
-        return new StringBuilder().append(super.toString())
-                .append("ContribuinteIndividual{")
-                .append("dependant_num=").append(this.dependant_num)
-                .append(", dependants=").append(this.dependants)
-                .append(", fiscal_coefficient=").append(this.fiscal_coefficient)
-                .append(", econActivities=").append(this.econActivities)
-                .append('}').toString();
+        return super.toString() +
+                "ContribuinteIndividual{" +
+                "dependant_num=" + this.dependant_num +
+                ", dependants=" + this.dependants +
+                ", fiscal_coefficient=" + this.fiscal_coefficient +
+                ", econActivities=" + this.econActivities +
+                '}';
     }
 }

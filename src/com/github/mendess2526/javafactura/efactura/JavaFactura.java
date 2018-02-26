@@ -1,6 +1,8 @@
 package com.github.mendess2526.javafactura.efactura;
 
 import com.github.mendess2526.javafactura.efactura.exceptions.InvalidCredentialsException;
+import com.github.mendess2526.javafactura.efactura.exceptions.NotEmpresaException;
+import com.github.mendess2526.javafactura.efactura.exceptions.NotIndividualException;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -49,6 +51,39 @@ public class JavaFactura {
         }
     }
 
+    public void registarInidividual(String nif, String email, String nome, String address, String password,
+                                    int dependantNum, List<String> dependants, double fiscalCoefficient,
+                                    Set<String> econActivities){
+        this.contribuintes.put(nif, new ContribuinteIndividual(
+                nif,
+                email,
+                nome,
+                address,
+                password,
+                dependantNum,
+                dependants,
+                fiscalCoefficient,
+                econActivities));
+    }
+
+    public void emitirFactura(String companyNif, float value, String description) throws NotEmpresaException,
+                                                                                         NotIndividualException{
+        Contribuinte company = this.contribuintes.get(companyNif);
+        if(company instanceof ContribuinteEmpresarial){
+            if(this.loggedInUser instanceof ContribuinteIndividual){
+                this.facturas.add(((ContribuinteEmpresarial) company).emitirFactura(
+                        ((ContribuinteIndividual) this.loggedInUser).getNif(),
+                        description,
+                        value
+                ));
+            }else {
+                throw new NotIndividualException();
+            }
+        }else{
+            throw new NotEmpresaException();
+        }
+    }
+
     private Map<String,Contribuinte> loadContribuintes(){
         Map<String,Contribuinte> contribuintes = new HashMap<>();
         for(int i=0; i<20; i++){
@@ -60,7 +95,7 @@ public class JavaFactura {
             int depend_num = i % 4;
             List<String> dependants = new ArrayList<>();//TODO make some stubs here
             double fiscal_coeficient = Math.random();
-            EnumSet<EconActivity> econActivities = EnumSet.allOf(EconActivity.class);//TODO maybe randomize this
+            Set<String> econActivities = new HashSet<>();
             contribuintes.put(nif,new ContribuinteIndividual(
                     nif,
                     email,
@@ -80,8 +115,8 @@ public class JavaFactura {
             String address = "Rua ce" + i;
             String password = "pass";
             double fiscal_coeficient = Math.random();
-            EconActivity econActivity = EconActivity.values()[new Random().nextInt(EconActivity.values().length)];
-            EnumSet<EconActivity> econActivities = EnumSet.of(econActivity);
+            Set<String> econActivities = new HashSet<>();
+            econActivities.add("F1");
             contribuintes.put(nif,new ContribuinteEmpresarial(
                     nif,
                     email,
@@ -113,15 +148,13 @@ public class JavaFactura {
             String issuerName = this.contribuintes.get(issuerNif).getName();
             String clientNif = clients.get(new Random().nextInt(clients.size()));
             String description = issuerNif + " -> " + clientNif;
-//            EconActivity type = null;
             float value = (float) Math.random() * 100;
-            facturas.add(new Factura(
+            facturas.add(new FacturaPendente(
                     issuerNif,
                     issuerName,
                     LocalDateTime.now(),
                     clientNif,
                     description,
-                    null,
                     value));
         }
         return facturas;

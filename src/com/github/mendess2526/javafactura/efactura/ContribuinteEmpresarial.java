@@ -1,25 +1,27 @@
 package com.github.mendess2526.javafactura.efactura;
 
-import java.util.EnumSet;
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class ContribuinteEmpresarial extends Contribuinte{
 
-    private EnumSet<EconActivity> econActivities;
+    private Set<String> econActivities;
     private double fiscalCoefficient;
 
     public ContribuinteEmpresarial(){
         super();
-        econActivities = EnumSet.noneOf(EconActivity.class);
+        econActivities = new HashSet<>();
         fiscalCoefficient = 0;
     }
 
     public ContribuinteEmpresarial(String nif, String email, String nome,
                                    String address, String password,
                                    double fiscalCoefficient,
-                                   EnumSet<EconActivity> econActivities){
+                                   Set<String> econActivities){
         super(nif, email, nome, address, password);
-        this.econActivities = econActivities;
+        this.econActivities = new HashSet<>(econActivities);
         this.fiscalCoefficient = fiscalCoefficient;
     }
 
@@ -30,11 +32,11 @@ public class ContribuinteEmpresarial extends Contribuinte{
     }
 
 
-    public EnumSet<EconActivity> getEconActivities(){
+    public Set<String> getEconActivities(){
         return econActivities;
     }
 
-    public void setEconActivities(EnumSet<EconActivity> econActivities){
+    public void setEconActivities(Set<String> econActivities){
         this.econActivities = econActivities;
     }
 
@@ -44,6 +46,16 @@ public class ContribuinteEmpresarial extends Contribuinte{
 
     public void setFiscalCoefficient(double fiscalCoefficient){
         this.fiscalCoefficient = fiscalCoefficient;
+    }
+
+    public Factura emitirFactura(String nif, String description, float value){
+        return new FacturaPendente(
+                this.getNif(),
+                this.getName(),
+                LocalDateTime.now(),
+                nif,
+                description,
+                value);
     }
 
     @Override
@@ -67,11 +79,10 @@ public class ContribuinteEmpresarial extends Contribuinte{
 
     @Override
     public String toString(){
-        return new StringBuilder()
-                .append(super.toString())
-                .append("ContribuinteEmpresarial{")
-                .append("econActivities=").append(this.econActivities)
-                .append(", fiscalCoefficient=").append(this.fiscalCoefficient)
-                .append('}').toString();
+        return super.toString() +
+                "ContribuinteEmpresarial{" +
+                "econActivities=" + this.econActivities +
+                ", fiscalCoefficient=" + this.fiscalCoefficient +
+                '}';
     }
 }
