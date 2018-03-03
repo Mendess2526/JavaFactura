@@ -1,61 +1,105 @@
 package com.github.mendess2526.javafactura.efactura;
 
+import com.github.mendess2526.javafactura.efactura.econSectors.EconSector;
+
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class ContribuinteEmpresarial extends Contribuinte{
 
-    private Set<String> econActivities;
+    /**
+     * The fiscal coefficient
+     */
     private double fiscalCoefficient;
+    /**
+     * The Economic Sectors this <tt>Contribuinte</tt> is eligible for
+     */
+    private List<EconSector> econActivities;
 
+    /**
+     * \brief Empty constructor
+     */
     public ContribuinteEmpresarial(){
         super();
-        econActivities = new HashSet<>();
+        econActivities = new ArrayList<>();
         fiscalCoefficient = 0;
     }
 
-    public ContribuinteEmpresarial(String nif, String email, String nome,
+    /**
+     * \brief
+     * @param nif The NIF
+     * @param email The email
+     * @param name The Name
+     * @param address The Address
+     * @param password The Password
+     * @param fiscalCoefficient The fiscal coefficient
+     * @param econActivities The economic activities
+     */
+    public ContribuinteEmpresarial(String nif, String email, String name,
                                    String address, String password,
                                    double fiscalCoefficient,
-                                   Set<String> econActivities){
-        super(nif, email, nome, address, password);
-        this.econActivities = new HashSet<>(econActivities);
+                                   Set<EconSector> econActivities){
+        super(nif, email, name, address, password);
+        this.econActivities = new ArrayList<>(econActivities);
         this.fiscalCoefficient = fiscalCoefficient;
     }
 
+    /**
+     * \brief The copy constructor
+     * @param contribuinteEmpresarial The object to clone
+     */
     public ContribuinteEmpresarial(ContribuinteEmpresarial contribuinteEmpresarial){
         super(contribuinteEmpresarial);
         this.econActivities = contribuinteEmpresarial.getEconActivities();
         this.fiscalCoefficient = contribuinteEmpresarial.getFiscalCoefficient();
     }
 
-
-    public Set<String> getEconActivities(){
+    /**
+     * Returns the economic activities
+     * @return The economic activities
+     */
+    public List<EconSector> getEconActivities(){
         return econActivities;
     }
 
-    public void setEconActivities(Set<String> econActivities){
-        this.econActivities = econActivities;
-    }
-
+    /**
+     * Returns the fiscal coefficient
+     * @return The fiscal coefficient
+     */
     public double getFiscalCoefficient(){
         return fiscalCoefficient;
     }
 
+    /**
+     * Changes the fiscal coefficient
+     * @param fiscalCoefficient the new fiscal coefficient
+     */
     public void setFiscalCoefficient(double fiscalCoefficient){
         this.fiscalCoefficient = fiscalCoefficient;
     }
 
-    public Factura emitirFactura(String nif, String description, float value){
-        return new FacturaPendente(
+    /**
+     * \brief Issues a <tt>Factura</tt>
+     * @param nif The NIF of the client
+     * @param description The description of the purchase
+     * @param value The value of the purchase
+     * @return The issued <tt>Factura</tt>
+     */
+    public Factura issueFactura(String nif, String description, float value){
+        EconSector econSector;
+        if(this.econActivities.size() > 1){
+            econSector = EconSector.factory("E00");
+        }else{
+            econSector = EconSector.factory(this.econActivities.get(0).getType());
+        }
+        return new Factura(
                 this.getNif(),
                 this.getName(),
                 LocalDateTime.now(),
                 nif,
                 description,
-                value);
+                value,
+                econSector);
     }
 
     @Override
@@ -69,12 +113,6 @@ public class ContribuinteEmpresarial extends Contribuinte{
         ContribuinteEmpresarial that = (ContribuinteEmpresarial) o;
         return  this.fiscalCoefficient == that.getFiscalCoefficient() &&
                 this.econActivities.equals(that.getEconActivities());
-    }
-
-    @Override
-    public int hashCode(){
-
-        return Objects.hash(getEconActivities(), getFiscalCoefficient());
     }
 
     @Override

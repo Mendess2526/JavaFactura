@@ -1,7 +1,7 @@
 package com.github.mendess2526.javafactura.userInterface.screens;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Form implements Screen<Map<Integer,String>>{

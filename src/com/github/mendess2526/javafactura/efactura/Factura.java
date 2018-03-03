@@ -1,11 +1,24 @@
 package com.github.mendess2526.javafactura.efactura;
 
+import com.github.mendess2526.javafactura.efactura.econSectors.Deductable;
+import com.github.mendess2526.javafactura.efactura.econSectors.EconSector;
+import com.github.mendess2526.javafactura.efactura.econSectors.Pendente;
+
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class Factura {
+public class Factura {
 
+    /**
+     * The last used id
+     */
+    private static int lastId = 0;
+
+    /**
+     * \brief The unique id the Factura
+     */
+    private final int id;
     /**
      * \brief The NIF of the entity that issued this Receipt
      */
@@ -31,14 +44,19 @@ public abstract class Factura {
      */
     private final float value;
     /**
-     *
+     * \brief History of states of this <tt>Factura</tt>
      */
     private final List<Factura> history;
+    /**
+     * \brief The economic sector
+     */
+    private EconSector econSector;
 
     /**
      * Empty constructor
      */
-    Factura(){
+    private Factura(){
+        this.id = lastId++;
         this.issuerNif = "";
         this.issuerName = "";
         this.date = null;
@@ -46,6 +64,8 @@ public abstract class Factura {
         this.description = "";
         this.value = 0.0f;
         this.history = new LinkedList<>();
+        this.history.add(this);
+        this.econSector = new Pendente();
     }
 
     /**
@@ -56,9 +76,11 @@ public abstract class Factura {
      * @param clientNif The NIF of the client to whom this Receipt was issued
      * @param description The description of the purchase
      * @param value The value of the purchase
+     * @param econSector The economic sector of this Factura
      */
-    public Factura(String issuerNif, String issuerName, LocalDateTime date, String clientNif,
-                   String description, float value){
+    Factura(String issuerNif, String issuerName, LocalDateTime date, String clientNif,
+            String description, float value, EconSector econSector){
+        this.id = lastId++;
         this.issuerNif = issuerNif;
         this.issuerName = issuerName;
         this.date = date;
@@ -66,6 +88,8 @@ public abstract class Factura {
         this.description = description;
         this.value = value;
         this.history = new LinkedList<>();
+        this.history.add(this);
+        this.econSector = econSector;
     }
 
     /**
@@ -73,6 +97,7 @@ public abstract class Factura {
      * @param factura the <tt>Factura</tt> to copy
      */
     public Factura(Factura factura){
+        this.id = factura.getId();
         this.issuerNif = factura.getIssuerNif();
         this.issuerName = factura.getIssuerName();
         this.date = factura.getDate();
@@ -80,6 +105,8 @@ public abstract class Factura {
         this.description = factura.getDescription();
         this.value = factura.getValue();
         this.history = factura.getHistory();
+        this.history.add(this);
+        this.econSector = factura.getEconSector();
     }
 
     /**
@@ -131,20 +158,62 @@ public abstract class Factura {
     }
 
     /**
+     * Returns the unique id
+     * @return The unique id
+     */
+    public int getId(){
+        return this.id;
+    }
+
+    /**
      * Returns the history of state of this <tt>Factura</tt>
      * @return The history of state of this <tt>Factura</tt>
      */
-    public List<Factura> getHistory(){
+    private List<Factura> getHistory(){
         return new LinkedList<>(this.history);
+    }
+
+    /**
+     * Returns the economic sector
+     * @return The economic sector
+     */
+    private EconSector getEconSector(){
+        return this.econSector;
+    }
+
+    /**
+     * Changes the economic sector of the <tt>Factura</tt>
+     * @param econSector the new economic sector
+     */
+    public void setEconSector(EconSector econSector){
+        this.econSector = econSector;
     }
 
     /**
      * Returns the type of the <tt>Factura</tt>
      * @return The type of the <tt>Factura</tt>
      */
-    public abstract String getType();
+    public String getType(){
+        return this.econSector.getType();
+    }
 
-    public abstract float deducao();
+    /**
+     * Returns if the <tt>Factura</tt> is deductible
+     * @return if the <tt>Factura</tt> is deductible
+     */
+    private boolean isDeductable(){
+        return this.econSector instanceof Deductable;
+    }
+    /**
+     * Returns the amount that can be deducted from this
+     * @return The amount that can be deducted from this
+     */
+    public float deducao(){
+        if(this.isDeductable()){
+            return ((Deductable) this.econSector).deduction();
+        }
+        return 0.0f;
+    }
 
     @Override
     public boolean equals(Object o){
@@ -158,18 +227,22 @@ public abstract class Factura {
                 this.issuerName.equals(that.getIssuerName()) &&
                 this.date.equals(that.getDate()) &&
                 this.clientNif.equals(that.getClientNif()) &&
-                this.description.equals(that.getDescription());
+                this.description.equals(that.getDescription()) &&
+                this.history.equals(that.history) &&
+                this.id == that.getId();
     }
 
     @Override
     public String toString(){
         return "Factura{" +
-                "issuerNif='" + this.issuerNif + '\'' +
-                ", issuerName='" + this.issuerName + '\'' +
-                ", date=" + this.date +
-                ", clientNif='" + this.clientNif + '\'' +
-                ", description='" + this.description + '\'' +
-                ", value=" + this.value +
+                "id=" + id +
+                ", issuerNif='" + issuerNif + '\'' +
+                ", issuerName='" + issuerName + '\'' +
+                ", date=" + date +
+                ", clientNif='" + clientNif + '\'' +
+                ", description='" + description + '\'' +
+                ", value=" + value +
+                ", history=" + history +
                 '}';
     }
 }

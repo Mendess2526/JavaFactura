@@ -26,7 +26,7 @@ public abstract class Contribuinte implements User{
     /**
      * The empty constructor
      */
-    public Contribuinte(){
+    Contribuinte(){
         nif = "";
         email = "";
         name = "";
@@ -42,7 +42,7 @@ public abstract class Contribuinte implements User{
      * @param address The Address
      * @param password The Password
      */
-    public Contribuinte(String nif, String email, String name, String address, String password){
+    Contribuinte(String nif, String email, String name, String address, String password){
         this.nif = nif;
         this.email = email;
         this.name = name;
@@ -54,7 +54,7 @@ public abstract class Contribuinte implements User{
      * Copy constructor
      * @param contribuinte The Contribuinte to copy
      */
-    public Contribuinte(Contribuinte contribuinte){
+    Contribuinte(Contribuinte contribuinte){
         this.nif = contribuinte.getNif();
         this.email = contribuinte.getEmail();
         this.name = contribuinte.getName();
@@ -74,7 +74,7 @@ public abstract class Contribuinte implements User{
      * Returns the email
      * @return The email
      */
-    public String getEmail(){
+    private String getEmail(){
         return email;
     }
 
@@ -98,7 +98,7 @@ public abstract class Contribuinte implements User{
      * Returns the address
      * @return The address
      */
-    public String getAddress(){
+    private String getAddress(){
         return address;
     }
 
