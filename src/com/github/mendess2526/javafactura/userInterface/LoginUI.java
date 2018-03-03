@@ -25,8 +25,8 @@ public class LoginUI implements UI {
      */
     public void run(){
         try{
-            Credentials creds = getCredentials();
-            javaFactura.login(creds.getNif(), creds.getPass());
+            Credentials credentials = getCredentials();
+            javaFactura.login(credentials.getNif(), credentials.getPass());
         }catch(NoSuchElementException | InvalidCredentialsException e){
             System.out.println("Invalid credentials");
             return;
@@ -63,7 +63,7 @@ public class LoginUI implements UI {
         private String pass;
 
         /**
-         * \brief Parameterized constructor
+         * \brief Parametrised constructor
          * @param nif nif
          * @param pass password
          */

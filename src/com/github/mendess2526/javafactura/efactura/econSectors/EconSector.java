@@ -6,7 +6,7 @@ public abstract class EconSector {
         switch(typeCode){
             case "E00": return new Pendente();
             case "E01": return new Alojamento();
-            case "E02": return new Cableireiro();
+            case "E02": return new Cabeleireiro();
             case "E03": return new Casa();
             case "E04": return new Educacao();
             case "E05": return new Familia();

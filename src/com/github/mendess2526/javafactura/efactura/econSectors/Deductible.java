@@ -1,5 +1,5 @@
 package com.github.mendess2526.javafactura.efactura.econSectors;
 
-public interface Deductable {
+public interface Deductible {
     float deduction();
 }

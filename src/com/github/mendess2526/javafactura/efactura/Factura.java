@@ -1,6 +1,6 @@
 package com.github.mendess2526.javafactura.efactura;
 
-import com.github.mendess2526.javafactura.efactura.econSectors.Deductable;
+import com.github.mendess2526.javafactura.efactura.econSectors.Deductible;
 import com.github.mendess2526.javafactura.efactura.econSectors.EconSector;
 import com.github.mendess2526.javafactura.efactura.econSectors.Pendente;
 
@@ -201,16 +201,16 @@ public class Factura {
      * Returns if the <tt>Factura</tt> is deductible
      * @return if the <tt>Factura</tt> is deductible
      */
-    private boolean isDeductable(){
-        return this.econSector instanceof Deductable;
+    private boolean isDeductible(){
+        return this.econSector instanceof Deductible;
     }
     /**
      * Returns the amount that can be deducted from this
      * @return The amount that can be deducted from this
      */
     public float deducao(){
-        if(this.isDeductable()){
-            return ((Deductable) this.econSector).deduction();
+        if(this.isDeductible()){
+            return ((Deductible) this.econSector).deduction();
         }
         return 0.0f;
     }

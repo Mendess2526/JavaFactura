@@ -35,7 +35,7 @@ public abstract class Contribuinte implements User{
     }
 
     /**
-     * Parameterized constructor
+     * Parametrised constructor
      * @param nif The NIF
      * @param email The email
      * @param name The Name

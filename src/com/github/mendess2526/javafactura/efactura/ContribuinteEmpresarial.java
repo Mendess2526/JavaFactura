@@ -87,7 +87,7 @@ public class ContribuinteEmpresarial extends Contribuinte{
      * @param value The value of the purchase
      * @return The issued <tt>Factura</tt>
      */
-    public Factura issueFactura(String nif, String description, float value){
+    Factura issueFactura(String nif, String description, float value){
         EconSector econSector;
         if(this.econActivities.size() > 1){
             econSector = EconSector.factory("E00");

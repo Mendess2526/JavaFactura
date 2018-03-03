@@ -1,6 +1,8 @@
 package com.github.mendess2526.javafactura.efactura.econSectors;
 
-public class Cableireiro extends EconSector {
+import java.io.Serializable;
+
+public class Cabeleireiro extends EconSector implements Serializable{
 
     @Override
     public String getType(){
