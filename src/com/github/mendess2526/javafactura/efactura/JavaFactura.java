@@ -4,6 +4,7 @@ import com.github.mendess2526.javafactura.efactura.econSectors.EconSector;
 import com.github.mendess2526.javafactura.efactura.econSectors.Pendente;
 import com.github.mendess2526.javafactura.efactura.exceptions.*;
 
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,21 +24,30 @@ public class JavaFactura{
         this.contribuintes = loadContribuintes();
         this.facturas = loadFacturas();
         this.loggedInUser = null;
-        this.adminPassword = getAdminPassword();
-
+        this.adminPassword = loadAdminPassword();
     }
 
     public User getLoggedUser(){
         return this.loggedInUser;
     }
 
-    private String getAdminPassword(){
-        return "admin";
+    private String loadAdminPassword(){
+        String pass;
+        try(BufferedReader reader = new BufferedReader(new FileReader("adminPass"))){
+            pass = reader.readLine();
+        }catch(IOException e){
+            pass = "admin";
+        }
+        return pass;
     }
 
     public void setAdminPassword(String adminPassword){
-        this.adminPassword = adminPassword;
-        //TODO update file
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter("adminPass"))){
+            writer.write(adminPassword);
+            this.adminPassword = adminPassword;
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
     public void login(String nif, String password) throws InvalidCredentialsException{

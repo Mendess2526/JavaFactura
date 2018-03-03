@@ -3,7 +3,9 @@ package com.github.mendess2526.javafactura.efactura;
 import com.github.mendess2526.javafactura.efactura.econSectors.EconSector;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class ContribuinteEmpresarial extends Contribuinte{
 

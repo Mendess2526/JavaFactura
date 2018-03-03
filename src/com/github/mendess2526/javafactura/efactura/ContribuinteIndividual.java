@@ -2,16 +2,36 @@ package com.github.mendess2526.javafactura.efactura;
 
 import com.github.mendess2526.javafactura.efactura.econSectors.EconSector;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
 
 public class ContribuinteIndividual extends Contribuinte {
 
+    /**
+     * The NIFs of the people dependant of this Contribuinte
+     */
     private List<String> dependants;
+    /**
+     * The fiscal coefficient of this Contribuinte
+     */
     private double fiscal_coefficient;
+
     private Set<EconSector> econActivities;
 
+    private ContribuinteIndividual(){
+    }
+
+    /**
+     * Fully parametrised constructor for <tt>Contribuinte Individual</tt>
+     * @param nif The NIF
+     * @param email The email
+     * @param nome The name
+     * @param address The address
+     * @param password The password
+     * @param dependants The list of NIF of the dependants
+     * @param fiscal_coefficient The fiscal coefficient of the Contribuinte
+     * @param econActivities The economic activities eligible
+     */
     public ContribuinteIndividual(String nif, String email, String nome, String address,
                                   String password, List<String> dependants,
                                   double fiscal_coefficient, Set<EconSector> econActivities){
@@ -19,6 +39,7 @@ public class ContribuinteIndividual extends Contribuinte {
         this.dependants = dependants;
         this.fiscal_coefficient = fiscal_coefficient;
         this.econActivities = new HashSet<>(econActivities);
+
     }
 
     public ContribuinteIndividual(ContribuinteIndividual contribuinteIndividual){
