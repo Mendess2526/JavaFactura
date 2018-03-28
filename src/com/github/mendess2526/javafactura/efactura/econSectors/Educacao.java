@@ -8,7 +8,7 @@ public class Educacao extends EconSector implements Deductible {
     }
 
     @Override
-    public float deduction(){
+    public float deduction(float value){
         return 0;
     }
 }

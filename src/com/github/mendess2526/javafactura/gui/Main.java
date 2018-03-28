@@ -12,7 +12,7 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage){
         primaryStage.setTitle("eFactura");
 
         /*Button b = new Button("Click me");
@@ -24,7 +24,7 @@ public class Main extends Application {
         primaryStage.setScene(scene);*/
         primaryStage.show();
 
-        new LoginFX(new JavaFactura(), primaryStage).run();
+        new LoginFX(JavaFactura.loadState(), primaryStage).run();
 
     }
 }

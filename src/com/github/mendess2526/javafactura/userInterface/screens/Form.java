@@ -5,9 +5,9 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class Form implements Screen<Map<Integer,String>>{
-    private String name;
-    private Map<Integer,String> fields;
-    private Map<Integer,String> answers;
+    private final String name;
+    private final Map<Integer,String> fields;
+    private final Map<Integer,String> answers;
 
     public Form(String name, Map<Integer,String> fields){
         this.name = name;

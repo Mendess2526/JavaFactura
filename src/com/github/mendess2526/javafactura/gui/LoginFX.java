@@ -16,8 +16,8 @@ import javafx.stage.Stage;
 
 public class LoginFX{
 
-    private JavaFactura javaFactura;
-    private Stage primaryStage;
+    private final JavaFactura javaFactura;
+    private final Stage primaryStage;
     private TextField userNameTextField;
     private PasswordField pwField;
     private Text errors;

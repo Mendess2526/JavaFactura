@@ -16,7 +16,7 @@ public class ContribuinteEmpresarial extends Contribuinte{
     /**
      * The Economic Sectors this <tt>Contribuinte</tt> is eligible for
      */
-    private List<EconSector> econActivities;
+    private final List<EconSector> econActivities;
 
     /**
      * \brief Empty constructor
@@ -124,5 +124,9 @@ public class ContribuinteEmpresarial extends Contribuinte{
                 "econActivities=" + this.econActivities +
                 ", fiscalCoefficient=" + this.fiscalCoefficient +
                 '}';
+    }
+
+    public ContribuinteEmpresarial clone(){
+        return new ContribuinteEmpresarial(this);
     }
 }

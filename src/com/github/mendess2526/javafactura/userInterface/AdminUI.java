@@ -4,7 +4,7 @@ import com.github.mendess2526.javafactura.efactura.JavaFactura;
 
 public class AdminUI implements UI {
 
-    private JavaFactura javaFactura;
+    private final JavaFactura javaFactura;
 
     AdminUI(JavaFactura javaFactura){
         this.javaFactura = javaFactura;

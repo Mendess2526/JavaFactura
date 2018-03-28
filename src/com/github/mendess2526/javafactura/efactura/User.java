@@ -2,4 +2,7 @@ package com.github.mendess2526.javafactura.efactura;
 
 public interface User {
 
+    String getPassword();
+
+    void setPassword(String password);
 }

@@ -4,13 +4,14 @@ import com.github.mendess2526.javafactura.efactura.*;
 import com.github.mendess2526.javafactura.efactura.exceptions.InvalidCredentialsException;
 import com.github.mendess2526.javafactura.userInterface.screens.Form;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
 public class LoginUI implements UI {
 
-    private JavaFactura javaFactura;
+    private final JavaFactura javaFactura;
 
     /**
      * \brief Constructor for the loginUI
@@ -18,6 +19,11 @@ public class LoginUI implements UI {
      */
     LoginUI(JavaFactura javaFactura){
         this.javaFactura = javaFactura;
+        try{
+            javaFactura.saveState();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -59,8 +65,8 @@ public class LoginUI implements UI {
      * \brief Wrapper class to pass the credentials gotten from the form
      */
     private final class Credentials{
-        private String nif;
-        private String pass;
+        private final String nif;
+        private final String pass;
 
         /**
          * \brief Parametrised constructor

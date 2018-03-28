@@ -1,5 +1,6 @@
 package com.github.mendess2526.javafactura.efactura;
 
+import com.github.mendess2526.javafactura.efactura.collections.Pair;
 import com.github.mendess2526.javafactura.efactura.econSectors.EconSector;
 import com.github.mendess2526.javafactura.efactura.econSectors.Pendente;
 import com.github.mendess2526.javafactura.efactura.exceptions.*;
@@ -9,50 +10,47 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class JavaFactura{
+public class JavaFactura implements Serializable{
 
-    private Map<String,Contribuinte> contribuintes;
+    private static final String SAVE_STATE_FILE = "javaFactura.dat";
 
-    private Map<Integer,Factura> faturas;
+    public static JavaFactura loadState(){
+        try(ObjectInputStream is = new ObjectInputStream(new FileInputStream(SAVE_STATE_FILE))){
+            return (JavaFactura) is.readObject();
+        }catch(IOException | ClassNotFoundException e){
+            return new JavaFactura();
+        }
+    }
+
+
+
+    private final Map<String,Contribuinte> contribuintes;
+
+    private final Map<Integer,Factura> faturas;
 
     private User loggedInUser;
 
-    private String adminPassword;
+    private final Admin admin;
 
 
-    public JavaFactura(){
+    private JavaFactura(){
         this.contribuintes = loadContribuintes();
         this.faturas = loadFaturas();
         this.loggedInUser = null;
-        this.adminPassword = loadAdminPassword();
+        this.admin = new Admin();
     }
 
     public User getLoggedUser(){
         return this.loggedInUser;
     }
 
-    private String loadAdminPassword(){
-        String pass;
-        try(BufferedReader reader = new BufferedReader(new FileReader("adminPass"))){
-            pass = reader.readLine();
-        }catch(IOException e){
-            pass = "admin";
-        }
-        return pass;
-    }
-
-    public void setAdminPassword(String adminPassword){
-        try(BufferedWriter writer = new BufferedWriter(new FileWriter("adminPass"))){
-            writer.write(adminPassword);
-            this.adminPassword = adminPassword;
-        }catch(IOException e){
-            e.printStackTrace();
-        }
+    public void setAdminPassword(String newPassword){
+        this.admin.setPassword(newPassword);
     }
 
     public void login(String nif, String password) throws InvalidCredentialsException{
-        if(nif.equals("admin") && password.equals(this.adminPassword)){
-            this.loggedInUser = new Admin();
+        if(nif.equals("admin") && password.equals(this.admin.getPassword())){
+            this.loggedInUser = this.admin;
         }else{
             Contribuinte user = this.contribuintes.get(nif);
             if(user == null || ! user.getPassword().equals(password))
@@ -62,8 +60,8 @@ public class JavaFactura{
     }
 
     public void registarIndividual(String nif, String email, String nome, String address, String password,
-                                   List<String> dependants, double fiscalCoefficient,
-                                   Set<String> econActivities){
+                                   int numDependants, List<String> dependants, double fiscalCoefficient,
+                                   Set<String> econActivities) throws InvalidNumberOfDependantsException{
         Set<EconSector> econSectors = new HashSet<>();
         for(String econActivity: econActivities){
             EconSector econSector = EconSector.factory(econActivity);
@@ -77,7 +75,26 @@ public class JavaFactura{
                 nome,
                 address,
                 password,
-                dependants,
+                numDependants, dependants,
+                fiscalCoefficient,
+                econSectors));
+    }
+    public void registarEmpresarial(String nif, String email, String nome, String address, String password,
+                                   double fiscalCoefficient, Set<String> econActivities){
+
+        Set<EconSector> econSectors = new HashSet<>();
+        for(String econActivity: econActivities){
+            EconSector econSector = EconSector.factory(econActivity);
+            if(!(econSector instanceof Pendente)){
+                econSectors.add(EconSector.factory(econActivity));
+            }
+        }
+        this.contribuintes.put(nif, new ContribuinteEmpresarial(
+                nif,
+                email,
+                nome,
+                address,
+                password,
                 fiscalCoefficient,
                 econSectors));
     }
@@ -101,14 +118,14 @@ public class JavaFactura{
         }
     }
 
-    public void changeFactura(String typeCode, int facturaID) throws InvalidFacturaTypeException{
+    public void changeFactura(String typeCode, int facturaID){
         this.faturas.get(facturaID).setEconSector(EconSector.factory(typeCode));
     }
 
     public List<Factura> faturasOfEmpresa(String nifEmpresa, Comparator<Factura> comparator){
         return this.faturas.values()
                 .stream()
-                .filter(f -> f.getIssuerNif().equals(nifEmpresa))
+                .filter(f ->f.getIssuerNif().equals(nifEmpresa))
                 .sorted(comparator)
                 .collect(Collectors.toList());
     }
@@ -148,28 +165,69 @@ public class JavaFactura{
         if(!(this.loggedInUser instanceof Admin)){
             throw new NotAdminException();
         }
-        Map<String,Spending> spendingMap = new HashMap<>();
+        Map<String,Pair<String,Double>> spendingMap = new HashMap<>();
         this.faturas.values()
                 .forEach(f -> {
-                    if(spendingMap.containsKey(f.getClientNif()))
-                        spendingMap.get(f.getClientNif()).add(f.getValue());
-                    else
-                        spendingMap.put(f.getClientNif(),new Spending(f.getClientNif(),f.getValue()));
+                    double value = f.getValue();
+                    if(spendingMap.containsKey(f.getClientNif())){
+                        value = value + spendingMap.get(f.getClientNif()).snd();
+                    }
+                    spendingMap.put(f.getClientNif(), new Pair<>(f.getClientNif(), value));
                 });
-        List<Spending> orderedSpending = new ArrayList<>(spendingMap.values());
-        orderedSpending.sort((s1,s2) ->Float.compare(s1.getVal(), s2.getVal()));
+        List<Pair<String,Double>> orderedPairNifValue = new ArrayList<>(spendingMap.values());
+        orderedPairNifValue.sort(Comparator.comparingDouble(Pair::snd));
         List<Contribuinte> contribuintes = new ArrayList<>();
         int c = 0;
-        for(Iterator<Spending> iterator = orderedSpending.iterator(); c < 10 && iterator.hasNext(); ){
-            Spending s = iterator.next();
+        for(Iterator<Pair<String,Double>> iterator = orderedPairNifValue.iterator(); c < 10 && iterator.hasNext(); ){
+            Pair<String,Double> s = iterator.next();
             c++;
-            contribuintes.add(this.contribuintes.get(s.getNif()));
+            contribuintes.add(this.contribuintes.get(s.fst()));
         }
         return contribuintes;
     }
 
-    public void saveState(){
+    /*
+    determinar a relação das X empresas que mais facturas emitiram em t_odo o sistema e o montante de
+    deduções fiscais que as despesas registadas (dessas empresas) representam;
+     */
+    //TODO montate total
+    public Pair<List<ContribuinteEmpresarial>,Double> getTopXEmpresas(int x){
+        // Create a "table" of the receipts of each company
+        Map<String,List<Factura>> facturasEmpresas = new HashMap<>();
+        this.faturas.values().forEach(f -> {
+            if(!facturasEmpresas.containsKey(f.getIssuerNif())){
+                facturasEmpresas.put(f.getIssuerNif(),new ArrayList<>());
+            }
+            facturasEmpresas.get(f.getIssuerNif()).add(f);
+        });
 
+        // Create a list of pairs (Company, #Receipts)
+        List<Pair<String,Integer>> pairNifValueList = new ArrayList<>();
+        facturasEmpresas.forEach((key, value)->pairNifValueList.add(new Pair<>(key, value.size())));
+
+        // Sort it according to the #Receipts
+        pairNifValueList.sort(Comparator.comparingInt(Pair::snd));
+
+        // Get the top 10 companies
+        List<ContribuinteEmpresarial> topX = new ArrayList<>(x);
+        Iterator<Pair<String,Integer>> it = pairNifValueList.iterator();
+        int i=0;
+        while(i<x && it.hasNext()){
+            String nif = it.next().fst();
+            try{
+                topX.add(((ContribuinteEmpresarial) this.contribuintes.get(nif)).clone());
+            }catch(ClassCastException ignored){}
+        }
+
+
+        return new Pair<>(topX,0.0);
+    }
+
+    public void saveState() throws IOException{
+        ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(SAVE_STATE_FILE));
+        os.writeObject(this);
+        os.flush();
+        os.close();
     }
 
     private Map<String,Contribuinte> loadContribuintes(){
@@ -183,15 +241,20 @@ public class JavaFactura{
             List<String> dependants = new ArrayList<>();//TODO make some stubs here
             double fiscal_coefficient = Math.random();
             Set<EconSector> econActivities = new HashSet<>();
-            contribuintes.put(nif,new ContribuinteIndividual(
-                    nif,
-                    email,
-                    nome,
-                    address,
-                    password,
-                    dependants,
-                    fiscal_coefficient,
-                    econActivities));
+            try{
+                contribuintes.put(nif,new ContribuinteIndividual(
+                        nif,
+                        email,
+                        nome,
+                        address,
+                        password,
+                        dependants.size(),
+                        dependants,
+                        fiscal_coefficient,
+                        econActivities));
+            }catch(InvalidNumberOfDependantsException e){
+                e.printStackTrace();
+            }
 
         }
         for(int i=0; i<10; i++){
@@ -249,25 +312,4 @@ public class JavaFactura{
                 .collect(Collectors.toMap(Factura::getId, f->f, (a, b)->b));
     }
 
-    private class Spending{
-
-        private final String nif;
-        private float val;
-
-        Spending(String nif, float initialVal){
-            this.nif = nif;
-            this.val = initialVal;
-        }
-
-        String getNif(){
-            return nif;
-        }
-
-        public float getVal(){
-            return val;
-        }
-        public void add(float addedVal){
-            this.val += addedVal;
-        }
-    }
 }

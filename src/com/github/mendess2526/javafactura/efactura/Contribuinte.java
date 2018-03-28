@@ -1,6 +1,8 @@
 package com.github.mendess2526.javafactura.efactura;
 
-public abstract class Contribuinte implements User{
+import java.io.Serializable;
+
+public abstract class Contribuinte implements User, Serializable{
 
     /**
      * The NIF of the Contribuinte

@@ -4,7 +4,7 @@ import com.github.mendess2526.javafactura.efactura.JavaFactura;
 
 public class ContribuinteEmpresarialUI implements UI {
 
-    private JavaFactura javaFactura;
+    private final JavaFactura javaFactura;
 
     public ContribuinteEmpresarialUI(JavaFactura javaFactura){
 

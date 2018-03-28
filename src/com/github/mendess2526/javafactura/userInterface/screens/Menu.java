@@ -15,11 +15,11 @@ public class Menu implements Screen<Integer>{
     /**
      * Menu name
      */
-    private String name;
+    private final String name;
     /**
      * List of options of the menu
      */
-    private List<String> options;
+    private final List<String> options;
     /**
      * Selected option
      */

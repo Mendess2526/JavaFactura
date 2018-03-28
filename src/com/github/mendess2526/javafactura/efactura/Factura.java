@@ -4,11 +4,12 @@ import com.github.mendess2526.javafactura.efactura.econSectors.Deductible;
 import com.github.mendess2526.javafactura.efactura.econSectors.EconSector;
 import com.github.mendess2526.javafactura.efactura.econSectors.Pendente;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Factura {
+public class Factura implements Serializable{
 
     /**
      * The last used id
@@ -210,7 +211,7 @@ public class Factura {
      */
     public float deducao(){
         if(this.isDeductible()){
-            return ((Deductible) this.econSector).deduction();
+            return ((Deductible) this.econSector).deduction(this.value);
         }
         return 0.0f;
     }
@@ -244,5 +245,10 @@ public class Factura {
                 ", value=" + value +
                 ", history=" + history +
                 '}';
+    }
+
+    @Override
+    public Factura clone(){
+        return new Factura(this);
     }
 }
