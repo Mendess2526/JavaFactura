@@ -14,17 +14,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class LoginFX{
+public class LoginFX extends FX{
 
-    private final JavaFactura javaFactura;
-    private final Stage primaryStage;
     private TextField userNameTextField;
     private PasswordField pwField;
     private Text errors;
 
     LoginFX(JavaFactura javaFactura, Stage primaryStage){
-        this.javaFactura = javaFactura;
-        this.primaryStage = primaryStage;
+        super(javaFactura,primaryStage);
     }
 
     public void run(){
@@ -68,7 +65,7 @@ public class LoginFX{
             this.javaFactura.login(userNameTextField.getText(),pwField.getText());
             User loggedUser = this.javaFactura.getLoggedUser();
             if(loggedUser instanceof Admin){
-                System.out.println("Admin login");
+                new AdminFX(this.javaFactura,this.primaryStage).run();
             }else if(loggedUser instanceof ContribuinteEmpresarial){
                 System.out.println("Contrib Empresarial login");
             }else if(loggedUser instanceof ContribuinteIndividual){
