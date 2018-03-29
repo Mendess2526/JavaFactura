@@ -9,11 +9,14 @@ import java.util.*;
 public class ContribuinteIndividual extends Contribuinte {
 
 
-    private int numDependants;
     /**
      * The NIFs of the people dependant of this Contribuinte
      */
     private List<String> familyAggregate;
+    /**
+     * Number of dependants
+     */
+    private int numDependants;
     /**
      * The fiscal coefficient of this Contribuinte
      */
@@ -22,10 +25,10 @@ public class ContribuinteIndividual extends Contribuinte {
     private Set<EconSector> econActivities;
 
     private ContribuinteIndividual(){
-        this.numDependants = 0;
         this.familyAggregate = new ArrayList<>();
+        this.numDependants = 0;
         this.fiscalCoefficient = 0.0;
-        this.econSectors = new HashSet<>();
+        this.econActivities = new HashSet<>();
     }
 
     /**
@@ -49,8 +52,8 @@ public class ContribuinteIndividual extends Contribuinte {
                                   Set<EconSector> econActivities) throws
                                                                   InvalidNumberOfDependantsException{
         super(nif, email, nome, address, password);
-        this.setNumDependants(numDependants);
         this.familyAggregate = familyAggregate;
+        this.setNumDependants(numDependants);
         this.fiscalCoefficient = fiscalCoefficient;
         this.econActivities = new HashSet<>(econActivities);
 
@@ -58,34 +61,42 @@ public class ContribuinteIndividual extends Contribuinte {
 
     public ContribuinteIndividual(ContribuinteIndividual contribuinteIndividual){
         super(contribuinteIndividual);
-        this.numDependants = contribuinteIndividual.getNumDependants();
         this.familyAggregate = contribuinteIndividual.getFamilyAggregate();
+        this.numDependants = contribuinteIndividual.getNumDependants();
         this.fiscalCoefficient = contribuinteIndividual.getFiscalCoefficient();
         this.econActivities = contribuinteIndividual.getEconActivities();
-    }
-
-    public int getDependant_num(){
-        return this.familyAggregate.size();
     }
 
     public List<String> getFamilyAggregate(){
         return familyAggregate;
     }
 
-    public void setFamilyAggregate(List<String> familyAggregate){
-        this.familyAggregate = familyAggregate;
+    public int getNumDependants(){
+        return numDependants;
     }
 
     public double getFiscalCoefficient(){
         return fiscalCoefficient;
     }
 
-    public void setFiscalCoefficient(double fiscalCoefficient){
-        this.fiscalCoefficient = fiscalCoefficient;
-    }
-
     public Set<EconSector> getEconActivities(){
         return econActivities;
+    }
+
+    public void setFamilyAggregate(List<String> familyAggregate){
+        this.familyAggregate = familyAggregate;
+    }
+
+    public void setNumDependants(int numDependants) throws InvalidNumberOfDependantsException{
+        if(numDependants <= this.familyAggregate.size()){
+            this.numDependants = numDependants;
+        }else{
+            throw new InvalidNumberOfDependantsException(numDependants);
+        }
+    }
+
+    public void setFiscalCoefficient(double fiscalCoefficient){
+        this.fiscalCoefficient = fiscalCoefficient;
     }
 
     public void setEconActivities(Set<EconSector> econActivities){
@@ -113,18 +124,6 @@ public class ContribuinteIndividual extends Contribuinte {
                 ", fiscalCoefficient=" + fiscalCoefficient +
                 ", econActivities=" + econActivities +
                 '}';
-    }
-
-    public int getNumDependants(){
-        return numDependants;
-    }
-
-    public void setNumDependants(int numDependants) throws InvalidNumberOfDependantsException{
-        if(numDependants <= this.familyAggregate.size()){
-            this.numDependants = numDependants;
-        }else{
-            throw new InvalidNumberOfDependantsException(numDependants);
-        }
     }
 
     public ContribuinteIndividual clone(){
