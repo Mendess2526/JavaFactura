@@ -216,6 +216,7 @@ public class JavaFactura implements Serializable{
             String nif = it.next().fst();
             try{
                 topX.add(((ContribuinteEmpresarial) this.contribuintes.get(nif)).clone());
+                i++;
             }catch(ClassCastException ignored){}
         }
 
