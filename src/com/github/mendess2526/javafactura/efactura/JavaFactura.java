@@ -59,6 +59,10 @@ public class JavaFactura implements Serializable{
         }
     }
 
+    public void logout(){
+        this.loggedInUser = null;
+    }
+
     public void registarIndividual(String nif, String email, String nome, String address, String password,
                                    int numDependants, List<String> dependants, double fiscalCoefficient,
                                    Set<String> econActivities) throws InvalidNumberOfDependantsException{
@@ -191,7 +195,9 @@ public class JavaFactura implements Serializable{
     deduções fiscais que as despesas registadas (dessas empresas) representam;
      */
     //TODO montate total
-    public Pair<List<ContribuinteEmpresarial>,Double> getTopXEmpresas(int x){
+    public Pair<List<ContribuinteEmpresarial>,Double> getTopXEmpresas(int x) throws NotAdminException{
+        if(!(this.loggedInUser instanceof Admin)) throw new NotAdminException();
+
         // Create a "table" of the receipts of each company
         Map<String,List<Factura>> facturasEmpresas = new HashMap<>();
         this.faturas.values().forEach(f -> {

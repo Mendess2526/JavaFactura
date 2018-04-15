@@ -25,6 +25,6 @@ public class Main extends Application {
 
         JavaFactura javaFactura = JavaFactura.loadState();
         LoginFX loginScreen = new LoginFX(javaFactura, primaryStage, null);
-        primaryStage.setScene(loginScreen.getScene());
+        loginScreen.show();
     }
 }
