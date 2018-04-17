@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Factura implements Serializable{
+public class Factura implements Comparable<Factura>, Serializable{
 
     /**
      * The last used id
@@ -194,8 +194,8 @@ public class Factura implements Serializable{
      * Returns the type of the <tt>Factura</tt>
      * @return The type of the <tt>Factura</tt>
      */
-    public String getType(){
-        return this.econSector.getType();
+    public EconSector getType(){
+        return this.econSector;
     }
 
     /**
@@ -250,5 +250,12 @@ public class Factura implements Serializable{
     @Override
     public Factura clone(){
         return new Factura(this);
+    }
+
+    @Override
+    public int compareTo(Factura o){
+        if(this.date.isBefore(o.getDate())) return -1;
+        if(this.date.isAfter(o.getDate())) return 1;
+        return 0;
     }
 }

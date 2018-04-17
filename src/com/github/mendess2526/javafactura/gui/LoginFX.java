@@ -57,11 +57,16 @@ class LoginFX extends FX{
             this.javaFactura.login(userNameTextField.getText(),pwField.getText());
             User loggedUser = this.javaFactura.getLoggedUser();
             if(loggedUser instanceof Admin){
-                this.adminScreen.show();
+                if(!this.adminScreen.show())
+                    throw new InvalidCredentialsException();
+
             }else if(loggedUser instanceof ContribuinteEmpresarial){
                 System.out.println("Contrib Empresarial login");
+
             }else if(loggedUser instanceof ContribuinteIndividual){
-                System.out.println("Contrib Individual login");
+                if(!this.individualScreen.show())
+                    throw new InvalidCredentialsException();
+
             }else{
                 throw new InvalidCredentialsException();
             }

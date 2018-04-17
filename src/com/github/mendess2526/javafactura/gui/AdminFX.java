@@ -1,15 +1,12 @@
 package com.github.mendess2526.javafactura.gui;
 
 import com.github.mendess2526.javafactura.efactura.JavaFactura;
-import javafx.geometry.Insets;
+import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import static com.github.mendess2526.javafactura.gui.Main.*;
 
 
 class AdminFX extends FX{
@@ -60,5 +57,10 @@ class AdminFX extends FX{
     private void logOut(){
         this.javaFactura.logout();
         this.primaryStage.setScene(this.previousScene);
+    }
+
+    @Override
+    protected void goBack(ActionEvent event){
+        throw new UnsupportedOperationException();
     }
 }

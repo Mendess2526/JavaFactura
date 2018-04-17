@@ -4,14 +4,12 @@ import com.github.mendess2526.javafactura.efactura.JavaFactura;
 import com.github.mendess2526.javafactura.efactura.exceptions.NotAdminException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 class AdminTop10ContribuintesFX extends FX{
@@ -32,22 +30,16 @@ class AdminTop10ContribuintesFX extends FX{
     }
 
     @Override
-    boolean show(){
-        this.top10.clear();
-        List<String> contribuintes;
+    protected boolean show(){
         try{
-            contribuintes = this.javaFactura.getTop10Contrib().stream()
+            this.top10.clear();
+            this.top10.addAll(this.javaFactura.getTop10Contrib().stream()
                     .map(c->c.getNif() + " " + c.getName())
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toList()));
         }catch(NotAdminException e){
             return false;
         }
-        this.top10.addAll(contribuintes);
-        this.primaryStage.setScene(this.scene);
+        super.show();
         return true;
-    }
-
-    private void goBack(ActionEvent event){
-        this.primaryStage.setScene(this.previousScene);
     }
 }

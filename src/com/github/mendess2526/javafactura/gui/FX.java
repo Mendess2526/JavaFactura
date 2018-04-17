@@ -1,6 +1,7 @@
 package com.github.mendess2526.javafactura.gui;
 
 import com.github.mendess2526.javafactura.efactura.JavaFactura;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -33,9 +34,13 @@ abstract class FX {
         this.scene = new Scene(this.gridPane, WIDTH, HEIGHT);
     }
 
-    boolean show(){
+    protected boolean show(){
         this.primaryStage.setScene(this.scene);
         return true;
+    }
+
+    protected void goBack(ActionEvent event){
+        this.primaryStage.setScene(this.previousScene);
     }
 
     HBox makeHBox(Node node, Pos alignment){

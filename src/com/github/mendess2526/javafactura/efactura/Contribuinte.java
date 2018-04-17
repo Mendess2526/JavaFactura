@@ -1,6 +1,9 @@
 package com.github.mendess2526.javafactura.efactura;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public abstract class Contribuinte implements User, Serializable{
 
@@ -26,14 +29,20 @@ public abstract class Contribuinte implements User, Serializable{
     private String password;
 
     /**
+     * The receipts
+     */
+    private List<Factura> facturas;
+
+    /**
      * The empty constructor
      */
     Contribuinte(){
-        nif = "";
-        email = "";
-        name = "";
-        address = "";
-        password = "";
+        this.nif = "";
+        this.email = "";
+        this.name = "";
+        this.address = "";
+        this.password = "";
+        this.facturas = new LinkedList<>();
     }
 
     /**
@@ -50,6 +59,7 @@ public abstract class Contribuinte implements User, Serializable{
         this.name = name;
         this.address = address;
         this.password = password;
+        this.facturas = new LinkedList<>();
     }
 
     /**
@@ -62,6 +72,7 @@ public abstract class Contribuinte implements User, Serializable{
         this.name = contribuinte.getName();
         this.address = contribuinte.getAddress();
         this.password = contribuinte.getPassword();
+        this.facturas = contribuinte.getFacturas();
     }
 
     /**
@@ -128,6 +139,20 @@ public abstract class Contribuinte implements User, Serializable{
         this.password = password;
     }
 
+    /**
+     * Returns the list of Facturas associated
+     * @return The list of Facturas associated
+     */
+    public List<Factura> getFacturas(){
+        List<Factura> l = new ArrayList<>();
+        this.facturas.forEach(f-> l.add(f.clone()));
+        return l;
+    }
+
+    protected void associateFactura(Factura f){
+        this.facturas.add(f);
+    }
+
     @Override
     public boolean equals(Object o){
         if(this == o) return true;
@@ -139,17 +164,19 @@ public abstract class Contribuinte implements User, Serializable{
                 this.email.equals(that.getEmail()) &&
                 this.name.equals(that.getName()) &&
                 this.address.equals(that.getAddress()) &&
-                this.password.equals(that.getPassword());
+                this.password.equals(that.getPassword()) &&
+                this.facturas.equals(that.getFacturas());
     }
 
     @Override
     public String toString(){
         return "Contribuinte{" +
-                "nif='" + nif + '\'' +
-                ", email='" + email + '\'' +
-                ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", password='" + password + '\'' +
+                "nif='" + this.nif + '\'' +
+                ", email='" + this.email + '\'' +
+                ", name='" + this.name + '\'' +
+                ", address='" + this.address + '\'' +
+                ", password='" + this.password + '\'' +
+                ", facturas='" + this.facturas + '\'' +
                 '}';
     }
 }

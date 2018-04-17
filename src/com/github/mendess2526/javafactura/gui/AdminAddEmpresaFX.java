@@ -1,7 +1,6 @@
 package com.github.mendess2526.javafactura.gui;
 
 import com.github.mendess2526.javafactura.efactura.JavaFactura;
-import com.github.mendess2526.javafactura.efactura.exceptions.InvalidNumberOfDependantsException;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -12,10 +11,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 class AdminAddEmpresaFX extends FX{
+
     private static final String[] fields = new String[]{
             "NIF:","Email:","Nome","Address","Password","Fiscal Coefficient"};
 
@@ -75,9 +74,5 @@ class AdminAddEmpresaFX extends FX{
         }catch(NumberFormatException e){
             this.errorTexts[field].setText("Not a number");
         }
-    }
-
-    private void goBack(ActionEvent event){
-        this.primaryStage.setScene(this.previousScene);
     }
 }

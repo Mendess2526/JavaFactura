@@ -14,7 +14,6 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 class AdminAddIndividualFX extends FX{
 
@@ -80,9 +79,5 @@ class AdminAddIndividualFX extends FX{
         }catch(NumberFormatException e){
             this.errorTexts[field-1].setText("Not a number");
         }
-    }
-
-    private void goBack(ActionEvent event){
-        this.primaryStage.setScene(this.previousScene);
     }
 }

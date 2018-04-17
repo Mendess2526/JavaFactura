@@ -4,27 +4,19 @@ import com.github.mendess2526.javafactura.efactura.ContribuinteEmpresarial;
 import com.github.mendess2526.javafactura.efactura.JavaFactura;
 import com.github.mendess2526.javafactura.efactura.collections.Pair;
 import com.github.mendess2526.javafactura.efactura.exceptions.NotAdminException;
-import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.github.mendess2526.javafactura.gui.Main.HEIGHT;
-import static com.github.mendess2526.javafactura.gui.Main.WIDTH;
 
 class AdminTopXEmpresasFX extends FX{
 
@@ -81,9 +73,5 @@ class AdminTopXEmpresasFX extends FX{
                 .stream()
                 .map(ce -> ce.getNif() +"\t"+ ce.getName()) //TODO formatar isto melhor
                 .collect(Collectors.toList()));
-    }
-
-    private void goBack(ActionEvent event){
-        this.primaryStage.setScene(this.previousScene);
     }
 }

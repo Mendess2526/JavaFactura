@@ -82,26 +82,21 @@ public class ContribuinteEmpresarial extends Contribuinte{
 
     /**
      * \brief Issues a <tt>Factura</tt>
-     * @param nif The NIF of the client
+     * @param buyer The buyer
      * @param description The description of the purchase
      * @param value The value of the purchase
-     * @return The issued <tt>Factura</tt>
      */
-    Factura issueFactura(String nif, String description, float value){
+    void issueFactura(Contribuinte buyer, String description, float value){
         EconSector econSector;
         if(this.econActivities.size() > 1){
             econSector = EconSector.factory("E00");
         }else{
             econSector = EconSector.factory(this.econActivities.get(0).getType());
         }
-        return new Factura(
-                this.getNif(),
-                this.getName(),
-                LocalDateTime.now(),
-                nif,
-                description,
-                value,
-                econSector);
+        Factura factura = new Factura(this.getNif(), this.getName(), LocalDateTime.now(),
+                                        buyer.getNif(), description, value, econSector);
+        this.associateFactura(factura);
+        buyer.associateFactura(factura);
     }
 
     @Override
