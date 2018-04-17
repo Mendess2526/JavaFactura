@@ -1,6 +1,6 @@
 package com.github.mendess2526.javafactura.efactura.econSectors;
 
-public class Educacao extends EconSector implements Deductible {
+public final class Educacao extends EconSector implements Deductible {
 
     @Override
     public String getType(){
