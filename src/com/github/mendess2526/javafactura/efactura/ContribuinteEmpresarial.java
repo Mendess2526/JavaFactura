@@ -2,7 +2,6 @@ package com.github.mendess2526.javafactura.efactura;
 
 import com.github.mendess2526.javafactura.efactura.econSectors.EconSector;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -93,8 +92,8 @@ public class ContribuinteEmpresarial extends Contribuinte{
         }else{
             econSector = EconSector.factory(this.econActivities.get(0).getType());
         }
-        Factura factura = new Factura(this.getNif(), this.getName(), LocalDateTime.now(),
-                                        buyer.getNif(), description, value, econSector);
+        Factura factura = new Factura(this.getNif(), this.getName(),
+                buyer.getNif(), description, value, econSector);
         this.associateFactura(factura);
         buyer.associateFactura(factura);
     }

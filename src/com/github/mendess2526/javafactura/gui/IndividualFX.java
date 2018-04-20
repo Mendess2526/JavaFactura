@@ -16,6 +16,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -30,18 +31,24 @@ class IndividualFX extends FX{
 
     IndividualFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene);
+        ColumnConstraints cc = new ColumnConstraints();
+        cc.setPercentWidth(90);
+        this.gridPane.getColumnConstraints().add(cc);
+
         this.facturas = new ObservableListWrapper<>(new ArrayList<>());
         this.facturas.addListener((ListChangeListener<FacturaDataModel>) c->updatePendingNum());
 
         this.pendingNum = new Label("null");
         this.gridPane.add(this.pendingNum,0,0);
 
-        IndividualViewFacturaFX individualViewFacturaFX = new IndividualViewFacturaFX(this.javaFactura,this.primaryStage,this.previousScene);
+        IndividualViewFacturaFX individualViewFacturaFX = new IndividualViewFacturaFX(this.javaFactura,this.primaryStage,this.scene);
 
         TableView<FacturaDataModel> tableView = new TableView<>();
+        tableView.setMinWidth(this.gridPane.getMinWidth());
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         TableColumn<FacturaDataModel,String> date = new TableColumn<>("Date");
-        date.setMinWidth(100);
+        date.setMinWidth(Factura.dateFormat.toString().length());
         date.setCellValueFactory(new PropertyValueFactory<>("date"));
 
         TableColumn<FacturaDataModel,String> type = new TableColumn<>("Type");
@@ -52,14 +59,10 @@ class IndividualFX extends FX{
         value.setMinWidth(100);
         value.setCellValueFactory(new PropertyValueFactory<>("value"));
 
-        tableView.setRowFactory(t -> {
-            TableRow row = new TableRow();
-            row.setOnMouseClicked(event -> {
-                if(event.getClickCount() > 1){
-                    row
-                }
-            });
-        });
+        tableView.getSelectionModel().selectedItemProperty().addListener(
+                (obs, oldSel, newSel) -> individualViewFacturaFX
+                    .setFactura(tableView.getSelectionModel().getSelectedItem().getSource())
+                    .show());
         tableView.getColumns().add(date);
         tableView.getColumns().add(type);
         tableView.getColumns().add(value);
@@ -109,16 +112,16 @@ class IndividualFX extends FX{
     }
 
     public static class FacturaDataModel{
-        private final Factura original;
+        private final Factura source;
         private final SimpleStringProperty date;
         private final SimpleObjectProperty<EconSector> type;
         private final SimpleFloatProperty value;
 
         FacturaDataModel(Factura f){
-            this.date = new SimpleStringProperty(f.getDate().toString());
+            this.date = new SimpleStringProperty(f.getCreationDate().format(Factura.dateFormat));
             this.type = new SimpleObjectProperty<>(f.getType());
             this.value = new SimpleFloatProperty(f.getValue());
-            this.original = f;
+            this.source = f;
         }
 
         public String getDate(){
@@ -145,8 +148,8 @@ class IndividualFX extends FX{
             this.value.set(value);
         }
 
-        public Factura getOriginal(){
-            return this.original;
+        public Factura getSource(){
+            return this.source;
         }
     }
 }

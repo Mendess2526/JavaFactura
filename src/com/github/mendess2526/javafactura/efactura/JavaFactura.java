@@ -147,8 +147,8 @@ public class JavaFactura implements Serializable{
         }
         return this.contribuintes.get(clientNIF).getFacturas()
                 .stream()
-                .filter(f -> f.getDate().isAfter(from))
-                .filter(f -> f.getDate().isBefore(to))
+                .filter(f -> f.getCreationDate().isAfter(from))
+                .filter(f -> f.getCreationDate().isBefore(to))
                 .sorted()
                 .collect(Collectors.toList());
     }

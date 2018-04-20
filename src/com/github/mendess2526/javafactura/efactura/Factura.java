@@ -6,16 +6,22 @@ import com.github.mendess2526.javafactura.efactura.econSectors.Pendente;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 public class Factura implements Comparable<Factura>, Serializable{
+
+    /** The format the creationDate will be printed with when toString is called on this */
+    public static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyy kk:mm:ss");
 
     /**
      * The last used id
      */
     private static int lastId = 0;
-
     /**
      * \brief The unique id the Factura
      */
@@ -31,7 +37,11 @@ public class Factura implements Comparable<Factura>, Serializable{
     /**
      * \brief The date this Receipt was issued
      */
-    private final LocalDateTime date;
+    private final LocalDateTime creationDate;
+    /**
+     * \brief The date this Factura was last edited
+     */
+    private LocalDateTime lastEditDate;
     /**
      * \brief The NIF of the client to whom this Receipt was issued
      */
@@ -60,7 +70,8 @@ public class Factura implements Comparable<Factura>, Serializable{
         this.id = lastId++;
         this.issuerNif = "";
         this.issuerName = "";
-        this.date = null;
+        this.creationDate = LocalDateTime.now();
+        this.lastEditDate = this.creationDate;
         this.clientNif = "";
         this.description = "";
         this.value = 0.0f;
@@ -73,18 +84,18 @@ public class Factura implements Comparable<Factura>, Serializable{
      * \brief Fully parametrised constructor for <tt>Factura</tt>
      * @param issuerNif The NIF of the entity that issued this Receipt
      * @param issuerName The name of the entity that issued this Receipt
-     * @param date The date this Receipt was issued
      * @param clientNif The NIF of the client to whom this Receipt was issued
      * @param description The description of the purchase
      * @param value The value of the purchase
      * @param econSector The economic sector of this Factura
      */
-    Factura(String issuerNif, String issuerName, LocalDateTime date, String clientNif,
+    Factura(String issuerNif, String issuerName, String clientNif,
             String description, float value, EconSector econSector){
         this.id = lastId++;
         this.issuerNif = issuerNif;
         this.issuerName = issuerName;
-        this.date = date;
+        this.creationDate = LocalDateTime.now();
+        this.lastEditDate = this.creationDate;
         this.clientNif = clientNif;
         this.description = description;
         this.value = value;
@@ -101,7 +112,8 @@ public class Factura implements Comparable<Factura>, Serializable{
         this.id = factura.getId();
         this.issuerNif = factura.getIssuerNif();
         this.issuerName = factura.getIssuerName();
-        this.date = factura.getDate();
+        this.creationDate = factura.getCreationDate();
+        this.lastEditDate = factura.getLastEditDate();
         this.clientNif = factura.getClientNif();
         this.description = factura.getDescription();
         this.value = factura.getValue();
@@ -127,11 +139,19 @@ public class Factura implements Comparable<Factura>, Serializable{
     }
 
     /**
-     * Returns the date of the receipt
-     * @return The date of the receipt
+     * Returns the creation date of the receipt
+     * @return The creation date of the receipt
      */
-    public LocalDateTime getDate(){
-        return this.date;
+    public LocalDateTime getCreationDate(){
+        return this.creationDate;
+    }
+
+    /**
+     * Returns the last date the receipt was edited
+     * @return The last date the receipt was edited
+     */
+    public LocalDateTime getLastEditDate(){
+        return this.lastEditDate;
     }
 
     /**
@@ -170,8 +190,11 @@ public class Factura implements Comparable<Factura>, Serializable{
      * Returns the history of state of this <tt>Factura</tt>
      * @return The history of state of this <tt>Factura</tt>
      */
-    private List<Factura> getHistory(){
-        return new LinkedList<>(this.history);
+    public List<Factura> getHistory(){
+        return this.history
+                .stream()
+                .map(Factura::clone)
+                .collect(Collectors.toCollection(LinkedList::new));
     }
 
     /**
@@ -186,8 +209,10 @@ public class Factura implements Comparable<Factura>, Serializable{
      * Changes the economic sector of the <tt>Factura</tt>
      * @param econSector the new economic sector
      */
-    public void setEconSector(EconSector econSector){
+    void setEconSector(EconSector econSector){
+        ((LinkedList<Factura>) this.history).addFirst(this);
         this.econSector = econSector;
+        this.lastEditDate = LocalDateTime.now();
     }
 
     /**
@@ -197,7 +222,6 @@ public class Factura implements Comparable<Factura>, Serializable{
     public EconSector getType(){
         return this.econSector;
     }
-
     /**
      * Returns if the <tt>Factura</tt> is deductible
      * @return if the <tt>Factura</tt> is deductible
@@ -205,6 +229,7 @@ public class Factura implements Comparable<Factura>, Serializable{
     private boolean isDeductible(){
         return this.econSector instanceof Deductible;
     }
+
     /**
      * Returns the amount that can be deducted from this
      * @return The amount that can be deducted from this
@@ -226,7 +251,7 @@ public class Factura implements Comparable<Factura>, Serializable{
         return  this.value == that.getValue() &&
                 this.issuerNif.equals(that.getIssuerNif()) &&
                 this.issuerName.equals(that.getIssuerName()) &&
-                this.date.equals(that.getDate()) &&
+                this.creationDate.equals(that.getCreationDate()) &&
                 this.clientNif.equals(that.getClientNif()) &&
                 this.description.equals(that.getDescription()) &&
                 this.history.equals(that.history) &&
@@ -239,7 +264,7 @@ public class Factura implements Comparable<Factura>, Serializable{
                 "id=" + id +
                 ", issuerNif='" + issuerNif + '\'' +
                 ", issuerName='" + issuerName + '\'' +
-                ", date=" + date +
+                ", creationDate=" + creationDate.format(dateFormat) +
                 ", clientNif='" + clientNif + '\'' +
                 ", description='" + description + '\'' +
                 ", value=" + value +
@@ -254,8 +279,8 @@ public class Factura implements Comparable<Factura>, Serializable{
 
     @Override
     public int compareTo(Factura o){
-        if(this.date.isBefore(o.getDate())) return -1;
-        if(this.date.isAfter(o.getDate())) return 1;
+        if(this.creationDate.isBefore(o.getCreationDate())) return -1;
+        if(this.creationDate.isAfter(o.getCreationDate())) return 1;
         return 0;
     }
 }
