@@ -21,4 +21,9 @@ public abstract class EconSector implements Serializable{
     }
 
     public abstract String getType();
+
+    @Override
+    public String toString(){
+        return this.getClass().getSimpleName();
+    }
 }

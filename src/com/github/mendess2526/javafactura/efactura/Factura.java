@@ -243,7 +243,7 @@ public class Factura implements Comparable<Factura>, Serializable{
                 ", clientNif='" + clientNif + '\'' +
                 ", description='" + description + '\'' +
                 ", value=" + value +
-                ", history=" + history +
+                ", history=" + history.size() +
                 '}';
     }
 
