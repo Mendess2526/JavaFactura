@@ -7,10 +7,9 @@ import com.github.mendess2526.javafactura.efactura.econSectors.Pendente;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Deque;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.stream.Collectors;
 
 public class Factura implements Comparable<Factura>, Serializable{
@@ -62,6 +61,10 @@ public class Factura implements Comparable<Factura>, Serializable{
      * \brief The economic sector
      */
     private EconSector econSector;
+    /**
+     * \brief The econ sectors of the company that issued this receipt
+     */
+    private List<EconSector> possibleEconSectors;
 
     /**
      * Empty constructor
@@ -88,9 +91,11 @@ public class Factura implements Comparable<Factura>, Serializable{
      * @param description The description of the purchase
      * @param value The value of the purchase
      * @param econSector The economic sector of this Factura
+     * @param possibleEconSectors The econ sectors of the company that issued this receipt
      */
     Factura(String issuerNif, String issuerName, String clientNif,
-            String description, float value, EconSector econSector){
+            String description, float value, EconSector econSector,
+            List<EconSector> possibleEconSectors){
         this.id = lastId++;
         this.issuerNif = issuerNif;
         this.issuerName = issuerName;
@@ -102,6 +107,7 @@ public class Factura implements Comparable<Factura>, Serializable{
         this.history = new LinkedList<>();
         this.history.add(this);
         this.econSector = econSector;
+        this.possibleEconSectors = new ArrayList<>(possibleEconSectors);
     }
 
     /**
@@ -222,6 +228,15 @@ public class Factura implements Comparable<Factura>, Serializable{
     public EconSector getType(){
         return this.econSector;
     }
+
+    /**
+     * Returns the list of possible econ sectors
+     * @return The list of possible econ sectors
+     */
+    public List<EconSector> getPossibleEconSectors(){
+        return new ArrayList<>(possibleEconSectors);
+    }
+
     /**
      * Returns if the <tt>Factura</tt> is deductible
      * @return if the <tt>Factura</tt> is deductible

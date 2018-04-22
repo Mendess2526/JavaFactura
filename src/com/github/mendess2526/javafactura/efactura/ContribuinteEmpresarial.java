@@ -93,7 +93,7 @@ public class ContribuinteEmpresarial extends Contribuinte{
             econSector = EconSector.factory(this.econActivities.get(0).getType());
         }
         Factura factura = new Factura(this.getNif(), this.getName(),
-                buyer.getNif(), description, value, econSector);
+                buyer.getNif(), description, value, econSector, this.econActivities);
         this.associateFactura(factura);
         buyer.associateFactura(factura);
     }

@@ -111,6 +111,7 @@ class IndividualFX extends FX{
         throw new UnsupportedOperationException();
     }
 
+    @SuppressWarnings("unused")
     public static class FacturaDataModel{
         private final Factura source;
         private final SimpleStringProperty date;
