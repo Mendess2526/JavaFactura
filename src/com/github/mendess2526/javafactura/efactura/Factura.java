@@ -56,7 +56,7 @@ public class Factura implements Comparable<Factura>, Serializable{
     /**
      * \brief History of states of this <tt>Factura</tt>
      */
-    private final List<Factura> history;
+    private final LinkedList<Factura> history;
     /**
      * \brief The economic sector
      */
@@ -105,7 +105,6 @@ public class Factura implements Comparable<Factura>, Serializable{
         this.description = description;
         this.value = value;
         this.history = new LinkedList<>();
-        this.history.add(this);
         this.econSector = econSector;
         this.possibleEconSectors = new ArrayList<>(possibleEconSectors);
     }
@@ -124,7 +123,6 @@ public class Factura implements Comparable<Factura>, Serializable{
         this.description = factura.getDescription();
         this.value = factura.getValue();
         this.history = factura.getHistory();
-        this.history.add(this);
         this.econSector = factura.getEconSector();
     }
 
@@ -196,7 +194,7 @@ public class Factura implements Comparable<Factura>, Serializable{
      * Returns the history of state of this <tt>Factura</tt>
      * @return The history of state of this <tt>Factura</tt>
      */
-    public List<Factura> getHistory(){
+    public LinkedList<Factura> getHistory(){
         return this.history
                 .stream()
                 .map(Factura::clone)
@@ -216,9 +214,14 @@ public class Factura implements Comparable<Factura>, Serializable{
      * @param econSector the new economic sector
      */
     void setEconSector(EconSector econSector){
-        ((LinkedList<Factura>) this.history).addFirst(this);
+        this.history.addFirst(this.clone().cleanHistory());
         this.econSector = econSector;
         this.lastEditDate = LocalDateTime.now();
+    }
+
+    private Factura cleanHistory(){
+        this.history.clear();
+        return this;
     }
 
     /**
