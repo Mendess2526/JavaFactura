@@ -10,8 +10,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-import static com.github.mendess2526.javafactura.gui.Main.HEIGHT;
-import static com.github.mendess2526.javafactura.gui.Main.WIDTH;
+import static com.github.mendess2526.javafactura.gui.MainFX.HEIGHT;
+import static com.github.mendess2526.javafactura.gui.MainFX.WIDTH;
 
 abstract class FX {
 

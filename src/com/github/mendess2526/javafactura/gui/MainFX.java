@@ -4,7 +4,7 @@ import com.github.mendess2526.javafactura.efactura.JavaFactura;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+public class MainFX extends Application {
 
     static final int HEIGHT = 480;
     static final int WIDTH = 600;
