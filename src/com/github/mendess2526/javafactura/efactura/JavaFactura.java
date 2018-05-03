@@ -101,30 +101,35 @@ public class JavaFactura implements Serializable{
                 econSectors));
     }
 
-    public void emitirFactura(String companyNif, float value, String description) throws NotEmpresaException,
+    public Factura emitirFactura(String companyNif, float value, String description) throws NotEmpresaException,
                                                                                          NotIndividualException{
+        Factura f;
         try{
             ContribuinteEmpresarial company =
                     (ContribuinteEmpresarial) this.contribuintes.get(companyNif);
             try{
-                company.issueFactura(
+                f = company.issueFactura(
                         (ContribuinteIndividual) this.loggedInUser,
                         description,
                         value
                 );
-            }catch(ClassCastException e) {
+            }catch(ClassCastException e){
                 throw new NotIndividualException();
             }
         }catch(ClassCastException e){
             throw new NotEmpresaException();
         }
+        return f;
     }
 
-    public void changeFactura(String typeCode, Factura factura) throws NotIndividualException{
-        if(!(this.loggedInUser instanceof ContribuinteIndividual))
+    public void changeFactura(Factura factura, String typeCode) throws NotIndividualException{
+        try{
+            ((ContribuinteIndividual) this.loggedInUser)
+                    .changeFatura(factura, EconSector.factory(typeCode));
+        }catch(ClassCastException e){
             throw new NotIndividualException();
-        List<Factura> fs = ((ContribuinteIndividual) this.loggedInUser).getFacturas();
-        fs.get(fs.indexOf(factura)).setEconSector(EconSector.factory(typeCode));
+        }
+
     }
 
     public List<Factura> getLoggedUserFaturas() throws NotContribuinteException{
@@ -209,7 +214,7 @@ public class JavaFactura implements Serializable{
 
     private Map<String,Contribuinte> generateContribuintes(){
         Map<String,Contribuinte> contribuintes = new HashMap<>();
-        for(int i=0; i<20; i++){
+        for(int i=0; i<5; i++){
             String nif = "I" + i;
             String email = "ci" + i + "@email.com";
             String nome = "ci" + i;
@@ -234,7 +239,7 @@ public class JavaFactura implements Serializable{
             }
 
         }
-        for(int i=0; i<10; i++){
+        for(int i=0; i<3; i++){
             String nif = "E" + i;
             String email = "ce" + i + "@email.com";
             String nome = "ce" + i;
@@ -278,7 +283,8 @@ public class JavaFactura implements Serializable{
 
             this.loggedInUser = this.contribuintes.get(clientNif);
             try{
-                emitirFactura(issuerNif,value,description);
+                Factura f = emitirFactura(issuerNif,value,description);
+                changeFactura(f, "E01");
             }catch(NotEmpresaException | NotIndividualException e){
                 e.printStackTrace();
             }

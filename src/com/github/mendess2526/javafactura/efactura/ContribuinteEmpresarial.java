@@ -85,7 +85,7 @@ public class ContribuinteEmpresarial extends Contribuinte{
      * @param description The description of the purchase
      * @param value The value of the purchase
      */
-    void issueFactura(Contribuinte buyer, String description, float value){
+    Factura issueFactura(Contribuinte buyer, String description, float value){
         EconSector econSector;
         if(this.econActivities.size() > 1){
             econSector = EconSector.factory("E00");
@@ -96,6 +96,7 @@ public class ContribuinteEmpresarial extends Contribuinte{
                 buyer.getNif(), description, value, econSector, this.econActivities);
         this.associateFactura(factura);
         buyer.associateFactura(factura);
+        return factura.clone();
     }
 
     @Override
