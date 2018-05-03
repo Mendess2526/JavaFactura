@@ -103,6 +103,10 @@ public class ContribuinteIndividual extends Contribuinte {
         this.econActivities = econActivities;
     }
 
+    public void changeFatura(Factura f, EconSector e){
+        this.facturas.get(this.facturas.indexOf(f)).setEconSector(e);
+    }
+
     @Override
     public boolean equals(Object o){
         if(this == o) return true;

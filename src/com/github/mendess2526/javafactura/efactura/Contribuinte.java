@@ -31,7 +31,7 @@ public abstract class Contribuinte implements User, Serializable{
     /**
      * The receipts
      */
-    private List<Factura> facturas;
+    protected final List<Factura> facturas;
 
     /**
      * The empty constructor
