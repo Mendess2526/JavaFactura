@@ -2,7 +2,9 @@ package com.github.mendess2526.javafactura.efactura;
 
 import java.io.Serializable;
 
-public class Admin implements User, Serializable{
+public class Admin implements User,
+                              Serializable {
+
     private String name;
     private String password;
 
@@ -34,6 +36,25 @@ public class Admin implements User, Serializable{
     @Override
     public void setPassword(String password){
         this.password = password;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(this == o) return true;
+
+        if(o == null || this.getClass() == o.getClass()) return false;
+
+        Admin admin = (Admin) o;
+        return this.name.equals(admin.getName())
+               && this.password.equals(admin.getPassword());
+    }
+
+    @Override
+    public String toString(){
+        return "Admin{" +
+               "name='" + name + '\''
+               + ", password='" + password + '\''
+               + '}';
     }
 
     public Admin clone(){

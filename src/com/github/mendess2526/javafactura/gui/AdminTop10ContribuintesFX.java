@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 
 import java.util.stream.Collectors;
 
-class AdminTop10ContribuintesFX extends FX{
+class AdminTop10ContribuintesFX extends FX {
 
     private final ObservableList<String> top10;
 
@@ -22,7 +22,7 @@ class AdminTop10ContribuintesFX extends FX{
         this.top10 = FXCollections.observableArrayList();
         ListView<String> top10ListView = new ListView<>(this.top10);
         top10ListView.setFocusTraversable(false);
-        this.gridPane.add(top10ListView,0,1);
+        this.gridPane.add(top10ListView, 0, 1);
 
         Button goBack = new Button("Back");
         goBack.setOnAction(this::goBack);
@@ -34,8 +34,8 @@ class AdminTop10ContribuintesFX extends FX{
         try{
             this.top10.clear();
             this.top10.addAll(this.javaFactura.getTop10Contrib().stream()
-                    .map(c->c.getNif() + " " + c.getName())
-                    .collect(Collectors.toList()));
+                                              .map(c -> c.getNif() + " " + c.getName())
+                                              .collect(Collectors.toList()));
         }catch(NotAdminException e){
             return false;
         }

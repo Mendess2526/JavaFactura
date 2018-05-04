@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class Contribuinte implements User, Serializable{
+public abstract class Contribuinte implements User,
+                                              Serializable {
 
     /**
      * The NIF of the Contribuinte
@@ -47,10 +48,10 @@ public abstract class Contribuinte implements User, Serializable{
 
     /**
      * Parametrised constructor
-     * @param nif The NIF
-     * @param email The email
-     * @param name The Name
-     * @param address The Address
+     * @param nif      The NIF
+     * @param email    The email
+     * @param name     The Name
+     * @param address  The Address
      * @param password The Password
      */
     Contribuinte(String nif, String email, String name, String address, String password){
@@ -145,7 +146,7 @@ public abstract class Contribuinte implements User, Serializable{
      */
     public List<Factura> getFacturas(){
         List<Factura> l = new ArrayList<>();
-        this.facturas.forEach(f-> l.add(f.clone()));
+        this.facturas.forEach(f -> l.add(f.clone()));
         return l;
     }
 
@@ -157,26 +158,26 @@ public abstract class Contribuinte implements User, Serializable{
     public boolean equals(Object o){
         if(this == o) return true;
 
-        if(o == null || getClass() != o.getClass()) return false;
+        if(o == null || this.getClass() != o.getClass()) return false;
 
         Contribuinte that = (Contribuinte) o;
-        return this.nif.equals(that.getNif()) &&
-                this.email.equals(that.getEmail()) &&
-                this.name.equals(that.getName()) &&
-                this.address.equals(that.getAddress()) &&
-                this.password.equals(that.getPassword()) &&
-                this.facturas.equals(that.getFacturas());
+        return this.nif.equals(that.getNif())
+               && this.email.equals(that.getEmail())
+               && this.name.equals(that.getName())
+               && this.address.equals(that.getAddress())
+               && this.password.equals(that.getPassword())
+               && this.facturas.equals(that.getFacturas());
     }
 
     @Override
     public String toString(){
         return "Contribuinte{" +
-                "nif='" + this.nif + '\'' +
-                ", email='" + this.email + '\'' +
-                ", name='" + this.name + '\'' +
-                ", address='" + this.address + '\'' +
-                ", password='" + this.password + '\'' +
-                ", facturas='" + this.facturas + '\'' +
-                '}';
+               "nif='" + nif + '\''
+               + ", email='" + email + '\''
+               + ", name='" + name + '\''
+               + ", address='" + address + '\''
+               + ", password='" + password + '\''
+               + ", facturas=" + facturas
+               + '}';
     }
 }

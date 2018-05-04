@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class ContribuinteEmpresarial extends Contribuinte{
+public class ContribuinteEmpresarial extends Contribuinte {
 
     /**
      * The fiscal coefficient
@@ -28,13 +28,13 @@ public class ContribuinteEmpresarial extends Contribuinte{
 
     /**
      * \brief
-     * @param nif The NIF
-     * @param email The email
-     * @param name The Name
-     * @param address The Address
-     * @param password The Password
+     * @param nif               The NIF
+     * @param email             The email
+     * @param name              The Name
+     * @param address           The Address
+     * @param password          The Password
      * @param fiscalCoefficient The fiscal coefficient
-     * @param econActivities The economic activities
+     * @param econActivities    The economic activities
      */
     public ContribuinteEmpresarial(String nif, String email, String name,
                                    String address, String password,
@@ -81,9 +81,9 @@ public class ContribuinteEmpresarial extends Contribuinte{
 
     /**
      * \brief Issues a <tt>Factura</tt>
-     * @param buyer The buyer
+     * @param buyer       The buyer
      * @param description The description of the purchase
-     * @param value The value of the purchase
+     * @param value       The value of the purchase
      */
     Factura issueFactura(Contribuinte buyer, String description, float value){
         EconSector econSector;
@@ -93,7 +93,7 @@ public class ContribuinteEmpresarial extends Contribuinte{
             econSector = EconSector.factory(this.econActivities.get(0).getType());
         }
         Factura factura = new Factura(this.getNif(), this.getName(),
-                buyer.getNif(), description, value, econSector, this.econActivities);
+                                      buyer.getNif(), description, value, econSector, this.econActivities);
         this.associateFactura(factura);
         buyer.associateFactura(factura);
         return factura.clone();
@@ -103,22 +103,20 @@ public class ContribuinteEmpresarial extends Contribuinte{
     public boolean equals(Object o){
         if(this == o) return true;
 
-        if(o == null || getClass() != o.getClass()) return false;
-
-        if(! super.equals(o)) return false;
+        if(o == null || this.getClass() != o.getClass()) return false;
 
         ContribuinteEmpresarial that = (ContribuinteEmpresarial) o;
-        return  this.fiscalCoefficient == that.getFiscalCoefficient() &&
-                this.econActivities.equals(that.getEconActivities());
+        return super.equals(o)
+               && this.fiscalCoefficient == that.getFiscalCoefficient()
+               && this.econActivities.equals(that.getEconActivities());
     }
 
     @Override
     public String toString(){
-        return super.toString() +
-                "ContribuinteEmpresarial{" +
-                "econActivities=" + this.econActivities +
-                ", fiscalCoefficient=" + this.fiscalCoefficient +
-                '}';
+        return "ContribuinteEmpresarial{" +
+               "fiscalCoefficient=" + fiscalCoefficient
+               + ", econActivities=" + econActivities
+               + "} " + super.toString();
     }
 
     public ContribuinteEmpresarial clone(){

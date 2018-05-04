@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class Form implements Screen<Map<Integer,String>>{
+public class Form implements Screen<Map<Integer,String>> {
+
     private final String name;
     private final Map<Integer,String> fields;
     private final Map<Integer,String> answers;

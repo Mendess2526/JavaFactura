@@ -1,12 +1,18 @@
 package com.github.mendess2526.javafactura.efactura.collections;
 
-public class Pair<A,B> {
+public class Pair<A, B> {
+
     private A fst;
     private B snd;
 
     public Pair(A fst, B snd){
         this.fst = fst;
         this.snd = snd;
+    }
+
+    public Pair(Pair<A,B> pair){
+        this.fst = pair.fst();
+        this.snd = pair.snd();
     }
 
     public A fst(){
@@ -34,6 +40,18 @@ public class Pair<A,B> {
         Pair<?,?> pair = (Pair<?,?>) o;
 
         return this.fst.equals(pair.fst()) &&
-                this.snd.equals(pair.snd());
+               this.snd.equals(pair.snd());
+    }
+
+    @Override
+    public String toString(){
+        return "Pair{" +
+               "fst=" + fst
+               + ", snd=" + snd
+               + '}';
+    }
+
+    public Pair<A,B> clone(){
+        return new Pair<>(this);
     }
 }

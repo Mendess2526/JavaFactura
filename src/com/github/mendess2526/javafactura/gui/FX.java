@@ -30,7 +30,7 @@ abstract class FX {
         this.gridPane.setAlignment(Pos.CENTER);
         this.gridPane.setHgap(10);
         this.gridPane.setVgap(10);
-        this.gridPane.setPadding(new Insets(25,25,25,25));
+        this.gridPane.setPadding(new Insets(25, 25, 25, 25));
 //        ColumnConstraints constraints = new ColumnConstraints();
 //        constraints.setPercentWidth(50);
 //        this.gridPane.getColumnConstraints().add(constraints);

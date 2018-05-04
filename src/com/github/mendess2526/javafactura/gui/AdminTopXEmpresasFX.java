@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class AdminTopXEmpresasFX extends FX{
+class AdminTopXEmpresasFX extends FX {
 
     private final TextField numberPrompt;
     private Label totalValue;
@@ -28,7 +28,7 @@ class AdminTopXEmpresasFX extends FX{
         super(javaFactura, primaryStage, previousScene);
 
         // [LABEL] Insert Numero
-        this.gridPane.add(new Label("Inserir numero") , 0, 0);
+        this.gridPane.add(new Label("Inserir numero"), 0, 0);
 
         // [TEXT_FIELD] Numero de empresas
         this.numberPrompt = new TextField();
@@ -70,8 +70,8 @@ class AdminTopXEmpresasFX extends FX{
         this.totalValue.setText(Double.toString(listDoublePair.snd()));
         this.topX.clear();
         this.topX.addAll(listDoublePair.fst()
-                .stream()
-                .map(ce -> ce.getNif() +"\t"+ ce.getName()) //TODO formatar isto melhor
-                .collect(Collectors.toList()));
+                                       .stream()
+                                       .map(ce -> ce.getNif() + "\t" + ce.getName()) //TODO formatar isto melhor
+                                       .collect(Collectors.toList()));
     }
 }

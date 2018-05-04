@@ -53,24 +53,25 @@ public class LoginUI implements UI {
      */
     private Credentials getCredentials(){
         Map<Integer,String> fields = new HashMap<>();
-        fields.put(0,"Nif: ");
-        fields.put(1,"Password: ");
-        Form login = new Form("Login",fields);
+        fields.put(0, "Nif: ");
+        fields.put(1, "Password: ");
+        Form login = new Form("Login", fields);
         login.execute();
         Map<Integer,String> answers = login.getResult();
-        return new Credentials(answers.get(0),answers.get(1));
+        return new Credentials(answers.get(0), answers.get(1));
     }
 
     /**
      * \brief Wrapper class to pass the credentials gotten from the form
      */
-    private final class Credentials{
+    private final class Credentials {
+
         private final String nif;
         private final String pass;
 
         /**
          * \brief Parametrised constructor
-         * @param nif nif
+         * @param nif  nif
          * @param pass password
          */
         private Credentials(String nif, String pass){

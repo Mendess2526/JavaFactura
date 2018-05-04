@@ -6,11 +6,10 @@ import java.util.Scanner;
 
 /**
  * Esta classe implementa um menu em modo texto.
- *
  * @author Pedro Mendes Félix da Costa
  * @version 3/6/2017
  */
-public class Menu implements Screen<Integer>{
+public class Menu implements Screen<Integer> {
 
     /**
      * Menu name
@@ -27,31 +26,32 @@ public class Menu implements Screen<Integer>{
 
     /**
      * Constructor for objects of class Menu
-     * @param name Name of the menu
+     * @param name    Name of the menu
      * @param options List of options from which to pick
      */
-    Menu(String name, List<String> options) {
+    Menu(String name, List<String> options){
         this.name = name;
         this.options = options;
         this.op = 0;
     }
 
     @Override
-    public void execute() {
-        do {
+    public void execute(){
+        do{
             showMenu();
             this.op = readOption();
-        } while (this.op == -1);
+        }
+        while(this.op == -1);
     }
 
     /**
      * Shows the menu
      */
-    private void showMenu() {
+    private void showMenu(){
         //clearScreen();
-        System.out.println("\n *** "+this.name +" Menu *** ");
-        for (int i = 0; i<this.options.size(); i++) {
-            System.out.print(i+1);
+        System.out.println("\n *** " + this.name + " Menu *** ");
+        for(int i = 0; i < this.options.size(); i++){
+            System.out.print(i + 1);
             System.out.print(" - ");
             System.out.println(this.options.get(i));
         }
@@ -61,7 +61,7 @@ public class Menu implements Screen<Integer>{
     /**
      * Clears the screen
      */
-    private void clearScreen() {
+    private void clearScreen(){
         System.out.print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
         System.out.flush();
     }
@@ -69,18 +69,17 @@ public class Menu implements Screen<Integer>{
     /**
      * Reads the users option
      */
-    private int readOption() {
+    private int readOption(){
         int op;
         Scanner is = new Scanner(System.in);
 
         System.out.print("Opção: ");
-        try {
+        try{
             op = is.nextInt();
-        }
-        catch (InputMismatchException e) { // Not an int
+        }catch(InputMismatchException e){ // Not an int
             op = -1;
         }
-        if (op<0 || op>this.options.size()) {
+        if(op < 0 || op > this.options.size()){
             System.out.println("Opção Inválida!!!");
             op = -1;
         }

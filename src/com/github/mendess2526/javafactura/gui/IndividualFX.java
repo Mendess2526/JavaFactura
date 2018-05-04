@@ -14,7 +14,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.paint.Color;
@@ -24,7 +27,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-class IndividualFX extends FX{
+class IndividualFX extends FX {
 
     private ObservableList<FacturaDataModel> facturas;
     private Label pendingNum;
@@ -36,12 +39,13 @@ class IndividualFX extends FX{
         this.gridPane.getColumnConstraints().add(cc);
 
         this.facturas = new ObservableListWrapper<>(new ArrayList<>());
-        this.facturas.addListener((ListChangeListener<FacturaDataModel>) c->updatePendingNum());
+        this.facturas.addListener((ListChangeListener<FacturaDataModel>) c -> updatePendingNum());
 
         this.pendingNum = new Label("null");
-        this.gridPane.add(this.pendingNum,0,0);
+        this.gridPane.add(this.pendingNum, 0, 0);
 
-        IndividualViewFacturaFX individualViewFacturaFX = new IndividualViewFacturaFX(this.javaFactura,this.primaryStage,this.scene);
+        IndividualViewFacturaFX individualViewFacturaFX = new IndividualViewFacturaFX(this.javaFactura,
+                                                                                      this.primaryStage, this.scene);
 
         TableView<FacturaDataModel> tableView = new TableView<>();
         tableView.setMinWidth(this.gridPane.getMinWidth());
@@ -61,18 +65,18 @@ class IndividualFX extends FX{
 
         tableView.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldSel, newSel) -> individualViewFacturaFX
-                    .setFactura(tableView.getSelectionModel().getSelectedItem().getSource())
-                    .show());
+                        .setFactura(tableView.getSelectionModel().getSelectedItem().getSource())
+                        .show());
         tableView.getColumns().add(date);
         tableView.getColumns().add(type);
         tableView.getColumns().add(value);
         tableView.setItems(this.facturas);
 
-        this.gridPane.add(tableView,0,1);
+        this.gridPane.add(tableView, 0, 1);
 
         Button logoutButton = new Button("Logout");
         logoutButton.setOnAction(this::logOut);
-        this.gridPane.add(makeHBox(logoutButton, Pos.BOTTOM_RIGHT),0,2);
+        this.gridPane.add(makeHBox(logoutButton, Pos.BOTTOM_RIGHT), 0, 2);
     }
 
     private void updatePendingNum(){
@@ -90,9 +94,9 @@ class IndividualFX extends FX{
         try{
             this.facturas.clear();
             this.facturas.addAll(this.javaFactura.getLoggedUserFaturas()
-                    .stream()
-                    .map(FacturaDataModel::new)
-                    .collect(Collectors.toList()));
+                                                 .stream()
+                                                 .map(FacturaDataModel::new)
+                                                 .collect(Collectors.toList()));
         }catch(NotContribuinteException e){
             goBack(null);
             return false;
@@ -112,7 +116,8 @@ class IndividualFX extends FX{
     }
 
     @SuppressWarnings("unused")
-    public static class FacturaDataModel{
+    public static class FacturaDataModel {
+
         private final Factura source;
         private final SimpleStringProperty date;
         private final SimpleObjectProperty<EconSector> type;

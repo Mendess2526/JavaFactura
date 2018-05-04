@@ -12,7 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Factura implements Comparable<Factura>, Serializable{
+public class Factura implements Comparable<Factura>,
+                                Serializable {
 
     /** The format the creationDate will be printed with when toString is called on this */
     public static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyy kk:mm:ss");
@@ -85,12 +86,12 @@ public class Factura implements Comparable<Factura>, Serializable{
 
     /**
      * \brief Fully parametrised constructor for <tt>Factura</tt>
-     * @param issuerNif The NIF of the entity that issued this Receipt
-     * @param issuerName The name of the entity that issued this Receipt
-     * @param clientNif The NIF of the client to whom this Receipt was issued
-     * @param description The description of the purchase
-     * @param value The value of the purchase
-     * @param econSector The economic sector of this Factura
+     * @param issuerNif           The NIF of the entity that issued this Receipt
+     * @param issuerName          The name of the entity that issued this Receipt
+     * @param clientNif           The NIF of the client to whom this Receipt was issued
+     * @param description         The description of the purchase
+     * @param value               The value of the purchase
+     * @param econSector          The economic sector of this Factura
      * @param possibleEconSectors The econ sectors of the company that issued this receipt
      */
     Factura(String issuerNif, String issuerName, String clientNif,
@@ -263,31 +264,37 @@ public class Factura implements Comparable<Factura>, Serializable{
     public boolean equals(Object o){
         if(this == o) return true;
 
-        if(o == null || getClass() != o.getClass()) return false;
+        if(o == null || this.getClass() != o.getClass()) return false;
 
-        Factura that = (Factura) o;
-        return  this.value == that.getValue() &&
-                this.issuerNif.equals(that.getIssuerNif()) &&
-                this.issuerName.equals(that.getIssuerName()) &&
-                this.creationDate.equals(that.getCreationDate()) &&
-                this.clientNif.equals(that.getClientNif()) &&
-                this.description.equals(that.getDescription()) &&
-                this.history.equals(that.history) &&
-                this.id == that.getId();
+        Factura factura = (Factura) o;
+        return this.id == factura.getId()
+               && this.value == factura.getValue()
+               && this.issuerNif.equals(factura.getIssuerNif())
+               && this.issuerName.equals(factura.getIssuerName())
+               && this.creationDate.equals(factura.getCreationDate())
+               && this.lastEditDate.equals(factura.getLastEditDate())
+               && this.clientNif.equals(factura.getClientNif())
+               && this.description.equals(factura.getDescription())
+               && this.history.equals(factura.getHistory())
+               && this.econSector.equals(factura.getEconSector())
+               && this.possibleEconSectors.equals(factura.getPossibleEconSectors());
     }
 
     @Override
     public String toString(){
         return "Factura{" +
-                "id=" + id +
-                ", issuerNif='" + issuerNif + '\'' +
-                ", issuerName='" + issuerName + '\'' +
-                ", creationDate=" + creationDate.format(dateFormat) +
-                ", clientNif='" + clientNif + '\'' +
-                ", description='" + description + '\'' +
-                ", value=" + value +
-                ", history=" + history.size() +
-                '}';
+               "id=" + id
+               + ", issuerNif='" + issuerNif + '\''
+               + ", issuerName='" + issuerName + '\''
+               + ", creationDate=" + creationDate
+               + ", lastEditDate=" + lastEditDate
+               + ", clientNif='" + clientNif + '\''
+               + ", description='" + description + '\''
+               + ", value=" + value
+               + ", history=" + history
+               + ", econSector=" + econSector
+               + ", possibleEconSectors=" + possibleEconSectors
+               + '}';
     }
 
     @Override

@@ -13,6 +13,6 @@ public class ComtribuinteSpendingComparator implements Comparator<Contribuinte> 
 
     @Override
     public int compare(Contribuinte c1, Contribuinte c2){
-        return Double.compare(getTotal(c1),getTotal(c2));
+        return Double.compare(getTotal(c1), getTotal(c2));
     }
 }

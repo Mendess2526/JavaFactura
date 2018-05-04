@@ -12,7 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-class LoginFX extends FX{
+class LoginFX extends FX {
 
     private final AdminFX adminScreen;
     private final IndividualFX individualScreen;
@@ -34,16 +34,16 @@ class LoginFX extends FX{
         this.gridPane.add(this.userNameTextField, 1, 1);
 
         Label userName = new Label("User Name");
-        this.gridPane.add(userName,0,1);
+        this.gridPane.add(userName, 0, 1);
 
         this.pwField = new PasswordField();
-        this.gridPane.add(this.pwField, 1,2);
+        this.gridPane.add(this.pwField, 1, 2);
 
         Label pw = new Label("Password");
-        this.gridPane.add(pw,0,2);
+        this.gridPane.add(pw, 0, 2);
 
         Button loginButton = new Button("Login");
-        loginButton.setOnAction(event->login());
+        loginButton.setOnAction(event -> login());
         this.gridPane.add(makeHBox(loginButton, Pos.BOTTOM_RIGHT), 1, 4);
 
         this.errors = new Text();
@@ -54,7 +54,7 @@ class LoginFX extends FX{
     private void login(){
         try{
             this.errors.setText("");
-            this.javaFactura.login(userNameTextField.getText(),pwField.getText());
+            this.javaFactura.login(userNameTextField.getText(), pwField.getText());
             User loggedUser = this.javaFactura.getLoggedUser();
             if(loggedUser instanceof Admin){
                 if(!this.adminScreen.show())

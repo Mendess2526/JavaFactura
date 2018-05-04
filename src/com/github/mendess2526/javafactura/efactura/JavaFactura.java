@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class JavaFactura implements Serializable{
+public class JavaFactura implements Serializable {
 
     private static final String SAVE_STATE_FILE = "javaFactura.dat";
 
@@ -21,7 +21,6 @@ public class JavaFactura implements Serializable{
             return new JavaFactura();
         }
     }
-
 
 
     private final Map<String,Contribuinte> contribuintes;
@@ -51,7 +50,7 @@ public class JavaFactura implements Serializable{
             this.loggedInUser = this.admin;
         }else{
             Contribuinte user = this.contribuintes.get(nif);
-            if(user == null || ! user.getPassword().equals(password))
+            if(user == null || !user.getPassword().equals(password))
                 throw new InvalidCredentialsException();
             this.loggedInUser = user;
         }
@@ -65,7 +64,7 @@ public class JavaFactura implements Serializable{
                                    int numDependants, List<String> dependants, double fiscalCoefficient,
                                    Set<String> econActivities) throws InvalidNumberOfDependantsException{
         Set<EconSector> econSectors = new HashSet<>();
-        for(String econActivity: econActivities){
+        for(String econActivity : econActivities){
             EconSector econSector = EconSector.factory(econActivity);
             if(!(econSector instanceof Pendente)){
                 econSectors.add(EconSector.factory(econActivity));
@@ -81,11 +80,12 @@ public class JavaFactura implements Serializable{
                 fiscalCoefficient,
                 econSectors));
     }
+
     public void registarEmpresarial(String nif, String email, String nome, String address, String password,
-                                   double fiscalCoefficient, Set<String> econActivities){
+                                    double fiscalCoefficient, Set<String> econActivities){
 
         Set<EconSector> econSectors = new HashSet<>();
-        for(String econActivity: econActivities){
+        for(String econActivity : econActivities){
             EconSector econSector = EconSector.factory(econActivity);
             if(!(econSector instanceof Pendente)){
                 econSectors.add(EconSector.factory(econActivity));
@@ -102,7 +102,7 @@ public class JavaFactura implements Serializable{
     }
 
     public Factura emitirFactura(String companyNif, float value, String description) throws NotEmpresaException,
-                                                                                         NotIndividualException{
+                                                                                            NotIndividualException{
         Factura f;
         try{
             ContribuinteEmpresarial company =
@@ -141,37 +141,39 @@ public class JavaFactura implements Serializable{
 
     public List<Factura> getFaturasOfEmpresa(String nifEmpresa, Comparator<Factura> comparator){
         return this.contribuintes.get(nifEmpresa).getFacturas()
-                .stream()
-                .sorted(comparator)
-                .collect(Collectors.toList());
+                                 .stream()
+                                 .sorted(comparator)
+                                 .collect(Collectors.toList());
     }
 
-    public List<Factura> getFaturasOfIndividual(String clientNIF, LocalDateTime from, LocalDateTime to) throws NotEmpresaException{
+    public List<Factura> getFaturasOfIndividual(String clientNIF, LocalDateTime from, LocalDateTime to) throws
+                                                                                                        NotEmpresaException{
         if(!(this.loggedInUser instanceof ContribuinteEmpresarial)){
             throw new NotEmpresaException();
         }
         return this.contribuintes.get(clientNIF).getFacturas()
-                .stream()
-                .filter(f -> f.getCreationDate().isAfter(from))
-                .filter(f -> f.getCreationDate().isBefore(to))
-                .sorted()
-                .collect(Collectors.toList());
+                                 .stream()
+                                 .filter(f -> f.getCreationDate().isAfter(from))
+                                 .filter(f -> f.getCreationDate().isBefore(to))
+                                 .sorted()
+                                 .collect(Collectors.toList());
     }
 
-    public List<Factura> getFaturasOfIndividual(String clientNif, Comparator<Factura> comparator) throws NotEmpresaException{
+    public List<Factura> getFaturasOfIndividual(String clientNif, Comparator<Factura> comparator) throws
+                                                                                                  NotEmpresaException{
         if(!(this.loggedInUser instanceof ContribuinteEmpresarial))
             throw new NotEmpresaException();
         return this.contribuintes.get(clientNif).getFacturas()
-                .stream()
-                .sorted(comparator)
-                .collect(Collectors.toList());
+                                 .stream()
+                                 .sorted(comparator)
+                                 .collect(Collectors.toList());
     }
 
     public double totalFaturado(String companyNif, LocalDateTime from, LocalDateTime to) throws NotEmpresaException{
         return this.contribuintes.get(companyNif).getFacturas()
-                .stream()
-                .mapToDouble(Factura::getValue)
-                .sum();
+                                 .stream()
+                                 .mapToDouble(Factura::getValue)
+                                 .sum();
     }
 
     public List<Contribuinte> getTop10Contrib() throws NotAdminException{
@@ -179,11 +181,11 @@ public class JavaFactura implements Serializable{
             throw new NotAdminException();
         }
         PriorityQueue<ContribuinteIndividual> top10
-                = new PriorityQueue<>(10,new ComtribuinteSpendingComparator().reversed());
+                = new PriorityQueue<>(10, new ComtribuinteSpendingComparator().reversed());
         this.contribuintes.values()
-                .stream()
-                .filter(c -> c instanceof ContribuinteIndividual)
-                .forEach(c -> top10.add((ContribuinteIndividual) c));
+                          .stream()
+                          .filter(c -> c instanceof ContribuinteIndividual)
+                          .forEach(c -> top10.add((ContribuinteIndividual) c));
         return top10.stream().limit(10).collect(Collectors.toList());
     }
 
@@ -199,8 +201,8 @@ public class JavaFactura implements Serializable{
                 new PriorityQueue<>(x, new ContribuinteFacturaCountComparator().reversed());
 
         this.contribuintes.values().stream()
-                .filter(c -> c instanceof ContribuinteEmpresarial)
-                .forEach(c -> topX.add((ContribuinteEmpresarial) c));
+                          .filter(c -> c instanceof ContribuinteEmpresarial)
+                          .forEach(c -> topX.add((ContribuinteEmpresarial) c));
 
         return new Pair<>(topX.stream().limit(x).collect(Collectors.toList()), 0.0);
     }
@@ -214,7 +216,7 @@ public class JavaFactura implements Serializable{
 
     private Map<String,Contribuinte> generateContribuintes(){
         Map<String,Contribuinte> contribuintes = new HashMap<>();
-        for(int i=0; i<5; i++){
+        for(int i = 0; i < 5; i++){
             String nif = "I" + i;
             String email = "ci" + i + "@email.com";
             String nome = "ci" + i;
@@ -224,7 +226,7 @@ public class JavaFactura implements Serializable{
             double fiscal_coefficient = Math.random();
             Set<EconSector> econActivities = new HashSet<>();
             try{
-                contribuintes.put(nif,new ContribuinteIndividual(
+                contribuintes.put(nif, new ContribuinteIndividual(
                         nif,
                         email,
                         nome,
@@ -239,7 +241,7 @@ public class JavaFactura implements Serializable{
             }
 
         }
-        for(int i=0; i<3; i++){
+        for(int i = 0; i < 3; i++){
             String nif = "E" + i;
             String email = "ce" + i + "@email.com";
             String nome = "ce" + i;
@@ -248,7 +250,7 @@ public class JavaFactura implements Serializable{
             double fiscal_coefficient = Math.random();
             Set<EconSector> econActivities = new HashSet<>();
             econActivities.add(new Pendente());
-            contribuintes.put(nif,new ContribuinteEmpresarial(
+            contribuintes.put(nif, new ContribuinteEmpresarial(
                     nif,
                     email,
                     nome,
@@ -265,17 +267,17 @@ public class JavaFactura implements Serializable{
     private void generateFacturas(){
         User u = this.loggedInUser;
         List<String> issuers = this.contribuintes.values()
-                .stream()
-                .map(Contribuinte::getNif)
-                .filter(nif->nif.startsWith("E"))
-                .collect(Collectors.toList());
+                                                 .stream()
+                                                 .map(Contribuinte::getNif)
+                                                 .filter(nif -> nif.startsWith("E"))
+                                                 .collect(Collectors.toList());
         List<String> clients = this.contribuintes.values()
-                .stream()
-                .map(Contribuinte::getNif)
-                .filter(nif->nif.startsWith("I"))
-                .collect(Collectors.toList());
+                                                 .stream()
+                                                 .map(Contribuinte::getNif)
+                                                 .filter(nif -> nif.startsWith("I"))
+                                                 .collect(Collectors.toList());
 
-        for(int i=0; i<40; i++){
+        for(int i = 0; i < 40; i++){
             String issuerNif = issuers.get(new Random().nextInt(issuers.size()));
             String clientNif = clients.get(new Random().nextInt(clients.size()));
             String description = issuerNif + " -> " + clientNif;
@@ -283,7 +285,7 @@ public class JavaFactura implements Serializable{
 
             this.loggedInUser = this.contribuintes.get(clientNif);
             try{
-                Factura f = emitirFactura(issuerNif,value,description);
+                Factura f = emitirFactura(issuerNif, value, description);
                 changeFactura(f, "E01");
             }catch(NotEmpresaException | NotIndividualException e){
                 e.printStackTrace();

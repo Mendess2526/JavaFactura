@@ -3,7 +3,10 @@ package com.github.mendess2526.javafactura.efactura;
 import com.github.mendess2526.javafactura.efactura.econSectors.EconSector;
 import com.github.mendess2526.javafactura.efactura.exceptions.InvalidNumberOfDependantsException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 public class ContribuinteIndividual extends Contribuinte {
@@ -33,16 +36,15 @@ public class ContribuinteIndividual extends Contribuinte {
 
     /**
      * Fully parametrised constructor for <tt>Contribuinte Individual</tt>
-     * @param nif The NIF
-     * @param email The email
-     * @param nome The name
-     * @param address The address
-     * @param password The password
-     * @param numDependants Number of dependents
-     * @param familyAggregate The list of NIF of the family aggregate
+     * @param nif               The NIF
+     * @param email             The email
+     * @param nome              The name
+     * @param address           The address
+     * @param password          The password
+     * @param numDependants     Number of dependents
+     * @param familyAggregate   The list of NIF of the family aggregate
      * @param fiscalCoefficient The fiscal coefficient of the Contribuinte
-     * @param econActivities The economic activities eligible
-     *
+     * @param econActivities    The economic activities eligible
      * @throws InvalidNumberOfDependantsException if the number of dependants is higher then the size
      *                                            of the family aggregate
      */
@@ -111,23 +113,24 @@ public class ContribuinteIndividual extends Contribuinte {
     public boolean equals(Object o){
         if(this == o) return true;
 
-        if(o == null || getClass() != o.getClass()) return false;
-
-        if(! super.equals(o)) return false;
+        if(o == null || this.getClass() != o.getClass()) return false;
 
         ContribuinteIndividual that = (ContribuinteIndividual) o;
-        return  this.fiscalCoefficient == that.getFiscalCoefficient() &&
-                this.familyAggregate.equals(that.getFamilyAggregate()) &&
-                this.econActivities.equals(that.getEconActivities());
+        return super.equals(o)
+               && this.numDependants == that.getNumDependants()
+               && this.fiscalCoefficient == that.getFiscalCoefficient()
+               && this.familyAggregate.equals(that.getFamilyAggregate())
+               && this.econActivities.equals(that.getEconActivities());
     }
 
     @Override
     public String toString(){
         return "ContribuinteIndividual{" +
-                "familyAggregate=" + familyAggregate +
-                ", fiscalCoefficient=" + fiscalCoefficient +
-                ", econActivities=" + econActivities +
-                '}';
+               "familyAggregate=" + familyAggregate
+               + ", numDependants=" + numDependants
+               + ", fiscalCoefficient=" + fiscalCoefficient
+               + ", econActivities=" + econActivities
+               + "} " + super.toString();
     }
 
     public ContribuinteIndividual clone(){
