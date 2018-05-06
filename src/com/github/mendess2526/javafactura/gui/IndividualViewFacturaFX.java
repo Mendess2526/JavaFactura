@@ -2,7 +2,9 @@ package com.github.mendess2526.javafactura.gui;
 
 import com.github.mendess2526.javafactura.efactura.Factura;
 import com.github.mendess2526.javafactura.efactura.JavaFactura;
-import com.github.mendess2526.javafactura.efactura.econSectors.*;
+import com.github.mendess2526.javafactura.efactura.econSectors.EconSector;
+import com.github.mendess2526.javafactura.efactura.exceptions.InvalidEconSectorException;
+import com.github.mendess2526.javafactura.efactura.exceptions.NotIndividualException;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -18,24 +20,15 @@ import java.util.LinkedList;
 
 public class IndividualViewFacturaFX extends FX {
 
-    private static final MenuItem[] sectors = {
-            new MenuItem(new AlojamentoRestauracao().toString()),
-            new MenuItem(new Cabeleireiro().toString()),
-            new MenuItem(new Educacao().toString()),
-            new MenuItem(new Familia().toString()),
-            new MenuItem(new Habitacao().toString()),
-            new MenuItem(new Lares().toString()),
-            new MenuItem(new Reparacoes().toString()),
-            new MenuItem(new Saude().toString()),
-            new MenuItem(new Veterinario().toString())
-    };
     private ArrayList<Factura> history;
     private int historyIndex;
     private final Button previousButton;
     private final Button nextButton;
+    private final MenuButton editSector;
     private final Text issuerNif;
     private final Text issuerName;
     private final Text date;
+    private final Text editDate;
     private final Text clientNif;
     private final Text description;
     private final Text value;
@@ -43,6 +36,10 @@ public class IndividualViewFacturaFX extends FX {
 
     IndividualViewFacturaFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene);
+
+        this.historyIndex = 0;
+        this.history = new ArrayList<>();
+
         int row = 0;
 
         Label issuerNifLabel = new Label("IssuerNif:");
@@ -59,6 +56,11 @@ public class IndividualViewFacturaFX extends FX {
         this.date = new Text();
         this.gridPane.add(dateLabel, 0, row);
         this.gridPane.add(this.date, 1, row++);
+
+        Label editDateLabel = new Label("Last Edit Date:");
+        this.editDate = new Text();
+        this.gridPane.add(editDateLabel, 0, row);
+        this.gridPane.add(this.editDate, 1, row++);
 
         Label clientNifLabel = new Label("ClientNif:");
         this.clientNif = new Text();
@@ -80,9 +82,8 @@ public class IndividualViewFacturaFX extends FX {
         this.gridPane.add(econSectorLabel, 0, row);
         this.gridPane.add(this.econSector, 1, row++);
 
-        MenuButton editSector = new MenuButton("Mudar Setor");
-        for(MenuItem m : sectors)
-            editSector.getItems().add(m);
+        this.editSector = new MenuButton("Mudar Setor");
+        this.gridPane.add(editSector, 0, row++);
 
         this.previousButton = new Button("Previous");
         this.previousButton.setOnAction(this::previousFactura);
@@ -128,19 +129,45 @@ public class IndividualViewFacturaFX extends FX {
     public IndividualViewFacturaFX setFactura(Factura factura){
         LinkedList<Factura> linkedList = factura.getHistory();
         linkedList.addFirst(factura);
-        this.history = new ArrayList<>(linkedList);
+        this.history.clear();
+        this.history.addAll(linkedList);
         this.historyIndex = 0;
+        this.editSector.getItems().clear();
+        for(EconSector e : factura.getPossibleEconSectors()){
+            MenuItem m = new MenuItem(e.toString() + " : " + e.getTypeCode());
+            m.setOnAction(ae->{
+                Factura f = this.history.get(0);
+                String typeCode = ((MenuItem) ae.getSource()).getText().split(" : ")[1];
+                try{
+                    f = this.javaFactura.changeFactura(f, typeCode);
+                }catch(NotIndividualException e1){
+                    this.goBack(null);
+                }catch(InvalidEconSectorException ignored){
+                } // using setFactura will fix this
+                // if it ever happens
+                this.setFactura(f);
+            });
+            this.editSector.getItems().add(m);
+        }
+        this.editSector.setDisable(this.editSector.getItems().isEmpty());
         updateFields(this.history.get(this.historyIndex));
+        updateButtons();
         return this;
     }
 
     private void updateFields(Factura factura){
         this.issuerNif.setText(factura.getIssuerNif());
         this.issuerName.setText(factura.getIssuerName());
-        this.date.setText(factura.getCreationDate().toString());
+        this.date.setText(factura.getCreationDate().format(Factura.dateFormat));
+        this.editDate.setText(factura.getLastEditDate().format(Factura.dateFormat));
         this.clientNif.setText(factura.getClientNif());
         this.description.setText(factura.getDescription());
         this.value.setText(String.valueOf(factura.getValue()));
         this.econSector.setText(factura.getType().toString());
+    }
+
+    @Override
+    protected void goBack(ActionEvent event){
+        super.goBack(event);
     }
 }

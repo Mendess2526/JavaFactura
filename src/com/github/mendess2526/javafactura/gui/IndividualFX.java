@@ -14,11 +14,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -30,6 +28,7 @@ import java.util.stream.Collectors;
 class IndividualFX extends FX {
 
     private ObservableList<FacturaDataModel> facturas;
+    private final TableView<FacturaDataModel> table;
     private Label pendingNum;
 
     IndividualFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
@@ -37,7 +36,7 @@ class IndividualFX extends FX {
         ColumnConstraints cc = new ColumnConstraints();
         cc.setPercentWidth(90);
         this.gridPane.getColumnConstraints().add(cc);
-
+        
         this.facturas = new ObservableListWrapper<>(new ArrayList<>());
         this.facturas.addListener((ListChangeListener<FacturaDataModel>) c -> updatePendingNum());
 
@@ -47,9 +46,9 @@ class IndividualFX extends FX {
         IndividualViewFacturaFX individualViewFacturaFX = new IndividualViewFacturaFX(this.javaFactura,
                                                                                       this.primaryStage, this.scene);
 
-        TableView<FacturaDataModel> tableView = new TableView<>();
-        tableView.setMinWidth(this.gridPane.getMinWidth());
-        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        this.table = new TableView<>();
+        this.table.setMinWidth(this.gridPane.getMinWidth());
+        this.table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         TableColumn<FacturaDataModel,String> date = new TableColumn<>("Date");
         date.setMinWidth(Factura.dateFormat.toString().length());
@@ -63,16 +62,25 @@ class IndividualFX extends FX {
         value.setMinWidth(100);
         value.setCellValueFactory(new PropertyValueFactory<>("value"));
 
-        tableView.getSelectionModel().selectedItemProperty().addListener(
-                (obs, oldSel, newSel) -> individualViewFacturaFX
-                        .setFactura(tableView.getSelectionModel().getSelectedItem().getSource())
-                        .show());
-        tableView.getColumns().add(date);
-        tableView.getColumns().add(type);
-        tableView.getColumns().add(value);
-        tableView.setItems(this.facturas);
+        this.table.setRowFactory(tv->{
+            TableRow<FacturaDataModel> row = new TableRow<>();
+            row.setOnMouseClicked(event->{
+                if(event.getButton().equals(MouseButton.PRIMARY)
+                        && event.getClickCount() == 2
+                        && ! row.isEmpty()){
+                    individualViewFacturaFX
+                            .setFactura(row.getItem().getSource())
+                            .show();
+                }
+            });
+            return row;
+        });
+        this.table.getColumns().add(date);
+        this.table.getColumns().add(type);
+        this.table.getColumns().add(value);
+        this.table.setItems(this.facturas);
 
-        this.gridPane.add(tableView, 0, 1);
+        this.gridPane.add(table, 0, 1);
 
         Button logoutButton = new Button("Logout");
         logoutButton.setOnAction(this::logOut);
@@ -87,6 +95,10 @@ class IndividualFX extends FX {
         this.pendingNum.setText(String.valueOf(count) + " facturas pendente(s)");
         if(count == 0) this.pendingNum.setTextFill(Color.GREEN);
         else this.pendingNum.setTextFill(Color.RED);
+    }
+
+    void refresh(){
+        this.table.refresh();
     }
 
     @Override
