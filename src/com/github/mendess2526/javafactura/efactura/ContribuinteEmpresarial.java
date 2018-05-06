@@ -1,6 +1,7 @@
 package com.github.mendess2526.javafactura.efactura;
 
 import com.github.mendess2526.javafactura.efactura.econSectors.EconSector;
+import com.github.mendess2526.javafactura.efactura.econSectors.Pendente;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +43,7 @@ public class ContribuinteEmpresarial extends Contribuinte {
                                    Set<EconSector> econActivities){
         super(nif, email, name, address, password);
         this.econActivities = new ArrayList<>(econActivities);
+        this.econActivities.remove(new Pendente());
         this.fiscalCoefficient = fiscalCoefficient;
     }
 
@@ -90,7 +92,7 @@ public class ContribuinteEmpresarial extends Contribuinte {
         if(this.econActivities.size() > 1){
             econSector = EconSector.factory("E00");
         }else{
-            econSector = EconSector.factory(this.econActivities.get(0).getType());
+            econSector = EconSector.factory(this.econActivities.get(0).getTypeCode());
         }
         Factura factura = new Factura(this.getNif(), this.getName(),
                                       buyer.getNif(), description, value, econSector, this.econActivities);

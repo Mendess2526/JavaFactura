@@ -3,13 +3,15 @@ package com.github.mendess2526.javafactura.efactura;
 import com.github.mendess2526.javafactura.efactura.econSectors.Deductible;
 import com.github.mendess2526.javafactura.efactura.econSectors.EconSector;
 import com.github.mendess2526.javafactura.efactura.econSectors.Pendente;
+import com.github.mendess2526.javafactura.efactura.exceptions.InvalidEconSectorException;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Factura implements Comparable<Factura>,
@@ -65,7 +67,7 @@ public class Factura implements Comparable<Factura>,
     /**
      * \brief The econ sectors of the company that issued this receipt
      */
-    private List<EconSector> possibleEconSectors;
+    private Set<EconSector> possibleEconSectors;
 
     /**
      * Empty constructor
@@ -82,6 +84,7 @@ public class Factura implements Comparable<Factura>,
         this.history = new LinkedList<>();
         this.history.add(this);
         this.econSector = new Pendente();
+        this.possibleEconSectors = new HashSet<>();
     }
 
     /**
@@ -107,7 +110,12 @@ public class Factura implements Comparable<Factura>,
         this.value = value;
         this.history = new LinkedList<>();
         this.econSector = econSector;
-        this.possibleEconSectors = new ArrayList<>(possibleEconSectors);
+        if(econSector instanceof Pendente){
+            this.possibleEconSectors = new HashSet<>(possibleEconSectors);
+            this.possibleEconSectors.remove(new Pendente());
+        }else{
+            this.possibleEconSectors = new HashSet<>();
+        }
     }
 
     /**
@@ -125,6 +133,7 @@ public class Factura implements Comparable<Factura>,
         this.value = factura.getValue();
         this.history = factura.getHistory();
         this.econSector = factura.getEconSector();
+        this.possibleEconSectors = factura.getPossibleEconSectors();
     }
 
     /**
@@ -214,7 +223,12 @@ public class Factura implements Comparable<Factura>,
      * Changes the economic sector of the <tt>Factura</tt>
      * @param econSector the new economic sector
      */
-    void setEconSector(EconSector econSector){
+    void setEconSector(EconSector econSector) throws InvalidEconSectorException{
+        if(! this.possibleEconSectors.contains(econSector)) throw new InvalidEconSectorException(econSector.toString());
+        this.possibleEconSectors.remove(econSector);
+        if(! (this.econSector instanceof Pendente)){
+            this.possibleEconSectors.add(this.econSector);
+        }
         this.history.addFirst(this.clone().cleanHistory());
         this.econSector = econSector;
         this.lastEditDate = LocalDateTime.now();
@@ -222,6 +236,7 @@ public class Factura implements Comparable<Factura>,
 
     private Factura cleanHistory(){
         this.history.clear();
+        this.possibleEconSectors.clear();
         return this;
     }
 
@@ -237,8 +252,8 @@ public class Factura implements Comparable<Factura>,
      * Returns the list of possible econ sectors
      * @return The list of possible econ sectors
      */
-    public List<EconSector> getPossibleEconSectors(){
-        return new ArrayList<>(possibleEconSectors);
+    public Set<EconSector> getPossibleEconSectors(){
+        return new HashSet<>(this.possibleEconSectors);
     }
 
     /**

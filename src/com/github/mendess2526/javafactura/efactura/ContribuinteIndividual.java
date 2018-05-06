@@ -1,6 +1,7 @@
 package com.github.mendess2526.javafactura.efactura;
 
 import com.github.mendess2526.javafactura.efactura.econSectors.EconSector;
+import com.github.mendess2526.javafactura.efactura.exceptions.InvalidEconSectorException;
 import com.github.mendess2526.javafactura.efactura.exceptions.InvalidNumberOfDependantsException;
 
 import java.util.ArrayList;
@@ -105,8 +106,11 @@ public class ContribuinteIndividual extends Contribuinte {
         this.econActivities = econActivities;
     }
 
-    public void changeFatura(Factura f, EconSector e){
-        this.facturas.get(this.facturas.indexOf(f)).setEconSector(e);
+    public Factura changeFatura(Factura f, EconSector e) throws InvalidEconSectorException{
+        Factura changedF = this.facturas.get(this.facturas.indexOf(f));
+        changedF.setEconSector(e);
+        f.setEconSector(e);
+        return f;
     }
 
     @Override

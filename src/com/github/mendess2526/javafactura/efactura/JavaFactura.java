@@ -2,6 +2,8 @@ package com.github.mendess2526.javafactura.efactura;
 
 import com.github.mendess2526.javafactura.efactura.collections.Pair;
 import com.github.mendess2526.javafactura.efactura.econSectors.EconSector;
+import com.github.mendess2526.javafactura.efactura.econSectors.Educacao;
+import com.github.mendess2526.javafactura.efactura.econSectors.Familia;
 import com.github.mendess2526.javafactura.efactura.econSectors.Pendente;
 import com.github.mendess2526.javafactura.efactura.exceptions.*;
 
@@ -122,14 +124,14 @@ public class JavaFactura implements Serializable {
         return f;
     }
 
-    public void changeFactura(Factura factura, String typeCode) throws NotIndividualException{
+    public Factura changeFactura(Factura factura, String typeCode) throws NotIndividualException,
+                                                                          InvalidEconSectorException{
         try{
-            ((ContribuinteIndividual) this.loggedInUser)
+            return ((ContribuinteIndividual) this.loggedInUser)
                     .changeFatura(factura, EconSector.factory(typeCode));
         }catch(ClassCastException e){
             throw new NotIndividualException();
         }
-
     }
 
     public List<Factura> getLoggedUserFaturas() throws NotContribuinteException{
@@ -249,7 +251,8 @@ public class JavaFactura implements Serializable {
             String password = "pass";
             double fiscal_coefficient = Math.random();
             Set<EconSector> econActivities = new HashSet<>();
-            econActivities.add(new Pendente());
+            econActivities.add(new Familia());
+            econActivities.add(new Educacao());
             contribuintes.put(nif, new ContribuinteEmpresarial(
                     nif,
                     email,
@@ -286,8 +289,8 @@ public class JavaFactura implements Serializable {
             this.loggedInUser = this.contribuintes.get(clientNif);
             try{
                 Factura f = emitirFactura(issuerNif, value, description);
-                changeFactura(f, "E01");
-            }catch(NotEmpresaException | NotIndividualException e){
+                //changeFactura(f, EconSector.T_CODE_FAMILIA);
+            }catch(NotEmpresaException | NotIndividualException /*| InvalidEconSectorException*/ e){
                 e.printStackTrace();
             }
         }
