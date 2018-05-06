@@ -3,8 +3,8 @@ package com.github.mendess2526.javafactura.efactura.econSectors;
 public final class Habitacao extends EconSector implements Deductible {
 
     @Override
-    public String getType(){
-        return "E06";
+    public String getTypeCode(){
+        return T_CODE_HABITACAO;
     }
 
     @Override
