@@ -2,14 +2,6 @@
 
 ### Duvidas
 
-* Posso fazer clones sem o metodo `clone`, apenas com o construtor de copia e com acesso direto
-fst variaveis? O mesmo para `equals` `hashCode`
-* Posso usar o `toString` sem `StringBuilder`  
-* Posso usar packages
-* Posso usar `Object#equals` e `Double#compare`
-* Posso escrever o codigo em ingles? Os nomes das classes tb? E fst documentação
+* Posso escrever o codigo em ingles? Os nomes das classes tb? E documentação?
 * `@Override`
-* package access modifiers
-* Posso usar Generics
-* Posso usar jsons para guardar algumas coisas (não todo o estado)
-* O que não posso usar?
+* protected/package access modifiers
