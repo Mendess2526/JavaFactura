@@ -57,10 +57,6 @@ public class Factura implements Comparable<Factura>,
      */
     private final float value;
     /**
-     * \brief History of states of this <tt>Factura</tt>
-     */
-    private final LinkedList<Factura> history;
-    /**
      * \brief The economic sector
      */
     private EconSector econSector;
@@ -68,6 +64,10 @@ public class Factura implements Comparable<Factura>,
      * \brief The econ sectors of the company that issued this receipt
      */
     private Set<EconSector> possibleEconSectors;
+    /**
+     * \brief History of states of this <tt>Factura</tt>
+     */
+    private final LinkedList<Factura> history;
 
     /**
      * Empty constructor
@@ -297,8 +297,8 @@ public class Factura implements Comparable<Factura>,
 
     @Override
     public String toString(){
-        return "Factura{" +
-               "id=" + id
+        return "Factura{"
+               + "id=" + id
                + ", issuerNif='" + issuerNif + '\''
                + ", issuerName='" + issuerName + '\''
                + ", creationDate=" + creationDate
@@ -306,9 +306,9 @@ public class Factura implements Comparable<Factura>,
                + ", clientNif='" + clientNif + '\''
                + ", description='" + description + '\''
                + ", value=" + value
-               + ", history=" + history
                + ", econSector=" + econSector
                + ", possibleEconSectors=" + possibleEconSectors
+               + ", history=" + history
                + '}';
     }
 

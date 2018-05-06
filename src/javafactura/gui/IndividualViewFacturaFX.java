@@ -134,17 +134,16 @@ public class IndividualViewFacturaFX extends FX {
         this.historyIndex = 0;
         this.editSector.getItems().clear();
         for(EconSector e : factura.getPossibleEconSectors()){
-            MenuItem m = new MenuItem(e.toString() + " : " + e.getTypeCode());
+            EconMenuItem m = new EconMenuItem(e);
             m.setOnAction(ae->{
                 Factura f = this.history.get(0);
-                String typeCode = ((MenuItem) ae.getSource()).getText().split(" : ")[1];
+                String typeCode = ((EconMenuItem) ae.getSource()).getSector().getTypeCode();
                 try{
                     f = this.javaFactura.changeFactura(f, typeCode);
                 }catch(NotIndividualException e1){
                     this.goBack(null);
                 }catch(InvalidEconSectorException ignored){
-                } // using setFactura will fix this
-                // if it ever happens
+                } // using setFactura will fix this if it ever happens
                 this.setFactura(f);
             });
             this.editSector.getItems().add(m);
@@ -169,5 +168,19 @@ public class IndividualViewFacturaFX extends FX {
     @Override
     protected void goBack(ActionEvent event){
         super.goBack(event);
+    }
+
+    private class EconMenuItem extends MenuItem{
+
+        private final EconSector sector;
+
+        EconMenuItem(EconSector e){
+            super(e.toString());
+            this.sector = e;
+        }
+
+        public EconSector getSector(){
+            return this.sector;
+        }
     }
 }

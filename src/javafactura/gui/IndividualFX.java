@@ -6,9 +6,11 @@ import javafactura.businessLogic.econSectors.EconSector;
 import javafactura.businessLogic.econSectors.Pendente;
 import javafactura.businessLogic.exceptions.NotContribuinteException;
 import com.sun.javafx.collections.ObservableListWrapper;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,6 +22,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -54,9 +57,9 @@ class IndividualFX extends FX {
         date.setMinWidth(Factura.dateFormat.toString().length());
         date.setCellValueFactory(new PropertyValueFactory<>("date"));
 
-        TableColumn<FacturaDataModel,String> type = new TableColumn<>("Type");
+        TableColumn<FacturaDataModel,EconSector> type = new TableColumn<>("Type");
         type.setMinWidth(100);
-        type.setCellValueFactory(new PropertyValueFactory<>("type"));
+        type.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().source.getType()));
 
         TableColumn<FacturaDataModel,String> value = new TableColumn<>("Value");
         value.setMinWidth(100);
@@ -85,20 +88,23 @@ class IndividualFX extends FX {
         Button logoutButton = new Button("Logout");
         logoutButton.setOnAction(this::logOut);
         this.gridPane.add(makeHBox(logoutButton, Pos.BOTTOM_RIGHT), 0, 2);
+
+        this.primaryStage.sceneProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue.equals(this.scene)){
+                this.table.refresh();
+                updatePendingNum();
+            }
+        });
     }
 
     private void updatePendingNum(){
         long count = this.facturas
                 .stream()
-                .filter(f -> f.getType() instanceof Pendente)
+                .filter(f -> f.getSource().getType() instanceof Pendente)
                 .count();
         this.pendingNum.setText(String.valueOf(count) + " facturas pendente(s)");
         if(count == 0) this.pendingNum.setTextFill(Color.GREEN);
         else this.pendingNum.setTextFill(Color.RED);
-    }
-
-    void refresh(){
-        this.table.refresh();
     }
 
     @Override
@@ -146,7 +152,7 @@ class IndividualFX extends FX {
             return date.get();
         }
 
-        public EconSector getType(){
+        EconSector getType(){
             return type.get();
         }
 
@@ -166,7 +172,7 @@ class IndividualFX extends FX {
             this.value.set(value);
         }
 
-        public Factura getSource(){
+        Factura getSource(){
             return this.source;
         }
     }
