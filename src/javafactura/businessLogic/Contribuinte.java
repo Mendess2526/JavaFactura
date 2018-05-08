@@ -1,9 +1,8 @@
 package javafactura.businessLogic;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class Contribuinte implements User,
                                               Serializable {
@@ -32,7 +31,7 @@ public abstract class Contribuinte implements User,
     /**
      * The receipts
      */
-    protected final List<Factura> facturas;
+    protected final LinkedList<Factura> facturas;
 
     /**
      * The empty constructor
@@ -144,14 +143,15 @@ public abstract class Contribuinte implements User,
      * Returns the list of Facturas associated
      * @return The list of Facturas associated
      */
-    public List<Factura> getFacturas(){
-        List<Factura> l = new ArrayList<>();
-        this.facturas.forEach(f -> l.add(f.clone()));
-        return l;
+    public LinkedList<Factura> getFacturas(){
+        return this.facturas
+                .stream()
+                .map(Factura::clone)
+                .collect(Collectors.toCollection(LinkedList::new));
     }
 
     protected void associateFactura(Factura f){
-        this.facturas.add(f);
+        this.facturas.addFirst(f);
     }
 
     @Override
