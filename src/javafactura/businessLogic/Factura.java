@@ -82,8 +82,7 @@ public class Factura implements Comparable<Factura>,
         this.description = "";
         this.value = 0.0f;
         this.history = new LinkedList<>();
-        this.history.add(this);
-        this.econSector = new Pendente();
+        this.econSector = Pendente.getInstance();
         this.possibleEconSectors = new HashSet<>();
     }
 
@@ -112,7 +111,7 @@ public class Factura implements Comparable<Factura>,
         this.econSector = econSector;
         if(econSector instanceof Pendente){
             this.possibleEconSectors = new HashSet<>(possibleEconSectors);
-            this.possibleEconSectors.remove(new Pendente());
+            this.possibleEconSectors.remove(Pendente.getInstance());
         }else{
             this.possibleEconSectors = new HashSet<>();
         }

@@ -43,7 +43,7 @@ public class ContribuinteEmpresarial extends Contribuinte {
                                    Set<EconSector> econActivities){
         super(nif, email, name, address, password);
         this.econActivities = new ArrayList<>(econActivities);
-        this.econActivities.remove(new Pendente());
+        this.econActivities.remove(Pendente.getInstance());
         this.fiscalCoefficient = fiscalCoefficient;
     }
 
@@ -90,9 +90,9 @@ public class ContribuinteEmpresarial extends Contribuinte {
     Factura issueFactura(Contribuinte buyer, String description, float value){
         EconSector econSector;
         if(this.econActivities.size() > 1){
-            econSector = EconSector.factory("E00");
+            econSector = Pendente.getInstance();
         }else{
-            econSector = EconSector.factory(this.econActivities.get(0).getTypeCode());
+            econSector = this.econActivities.get(0);
         }
         Factura factura = new Factura(this.getNif(), this.getName(),
                                       buyer.getNif(), description, value, econSector, this.econActivities);

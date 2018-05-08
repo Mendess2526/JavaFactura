@@ -2,10 +2,13 @@ package javafactura.businessLogic.econSectors;
 
 public final class Cabeleireiro extends EconSector implements Deductible {
 
-    @Override
-    public String getTypeCode(){
-        return T_CODE_CABELEIREIRO;
+    private static Cabeleireiro instance = new Cabeleireiro();
+
+    public static Cabeleireiro getInstance(){
+        return instance;
     }
+
+    private Cabeleireiro(){}
 
     @Override
     public float deduction(float value){

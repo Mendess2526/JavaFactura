@@ -2,10 +2,13 @@ package javafactura.businessLogic.econSectors;
 
 public final class Saude extends EconSector implements Deductible {
 
-    @Override
-    public String getTypeCode(){
-        return T_CODE_SAUDE;
+    private static Saude instance = new Saude();
+
+    public static Saude getInstance(){
+        return instance;
     }
+
+    private Saude(){}
 
     @Override
     public float deduction(float value){

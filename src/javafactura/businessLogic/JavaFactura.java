@@ -64,14 +64,10 @@ public class JavaFactura implements Serializable {
 
     public void registarIndividual(String nif, String email, String nome, String address, String password,
                                    int numDependants, List<String> dependants, double fiscalCoefficient,
-                                   Set<String> econActivities) throws InvalidNumberOfDependantsException{
-        Set<EconSector> econSectors = new HashSet<>();
-        for(String econActivity : econActivities){
-            EconSector econSector = EconSector.factory(econActivity);
-            if(!(econSector instanceof Pendente)){
-                econSectors.add(EconSector.factory(econActivity));
-            }
-        }
+                                   Set<EconSector> econSectors) throws
+                                                                InvalidNumberOfDependantsException,
+                                                                IndividualAlreadyExistsException{
+        if(this.contribuintes.containsKey(nif)) throw new IndividualAlreadyExistsException();
         this.contribuintes.put(nif, new ContribuinteIndividual(
                 nif,
                 email,
@@ -84,15 +80,9 @@ public class JavaFactura implements Serializable {
     }
 
     public void registarEmpresarial(String nif, String email, String nome, String address, String password,
-                                    double fiscalCoefficient, Set<String> econActivities){
-
-        Set<EconSector> econSectors = new HashSet<>();
-        for(String econActivity : econActivities){
-            EconSector econSector = EconSector.factory(econActivity);
-            if(!(econSector instanceof Pendente)){
-                econSectors.add(EconSector.factory(econActivity));
-            }
-        }
+                                    double fiscalCoefficient, Set<EconSector> econSectors) throws
+                                                                                           EmpresarialAlreadyExistsException{
+        if(this.contribuintes.containsKey(nif)) throw new EmpresarialAlreadyExistsException();
         this.contribuintes.put(nif, new ContribuinteEmpresarial(
                 nif,
                 email,
@@ -101,6 +91,12 @@ public class JavaFactura implements Serializable {
                 password,
                 fiscalCoefficient,
                 econSectors));
+    }
+
+    public Set<EconSector> getAllSectors(){
+        Set<EconSector> allSectors = EconSector.getAllSectors();
+        allSectors.remove(Pendente.getInstance());
+        return allSectors;
     }
 
     public Factura emitirFactura(String companyNif, float value, String description) throws NotEmpresaException,
@@ -124,11 +120,11 @@ public class JavaFactura implements Serializable {
         return f;
     }
 
-    public Factura changeFactura(Factura factura, String typeCode) throws NotIndividualException,
-                                                                          InvalidEconSectorException{
+    public Factura changeFactura(Factura factura, EconSector econSector) throws NotIndividualException,
+                                                                                InvalidEconSectorException{
         try{
             return ((ContribuinteIndividual) this.loggedInUser)
-                    .changeFatura(factura, EconSector.factory(typeCode));
+                    .changeFatura(factura, econSector);
         }catch(ClassCastException e){
             throw new NotIndividualException();
         }
@@ -186,7 +182,7 @@ public class JavaFactura implements Serializable {
                 = new PriorityQueue<>(10, new ComtribuinteSpendingComparator().reversed());
         this.contribuintes.values()
                           .stream()
-                          .filter(c -> c instanceof ContribuinteIndividual)
+                          .filter(ContribuinteIndividual.class::isInstance)
                           .forEach(c -> top10.add((ContribuinteIndividual) c));
         return top10.stream().limit(10).collect(Collectors.toList());
     }
@@ -203,7 +199,7 @@ public class JavaFactura implements Serializable {
                 new PriorityQueue<>(x, new ContribuinteFacturaCountComparator().reversed());
 
         this.contribuintes.values().stream()
-                          .filter(c -> c instanceof ContribuinteEmpresarial)
+                          .filter(ContribuinteEmpresarial.class::isInstance)
                           .forEach(c -> topX.add((ContribuinteEmpresarial) c));
 
         return new Pair<>(topX.stream().limit(x).collect(Collectors.toList()), 0.0);
@@ -251,8 +247,8 @@ public class JavaFactura implements Serializable {
             String password = "pass";
             double fiscal_coefficient = Math.random();
             Set<EconSector> econActivities = new HashSet<>();
-            econActivities.add(new Familia());
-            econActivities.add(new Educacao());
+            econActivities.add(Familia.getInstance());
+            econActivities.add(Educacao.getInstance());
             contribuintes.put(nif, new ContribuinteEmpresarial(
                     nif,
                     email,

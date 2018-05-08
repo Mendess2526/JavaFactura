@@ -2,10 +2,13 @@ package javafactura.businessLogic.econSectors;
 
 public final class Habitacao extends EconSector implements Deductible {
 
-    @Override
-    public String getTypeCode(){
-        return T_CODE_HABITACAO;
+    private static Habitacao instance = new Habitacao();
+
+    public static Habitacao getInstance(){
+        return instance;
     }
+
+    private Habitacao(){}
 
     @Override
     public float deduction(float value){

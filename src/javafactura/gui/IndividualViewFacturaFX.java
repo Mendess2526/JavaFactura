@@ -137,9 +137,9 @@ public class IndividualViewFacturaFX extends FX {
             EconMenuItem m = new EconMenuItem(e);
             m.setOnAction(ae->{
                 Factura f = this.history.get(0);
-                String typeCode = ((EconMenuItem) ae.getSource()).getSector().getTypeCode();
+                EconSector econSector = ((EconMenuItem) ae.getSource()).getSector();
                 try{
-                    f = this.javaFactura.changeFactura(f, typeCode);
+                    f = this.javaFactura.changeFactura(f, econSector);
                 }catch(NotIndividualException e1){
                     this.goBack(null);
                 }catch(InvalidEconSectorException ignored){

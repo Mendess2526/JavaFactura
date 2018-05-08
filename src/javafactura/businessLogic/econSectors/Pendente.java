@@ -2,8 +2,12 @@ package javafactura.businessLogic.econSectors;
 
 public final class Pendente extends EconSector {
 
-    @Override
-    public String getTypeCode(){
-        return T_CODE_PENDENTE;
+    private static Pendente instance = new Pendente();
+
+    public static Pendente getInstance(){
+        return instance;
     }
+
+    private Pendente(){}
+
 }

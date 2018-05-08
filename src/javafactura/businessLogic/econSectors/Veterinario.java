@@ -2,10 +2,13 @@ package javafactura.businessLogic.econSectors;
 
 public final class Veterinario extends EconSector implements Deductible {
 
-    @Override
-    public String getTypeCode(){
-        return T_CODE_VETERINARIO;
+    private static Veterinario instance = new Veterinario();
+
+    public static Veterinario getInstance(){
+        return instance;
     }
+
+    private Veterinario(){}
 
     @Override
     public float deduction(float value){

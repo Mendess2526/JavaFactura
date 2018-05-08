@@ -2,9 +2,13 @@ package javafactura.businessLogic.econSectors;
 
 public final class AlojamentoRestauracao extends EconSector implements Deductible {
 
-    @Override
-    public String getTypeCode(){
-        return T_CODE_ALOJ_REST;
+    private static final AlojamentoRestauracao instance = new AlojamentoRestauracao();
+
+    public static AlojamentoRestauracao getInstance(){
+        return instance;
+    }
+
+    private AlojamentoRestauracao(){
     }
 
     @Override

@@ -2,10 +2,13 @@ package javafactura.businessLogic.econSectors;
 
 public final class Lares extends EconSector implements Deductible {
 
-    @Override
-    public String getTypeCode(){
-        return T_CODE_LARES;
+    private static Lares instance = new Lares();
+
+    public static Lares getInstance(){
+        return instance;
     }
+
+    private Lares(){}
 
     @Override
     public float deduction(float value){
