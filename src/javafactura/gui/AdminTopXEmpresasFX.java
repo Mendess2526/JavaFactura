@@ -38,7 +38,7 @@ class AdminTopXEmpresasFX extends FX {
         // [BUTTON] Search button
         Button searchButton = new Button("Search");
         searchButton.setOnAction(this::fillList);
-        this.gridPane.add(makeHBox(searchButton, Pos.CENTER), 3, 0);
+        this.gridPane.add(makeHBox(searchButton, Pos.CENTER), 2, 0);
 
         // [LABEL] Total Value
         this.gridPane.add(new Label("Total Value: "), 0, 1);
@@ -54,7 +54,7 @@ class AdminTopXEmpresasFX extends FX {
         // [BUTTON] Back button
         Button goBackButton = new Button("Back");
         goBackButton.setOnAction(this::goBack);
-        this.gridPane.add(makeHBox(goBackButton, Pos.BOTTOM_RIGHT), 4, 2);
+        this.gridPane.add(makeHBox(goBackButton, Pos.BOTTOM_RIGHT), 2, 2);
     }
 
     private void fillList(ActionEvent event){
