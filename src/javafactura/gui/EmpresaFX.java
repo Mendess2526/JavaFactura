@@ -20,7 +20,7 @@ public class EmpresaFX extends FX {
     private final Label totalFacturado;
     private final TableView<ContribuinteIndividual> clients;
     private final TableView<Factura> facturasClient;
-
+//TODO profile page
     public EmpresaFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene);
 

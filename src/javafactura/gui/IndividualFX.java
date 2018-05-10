@@ -24,7 +24,7 @@ public class IndividualFX extends FX {
     private final ObservableList<Factura> facturas;
     private final TableView<Factura> table;
     private final Label pendingNum;
-
+//TODO profile page
     public IndividualFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene);
         ColumnConstraints cc = new ColumnConstraints();
