@@ -2,7 +2,6 @@ package javafactura.gui;
 
 import javafactura.businessLogic.*;
 import javafactura.businessLogic.exceptions.InvalidCredentialsException;
-import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,9 +17,9 @@ class LoginFX extends FX {
     private final AdminFX adminScreen;
     private final IndividualFX individualScreen;
     private final EmpresaFX empresaScreen;
-    private TextField userNameTextField;
-    private PasswordField pwField;
-    private Text errors;
+    private final TextField userNameTextField;
+    private final PasswordField pwField;
+    private final Text errors;
 
     LoginFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene);
@@ -44,7 +43,7 @@ class LoginFX extends FX {
         this.gridPane.add(pw, 0, 2);
 
         Button loginButton = new Button("Login");
-        loginButton.setOnAction(this::login);
+        loginButton.setOnAction(event -> login());
         this.gridPane.add(makeHBox(loginButton, Pos.BOTTOM_RIGHT), 1, 4);
 
         this.errors = new Text();
@@ -52,7 +51,7 @@ class LoginFX extends FX {
         this.gridPane.add(errors, 1, 6);
     }
 
-    private void login(ActionEvent event){
+    private void login(){
         try{
             this.errors.setText("");
             this.javaFactura.login(userNameTextField.getText(), pwField.getText());

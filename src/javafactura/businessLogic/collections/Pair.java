@@ -10,7 +10,7 @@ public class Pair<A, B> {
         this.snd = snd;
     }
 
-    public Pair(Pair<A,B> pair){
+    private Pair(Pair<A,B> pair){
         this.fst = pair.fst();
         this.snd = pair.snd();
     }

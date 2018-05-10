@@ -1,7 +1,6 @@
 package javafactura.gui;
 
 import javafactura.businessLogic.JavaFactura;
-import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -60,7 +59,7 @@ class AdminFX extends FX {
     }
 
     @Override
-    protected void goBack(ActionEvent event){
+    protected void goBack(){
         throw new UnsupportedOperationException();
     }
 }

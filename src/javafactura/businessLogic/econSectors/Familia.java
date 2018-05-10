@@ -2,7 +2,7 @@ package javafactura.businessLogic.econSectors;
 
 public final class Familia extends EconSector implements Deductible {
 
-    private static Familia instance = new Familia();
+    private static final Familia instance = new Familia();
 
     public static Familia getInstance(){
         return instance;

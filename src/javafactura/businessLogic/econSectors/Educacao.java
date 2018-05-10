@@ -2,7 +2,7 @@ package javafactura.businessLogic.econSectors;
 
 public final class Educacao extends EconSector implements Deductible {
 
-    private static Educacao instance = new Educacao();
+    private static final Educacao instance = new Educacao();
 
     public static Educacao getInstance(){
         return instance;

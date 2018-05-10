@@ -99,25 +99,15 @@ public class JavaFactura implements Serializable {
         return allSectors;
     }
 
-    public Factura emitirFactura(String companyNif, float value, String description) throws NotEmpresaException,
-                                                                                            NotIndividualException{
-        Factura f;
-        try{
-            ContribuinteEmpresarial company =
-                    (ContribuinteEmpresarial) this.contribuintes.get(companyNif);
-            try{
-                f = company.issueFactura(
-                        (ContribuinteIndividual) this.loggedInUser,
-                        description,
-                        value
-                );
-            }catch(ClassCastException e){
-                throw new NotIndividualException();
-            }
-        }catch(ClassCastException e){
-            throw new NotEmpresaException();
-        }
-        return f;
+    public void emitirFactura(String clientNif, float value, String description) throws
+                                                                                    NotEmpresaException,
+                                                                                    NoSuchIndividualException{
+        if(!(this.loggedInUser instanceof ContribuinteEmpresarial)) throw new NotEmpresaException();
+
+        Contribuinte client = this.contribuintes.get(clientNif);
+        if(client == null) throw new NoSuchIndividualException();
+
+        ((ContribuinteEmpresarial) this.loggedInUser).issueFactura(client, description, value);
     }
 
     public Factura changeFactura(Factura factura, EconSector econSector) throws NotIndividualException,
@@ -130,46 +120,50 @@ public class JavaFactura implements Serializable {
         }
     }
 
-    public List<Factura> getLoggedUserFaturas() throws NotContribuinteException{
-        if(!(this.loggedInUser instanceof Contribuinte))
-            throw new NotContribuinteException();
-        Contribuinte c = this.contribuintes.get(((Contribuinte) this.loggedInUser).getNif());
-        return c.getFacturas();
+    public List<Factura> getLoggedUserFacturas() throws NotContribuinteException{
+        if(!(this.loggedInUser instanceof Contribuinte)) throw new NotContribuinteException();
+        return this.contribuintes.get(((Contribuinte) this.loggedInUser).getNif()).getFacturas();
     }
 
-    public List<Factura> getFaturasOfEmpresa(String nifEmpresa, Comparator<Factura> comparator){
-        return this.contribuintes.get(nifEmpresa).getFacturas()
-                                 .stream()
-                                 .sorted(comparator)
-                                 .collect(Collectors.toList());
+    public List<Factura> getLoggedUserFacturas(Comparator<Factura> comparator) throws
+                                                                               NotContribuinteException{
+        return getLoggedUserFacturas().stream().sorted(comparator).collect(Collectors.toList());
     }
 
-    public List<Factura> getFaturasOfIndividual(String clientNIF, LocalDateTime from, LocalDateTime to) throws
-                                                                                                        NotEmpresaException{
-        if(!(this.loggedInUser instanceof ContribuinteEmpresarial)){
-            throw new NotEmpresaException();
-        }
-        return this.contribuintes.get(clientNIF).getFacturas()
-                                 .stream()
-                                 .filter(f -> f.getCreationDate().isAfter(from))
-                                 .filter(f -> f.getCreationDate().isBefore(to))
-                                 .sorted()
-                                 .collect(Collectors.toList());
+    public List<Factura> getLoggedUserFacturas(LocalDateTime from, LocalDateTime to) throws
+                                                                                     NotContribuinteException{
+        return getLoggedUserFacturas().stream()
+                                      .filter(f -> f.getCreationDate().isAfter(from))
+                                      .filter(f -> f.getCreationDate().isBefore(to))
+                                      .sorted()
+                                      .collect(Collectors.toList());
     }
 
     public List<Factura> getFaturasOfIndividual(String clientNif, Comparator<Factura> comparator) throws
-                                                                                                  NotEmpresaException{
-        if(!(this.loggedInUser instanceof ContribuinteEmpresarial))
-            throw new NotEmpresaException();
-        return this.contribuintes.get(clientNif).getFacturas()
-                                 .stream()
-                                 .sorted(comparator)
-                                 .collect(Collectors.toList());
+                                                                                                  NotEmpresaException,
+                                                                                                  NotIndividualException{
+        if(!(this.loggedInUser instanceof ContribuinteEmpresarial)) throw new NotEmpresaException();
+        Contribuinte c = this.contribuintes.get(clientNif);
+        if(!(c instanceof ContribuinteIndividual)) throw new NotIndividualException();
+        return c.getFacturas().stream().sorted(comparator).collect(Collectors.toList());
     }
 
-    public double totalFaturado(String companyNif, LocalDateTime from, LocalDateTime to) throws NotEmpresaException{
-        return this.contribuintes.get(companyNif).getFacturas()
+    public Set<ContribuinteIndividual> getClients() throws NotEmpresaException{
+        if(!(this.loggedInUser instanceof ContribuinteEmpresarial)) throw new NotEmpresaException();
+        return this.contribuintes.get(((ContribuinteEmpresarial) this.loggedInUser).getNif()).getFacturas()
                                  .stream()
+                                 .map(f -> this.contribuintes.get(f.getClientNif()))
+                                 .filter(ContribuinteIndividual.class::isInstance)
+                                 .map(ContribuinteIndividual.class::cast)
+                                 .collect(Collectors.toSet());
+    }
+
+    public double totalFaturado(LocalDateTime from, LocalDateTime to) throws NotEmpresaException{
+        if(!(this.loggedInUser instanceof ContribuinteEmpresarial)) throw new NotEmpresaException();
+        return this.contribuintes.get(((ContribuinteEmpresarial) this.loggedInUser).getNif()).getFacturas()
+                                 .stream()
+                                 .filter(f -> f.getCreationDate().isAfter(from))
+                                 .filter(f -> f.getCreationDate().isBefore(to))
                                  .mapToDouble(Factura::getValue)
                                  .sum();
     }
@@ -179,7 +173,7 @@ public class JavaFactura implements Serializable {
             throw new NotAdminException();
         }
         PriorityQueue<ContribuinteIndividual> top10
-                = new PriorityQueue<>(10, new ComtribuinteSpendingComparator().reversed());
+                = new PriorityQueue<>(10, new ContribuinteSpendingComparator().reversed());
         this.contribuintes.values()
                           .stream()
                           .filter(ContribuinteIndividual.class::isInstance)
@@ -191,7 +185,7 @@ public class JavaFactura implements Serializable {
     determinar a relação das X empresas que mais facturas emitiram em t_odo o sistema e o montante de
     deduções fiscais que as despesas registadas (dessas empresas) representam;
      */
-    //TODO montate total
+    //TODO montante total
     public Pair<List<ContribuinteEmpresarial>,Double> getTopXEmpresas(int x) throws NotAdminException{
         if(!(this.loggedInUser instanceof Admin)) throw new NotAdminException();
 
@@ -282,11 +276,11 @@ public class JavaFactura implements Serializable {
             String description = issuerNif + " -> " + clientNif;
             float value = (float) Math.random() * 100;
 
-            this.loggedInUser = this.contribuintes.get(clientNif);
+            this.loggedInUser = this.contribuintes.get(issuerNif);
             try{
-                Factura f = emitirFactura(issuerNif, value, description);
+                /*Factura f =*/ emitirFactura(clientNif, value, description);
                 //changeFactura(f, EconSector.T_CODE_FAMILIA);
-            }catch(NotEmpresaException | NotIndividualException /*| InvalidEconSectorException*/ e){
+            }catch(NotEmpresaException | NoSuchIndividualException e){
                 e.printStackTrace();
             }
         }

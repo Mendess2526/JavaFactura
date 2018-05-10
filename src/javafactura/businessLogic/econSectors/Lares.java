@@ -2,7 +2,7 @@ package javafactura.businessLogic.econSectors;
 
 public final class Lares extends EconSector implements Deductible {
 
-    private static Lares instance = new Lares();
+    private static final Lares instance = new Lares();
 
     public static Lares getInstance(){
         return instance;

@@ -5,7 +5,6 @@ import javafactura.businessLogic.JavaFactura;
 import javafactura.businessLogic.econSectors.EconSector;
 import javafactura.businessLogic.exceptions.InvalidEconSectorException;
 import javafactura.businessLogic.exceptions.NotIndividualException;
-import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -20,7 +19,7 @@ import java.util.LinkedList;
 
 public class IndividualViewFacturaFX extends FX {
 
-    private ArrayList<Factura> history;
+    private final ArrayList<Factura> history;
     private int historyIndex;
     private final Button previousButton;
     private final Button nextButton;
@@ -86,27 +85,27 @@ public class IndividualViewFacturaFX extends FX {
         this.gridPane.add(editSector, 0, row++);
 
         this.previousButton = new Button("Previous");
-        this.previousButton.setOnAction(this::previousFactura);
+        this.previousButton.setOnAction(event1 -> previousFactura());
         this.previousButton.setDisable(true);
         this.gridPane.add(makeHBox(this.previousButton, Pos.CENTER_LEFT), 0, row);
 
         this.nextButton = new Button("Next");
-        this.nextButton.setOnAction(this::nextFactura);
+        this.nextButton.setOnAction(event -> nextFactura());
         this.gridPane.add(makeHBox(this.nextButton, Pos.CENTER_RIGHT), 1, row++);
 
         Button goBackButton = new Button("Back");
-        goBackButton.setOnAction(this::goBack);
+        goBackButton.setOnAction(event -> goBack());
         this.gridPane.add(makeHBox(goBackButton, Pos.BOTTOM_RIGHT), 1, row);
     }
 
-    private void nextFactura(ActionEvent event){
+    private void nextFactura(){
         if(this.hasNext()){
             updateFields(this.history.get(++this.historyIndex));
         }
         updateButtons();
     }
 
-    private void previousFactura(ActionEvent event){
+    private void previousFactura(){
         if(this.hasPrevious()){
             updateFields(this.history.get(--this.historyIndex));
         }
@@ -141,7 +140,7 @@ public class IndividualViewFacturaFX extends FX {
                 try{
                     f = this.javaFactura.changeFactura(f, econSector);
                 }catch(NotIndividualException e1){
-                    this.goBack(null);
+                    this.goBack();
                 }catch(InvalidEconSectorException ignored){
                 } // using setFactura will fix this if it ever happens
                 this.setFactura(f);
@@ -154,6 +153,7 @@ public class IndividualViewFacturaFX extends FX {
         return this;
     }
 
+    @SuppressWarnings("Duplicates")
     private void updateFields(Factura factura){
         this.issuerNif.setText(factura.getIssuerNif());
         this.issuerName.setText(factura.getIssuerName());
@@ -165,11 +165,6 @@ public class IndividualViewFacturaFX extends FX {
         this.econSector.setText(factura.getType().toString());
     }
 
-    @Override
-    protected void goBack(ActionEvent event){
-        super.goBack(event);
-    }
-
     private class EconMenuItem extends MenuItem{
 
         private final EconSector sector;
@@ -179,7 +174,7 @@ public class IndividualViewFacturaFX extends FX {
             this.sector = e;
         }
 
-        public EconSector getSector(){
+        private EconSector getSector(){
             return this.sector;
         }
     }

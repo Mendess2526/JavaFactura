@@ -9,7 +9,6 @@ import javafactura.businessLogic.exceptions.NotContribuinteException;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -22,9 +21,9 @@ import java.util.ArrayList;
 
 class IndividualFX extends FX {
 
-    private ObservableList<Factura> facturas;
+    private final ObservableList<Factura> facturas;
     private final TableView<Factura> table;
-    private Label pendingNum;
+    private final Label pendingNum;
 
     IndividualFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene);
@@ -79,7 +78,7 @@ class IndividualFX extends FX {
         this.gridPane.add(table, 0, 1);
 
         Button logoutButton = new Button("Logout");
-        logoutButton.setOnAction(this::logOut);
+        logoutButton.setOnAction(event -> logOut());
         this.gridPane.add(makeHBox(logoutButton, Pos.BOTTOM_RIGHT), 0, 2);
 
         this.primaryStage.sceneProperty().addListener((observable, oldValue, newValue) -> {
@@ -104,22 +103,22 @@ class IndividualFX extends FX {
     protected boolean show(){
         try{
             this.facturas.clear();
-            this.facturas.addAll(this.javaFactura.getLoggedUserFaturas());
+            this.facturas.addAll(this.javaFactura.getLoggedUserFacturas());
         }catch(NotContribuinteException e){
-            goBack(null);
+            goBack();
             return false;
         }
         super.show();
         return true;
     }
 
-    private void logOut(ActionEvent event){
+    private void logOut(){
         this.javaFactura.logout();
         this.primaryStage.setScene(this.previousScene);
     }
 
     @Override
-    protected void goBack(ActionEvent event){
+    protected void goBack(){
         throw new UnsupportedOperationException();
     }
 

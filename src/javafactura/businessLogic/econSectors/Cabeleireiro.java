@@ -2,7 +2,7 @@ package javafactura.businessLogic.econSectors;
 
 public final class Cabeleireiro extends EconSector implements Deductible {
 
-    private static Cabeleireiro instance = new Cabeleireiro();
+    private static final Cabeleireiro instance = new Cabeleireiro();
 
     public static Cabeleireiro getInstance(){
         return instance;

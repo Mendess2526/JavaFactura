@@ -2,7 +2,7 @@ package javafactura.businessLogic;
 
 import java.util.Comparator;
 
-public class ComtribuinteSpendingComparator implements Comparator<Contribuinte> {
+public class ContribuinteSpendingComparator implements Comparator<Contribuinte> {
 
     private static double getTotal(Contribuinte c){
         return c.getFacturas()

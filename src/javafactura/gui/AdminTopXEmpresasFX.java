@@ -6,7 +6,6 @@ import javafactura.businessLogic.collections.Pair;
 import javafactura.businessLogic.exceptions.NotAdminException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -21,8 +20,8 @@ import java.util.stream.Collectors;
 class AdminTopXEmpresasFX extends FX {
 
     private final TextField numberPrompt;
-    private Label totalValue;
-    private ObservableList<String> topX;
+    private final Label totalValue;
+    private final ObservableList<String> topX;
 
     AdminTopXEmpresasFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene);
@@ -37,7 +36,7 @@ class AdminTopXEmpresasFX extends FX {
 
         // [BUTTON] Search button
         Button searchButton = new Button("Search");
-        searchButton.setOnAction(this::fillList);
+        searchButton.setOnAction(event -> fillList());
         this.gridPane.add(makeHBox(searchButton, Pos.CENTER), 2, 0);
 
         // [LABEL] Total Value
@@ -53,18 +52,18 @@ class AdminTopXEmpresasFX extends FX {
 
         // [BUTTON] Back button
         Button goBackButton = new Button("Back");
-        goBackButton.setOnAction(this::goBack);
+        goBackButton.setOnAction(event -> goBack());
         this.gridPane.add(makeHBox(goBackButton, Pos.BOTTOM_RIGHT), 2, 2);
     }
 
-    private void fillList(ActionEvent event){
+    private void fillList(){
         int num = Integer.parseInt(this.numberPrompt.getText());
         System.out.println("Getting top " + num + " companies");
         Pair<List<ContribuinteEmpresarial>,Double> listDoublePair;
         try{
             listDoublePair = this.javaFactura.getTopXEmpresas(num);
         }catch(NotAdminException e){
-            goBack(null);
+            goBack();
             return;
         }
         this.totalValue.setText(Double.toString(listDoublePair.snd()));

@@ -25,7 +25,7 @@ class AdminTop10ContribuintesFX extends FX {
         this.gridPane.add(top10ListView, 0, 1);
 
         Button goBack = new Button("Back");
-        goBack.setOnAction(this::goBack);
+        goBack.setOnAction(event -> goBack());
         this.gridPane.add(makeHBox(goBack, Pos.BOTTOM_RIGHT), 0, 2);
     }
 

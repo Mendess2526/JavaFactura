@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class Admin implements User,
                               Serializable {
 
-    private String name;
+    private final String name;
     private String password;
 
     public Admin(){
@@ -14,11 +14,11 @@ public class Admin implements User,
     }
 
     public Admin(String name, String password){
-        this.name = this.name;
+        this.name = name;
         this.password = password;
     }
 
-    public Admin(Admin admin){
+    private Admin(Admin admin){
         this.name = admin.getName();
         this.password = admin.getPassword();
     }

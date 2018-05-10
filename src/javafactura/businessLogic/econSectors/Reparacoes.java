@@ -2,10 +2,10 @@ package javafactura.businessLogic.econSectors;
 
 public final class Reparacoes extends EconSector implements Deductible {
 
-    private static Reparacoes instancias = new Reparacoes();
+    private static final Reparacoes instance = new Reparacoes();
 
     public static Reparacoes getInstance(){
-        return instancias;
+        return instance;
     }
 
     private Reparacoes(){}

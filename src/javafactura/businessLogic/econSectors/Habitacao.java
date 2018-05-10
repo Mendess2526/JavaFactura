@@ -2,7 +2,7 @@ package javafactura.businessLogic.econSectors;
 
 public final class Habitacao extends EconSector implements Deductible {
 
-    private static Habitacao instance = new Habitacao();
+    private static final Habitacao instance = new Habitacao();
 
     public static Habitacao getInstance(){
         return instance;

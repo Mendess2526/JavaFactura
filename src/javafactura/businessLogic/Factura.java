@@ -21,14 +21,6 @@ public class Factura implements Comparable<Factura>,
     public static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyy kk:mm:ss");
 
     /**
-     * The last used id
-     */
-    private static int lastId = 0;
-    /**
-     * \brief The unique id the Factura
-     */
-    private final int id;
-    /**
      * \brief The NIF of the entity that issued this Receipt
      */
     private final String issuerNif;
@@ -63,7 +55,7 @@ public class Factura implements Comparable<Factura>,
     /**
      * \brief The econ sectors of the company that issued this receipt
      */
-    private Set<EconSector> possibleEconSectors;
+    private final Set<EconSector> possibleEconSectors;
     /**
      * \brief History of states of this <tt>Factura</tt>
      */
@@ -73,7 +65,6 @@ public class Factura implements Comparable<Factura>,
      * Empty constructor
      */
     private Factura(){
-        this.id = lastId++;
         this.issuerNif = "";
         this.issuerName = "";
         this.creationDate = LocalDateTime.now();
@@ -99,7 +90,6 @@ public class Factura implements Comparable<Factura>,
     Factura(String issuerNif, String issuerName, String clientNif,
             String description, float value, EconSector econSector,
             List<EconSector> possibleEconSectors){
-        this.id = lastId++;
         this.issuerNif = issuerNif;
         this.issuerName = issuerName;
         this.creationDate = LocalDateTime.now();
@@ -121,8 +111,7 @@ public class Factura implements Comparable<Factura>,
      * Copy constructor for <tt>Factura</tt>
      * @param factura the <tt>Factura</tt> to copy
      */
-    public Factura(Factura factura){
-        this.id = factura.getId();
+    private Factura(Factura factura){
         this.issuerNif = factura.getIssuerNif();
         this.issuerName = factura.getIssuerName();
         this.creationDate = factura.getCreationDate();
@@ -189,14 +178,6 @@ public class Factura implements Comparable<Factura>,
      */
     public float getValue(){
         return this.value;
-    }
-
-    /**
-     * Returns the unique id
-     * @return The unique id
-     */
-    public int getId(){
-        return this.id;
     }
 
     /**
@@ -281,8 +262,7 @@ public class Factura implements Comparable<Factura>,
         if(o == null || this.getClass() != o.getClass()) return false;
 
         Factura factura = (Factura) o;
-        return this.id == factura.getId()
-               && this.value == factura.getValue()
+        return this.value == factura.getValue()
                && this.issuerNif.equals(factura.getIssuerNif())
                && this.issuerName.equals(factura.getIssuerName())
                && this.creationDate.equals(factura.getCreationDate())
@@ -297,8 +277,7 @@ public class Factura implements Comparable<Factura>,
     @Override
     public String toString(){
         return "Factura{"
-               + "id=" + id
-               + ", issuerNif='" + issuerNif + '\''
+               + "issuerNif='" + issuerNif + '\''
                + ", issuerName='" + issuerName + '\''
                + ", creationDate=" + creationDate
                + ", lastEditDate=" + lastEditDate

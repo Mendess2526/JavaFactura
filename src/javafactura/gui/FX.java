@@ -1,7 +1,6 @@
 package javafactura.gui;
 
 import javafactura.businessLogic.JavaFactura;
-import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -42,7 +41,7 @@ abstract class FX {
         return true;
     }
 
-    protected void goBack(ActionEvent event){
+    protected void goBack(){
         this.primaryStage.setScene(this.previousScene);
     }
 

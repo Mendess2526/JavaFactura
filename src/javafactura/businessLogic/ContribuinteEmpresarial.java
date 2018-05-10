@@ -51,7 +51,7 @@ public class ContribuinteEmpresarial extends Contribuinte {
      * \brief The copy constructor
      * @param contribuinteEmpresarial The object to clone
      */
-    public ContribuinteEmpresarial(ContribuinteEmpresarial contribuinteEmpresarial){
+    private ContribuinteEmpresarial(ContribuinteEmpresarial contribuinteEmpresarial){
         super(contribuinteEmpresarial);
         this.econActivities = contribuinteEmpresarial.getEconActivities();
         this.fiscalCoefficient = contribuinteEmpresarial.getFiscalCoefficient();
@@ -87,7 +87,7 @@ public class ContribuinteEmpresarial extends Contribuinte {
      * @param description The description of the purchase
      * @param value       The value of the purchase
      */
-    Factura issueFactura(Contribuinte buyer, String description, float value){
+    void issueFactura(Contribuinte buyer, String description, float value){
         EconSector econSector;
         if(this.econActivities.size() > 1){
             econSector = Pendente.getInstance();
@@ -98,7 +98,7 @@ public class ContribuinteEmpresarial extends Contribuinte {
                                       buyer.getNif(), description, value, econSector, this.econActivities);
         this.associateFactura(factura);
         buyer.associateFactura(factura);
-        return factura.clone();
+        factura.clone();
     }
 
     @Override

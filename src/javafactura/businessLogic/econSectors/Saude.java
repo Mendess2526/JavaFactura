@@ -2,7 +2,7 @@ package javafactura.businessLogic.econSectors;
 
 public final class Saude extends EconSector implements Deductible {
 
-    private static Saude instance = new Saude();
+    private static final Saude instance = new Saude();
 
     public static Saude getInstance(){
         return instance;
