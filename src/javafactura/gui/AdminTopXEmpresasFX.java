@@ -4,26 +4,23 @@ import javafactura.businessLogic.ContribuinteEmpresarial;
 import javafactura.businessLogic.JavaFactura;
 import javafactura.businessLogic.collections.Pair;
 import javafactura.businessLogic.exceptions.NotAdminException;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-class AdminTopXEmpresasFX extends FX {
+public class AdminTopXEmpresasFX extends FX {
 
     private final TextField numberPrompt;
     private final Label totalValue;
-    private final ObservableList<String> topX;
+    private final ObservableList<ContribuinteEmpresarial> topX;
 
-    AdminTopXEmpresasFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
+    public AdminTopXEmpresasFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene);
 
         // [LABEL] Insert Numero
@@ -46,8 +43,16 @@ class AdminTopXEmpresasFX extends FX {
 
         // [LIST_VIEW] Top X
         this.topX = FXCollections.observableArrayList();
-        ListView<String> topX = new ListView<>(this.topX);
+        TableView<ContribuinteEmpresarial> topX = new TableView<>(this.topX);
+        topX.setMinWidth(this.gridPane.getMinWidth());
+        topX.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         topX.setFocusTraversable(false);
+        TableColumn<ContribuinteEmpresarial, String> nif = new TableColumn<>("NIF");
+        nif.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().getNif()));
+        TableColumn<ContribuinteEmpresarial,String> name = new TableColumn<>("Nome");
+        name.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().getName()));
+        topX.getColumns().add(nif);
+        topX.getColumns().add(name);
         this.gridPane.add(topX, 0, 2);
 
         // [BUTTON] Back button
@@ -68,9 +73,6 @@ class AdminTopXEmpresasFX extends FX {
         }
         this.totalValue.setText(Double.toString(listDoublePair.snd()));
         this.topX.clear();
-        this.topX.addAll(listDoublePair.fst()
-                                       .stream()
-                                       .map(ce -> ce.getNif() + "\t" + ce.getName()) //TODO formatar isto melhor
-                                       .collect(Collectors.toList()));
+        this.topX.addAll(listDoublePair.fst());
     }
 }
