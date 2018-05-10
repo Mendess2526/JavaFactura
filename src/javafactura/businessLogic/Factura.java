@@ -87,7 +87,7 @@ public class Factura implements Comparable<Factura>,
      * @param econSector          The economic sector of this Factura
      * @param possibleEconSectors The econ sectors of the company that issued this receipt
      */
-    Factura(String issuerNif, String issuerName, String clientNif,
+    public Factura(String issuerNif, String issuerName, String clientNif,
             String description, float value, EconSector econSector,
             List<EconSector> possibleEconSectors){
         this.issuerNif = issuerNif;
@@ -203,7 +203,7 @@ public class Factura implements Comparable<Factura>,
      * Changes the economic sector of the <tt>Factura</tt>
      * @param econSector the new economic sector
      */
-    void setEconSector(EconSector econSector) throws InvalidEconSectorException{
+    public void setEconSector(EconSector econSector) throws InvalidEconSectorException{
         if(! this.possibleEconSectors.contains(econSector)) throw new InvalidEconSectorException(econSector.toString());
         this.possibleEconSectors.remove(econSector);
         if(! (this.econSector instanceof Pendente)){

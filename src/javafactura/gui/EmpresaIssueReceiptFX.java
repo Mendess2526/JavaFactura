@@ -13,7 +13,7 @@ public class EmpresaIssueReceiptFX extends FormFX{
             "Nif do cliente", "Valor", "Descrição"
     };
 
-    EmpresaIssueReceiptFX(JavaFactura javaFactura, Stage primaryStage,
+    public EmpresaIssueReceiptFX(JavaFactura javaFactura, Stage primaryStage,
                           Scene previousScene){
         super(javaFactura, primaryStage, previousScene, defaultFields);
     }

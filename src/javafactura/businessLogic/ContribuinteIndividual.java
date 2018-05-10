@@ -62,7 +62,7 @@ public class ContribuinteIndividual extends Contribuinte {
 
     }
 
-    public ContribuinteIndividual(ContribuinteIndividual contribuinteIndividual){
+    private ContribuinteIndividual(ContribuinteIndividual contribuinteIndividual){
         super(contribuinteIndividual);
         this.familyAggregate = contribuinteIndividual.getFamilyAggregate();
         this.numDependants = contribuinteIndividual.getNumDependants();

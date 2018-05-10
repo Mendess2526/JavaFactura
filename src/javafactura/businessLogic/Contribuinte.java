@@ -36,7 +36,7 @@ public abstract class Contribuinte implements User,
     /**
      * The empty constructor
      */
-    Contribuinte(){
+    public Contribuinte(){
         this.nif = "";
         this.email = "";
         this.name = "";
@@ -53,7 +53,7 @@ public abstract class Contribuinte implements User,
      * @param address  The Address
      * @param password The Password
      */
-    Contribuinte(String nif, String email, String name, String address, String password){
+    public Contribuinte(String nif, String email, String name, String address, String password){
         this.nif = nif;
         this.email = email;
         this.name = name;
@@ -66,7 +66,7 @@ public abstract class Contribuinte implements User,
      * Copy constructor
      * @param contribuinte The Contribuinte to copy
      */
-    Contribuinte(Contribuinte contribuinte){
+    public Contribuinte(Contribuinte contribuinte){
         this.nif = contribuinte.getNif();
         this.email = contribuinte.getEmail();
         this.name = contribuinte.getName();

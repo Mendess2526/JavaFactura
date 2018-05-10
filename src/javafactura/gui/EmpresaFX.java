@@ -15,13 +15,13 @@ import javafx.stage.Stage;
 
 import java.time.LocalDateTime;
 
-class EmpresaFX extends FX {
+public class EmpresaFX extends FX {
 
     private final Label totalFacturado;
     private final TableView<ContribuinteIndividual> clients;
     private final TableView<Factura> facturasClient;
 
-    EmpresaFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
+    public EmpresaFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene);
 
         EmpresaIssueReceiptFX empresaIssueReceiptFX

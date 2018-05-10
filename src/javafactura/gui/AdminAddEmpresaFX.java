@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 
 import java.util.HashSet;
 
-class AdminAddEmpresaFX extends FormFX {
+public class AdminAddEmpresaFX extends FormFX {
 
     private static final String[] defaultFields = new String[]{
             "NIF:", "Email:", "Nome", "Address", "Password", "Fiscal Coefficient"
@@ -18,7 +18,7 @@ class AdminAddEmpresaFX extends FormFX {
 
     private final ComboBox<EconSector> sectorsBox;
 
-    AdminAddEmpresaFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
+    public AdminAddEmpresaFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene, defaultFields);
 
         this.sectorsBox = new ComboBox<>();

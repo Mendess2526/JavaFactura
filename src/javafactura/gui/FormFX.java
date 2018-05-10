@@ -24,7 +24,7 @@ public abstract class FormFX extends FX {
     private final HBox submitButtonHBox;
     private final HBox goBackButtonHBox;
 
-    FormFX(JavaFactura javaFactura, Stage primaryStage,
+    public FormFX(JavaFactura javaFactura, Stage primaryStage,
            Scene previousScene, String[] fields){
         super(javaFactura, primaryStage, previousScene);
         this.fields = Arrays.copyOf(fields, fields.length);
@@ -67,7 +67,7 @@ public abstract class FormFX extends FX {
         return allFilled;
     }
 
-    protected void appendField(String label, Node node){
+    protected void appendField(@SuppressWarnings("SameParameterValue") String label, Node node){//TODO fix ordering of tab navigation
         int rowIndex = GridPane.getRowIndex(this.confirmText);
         GridPane.setRowIndex(this.confirmText, rowIndex + 1);
         GridPane.setRowIndex(this.submitButtonHBox, rowIndex + 2);

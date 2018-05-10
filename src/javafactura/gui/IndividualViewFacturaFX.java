@@ -33,7 +33,7 @@ public class IndividualViewFacturaFX extends FX {
     private final Text value;
     private final Text econSector;
 
-    IndividualViewFacturaFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
+    public IndividualViewFacturaFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene);
 
         this.historyIndex = 0;

@@ -12,7 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-class LoginFX extends FX {
+public class LoginFX extends FX {
 
     private final AdminFX adminScreen;
     private final IndividualFX individualScreen;
@@ -21,7 +21,7 @@ class LoginFX extends FX {
     private final PasswordField pwField;
     private final Text errors;
 
-    LoginFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
+    public LoginFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene);
         this.adminScreen = new AdminFX(this.javaFactura, this.primaryStage, this.scene);
         this.individualScreen = new IndividualFX(this.javaFactura, this.primaryStage, this.scene);

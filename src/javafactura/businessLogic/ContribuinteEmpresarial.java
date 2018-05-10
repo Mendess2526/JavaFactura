@@ -21,7 +21,7 @@ public class ContribuinteEmpresarial extends Contribuinte {
     /**
      * \brief Empty constructor
      */
-    public ContribuinteEmpresarial(){
+    private ContribuinteEmpresarial(){
         super();
         econActivities = new ArrayList<>();
         fiscalCoefficient = 0;

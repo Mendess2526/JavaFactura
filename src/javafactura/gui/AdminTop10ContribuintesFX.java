@@ -12,11 +12,11 @@ import javafx.stage.Stage;
 
 import java.util.stream.Collectors;
 
-class AdminTop10ContribuintesFX extends FX {
+public class AdminTop10ContribuintesFX extends FX {
 
     private final ObservableList<String> top10;
 
-    AdminTop10ContribuintesFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
+    public AdminTop10ContribuintesFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene);
 
         this.top10 = FXCollections.observableArrayList();
