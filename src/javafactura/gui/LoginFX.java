@@ -2,6 +2,9 @@ package javafactura.gui;
 
 import javafactura.businessLogic.*;
 import javafactura.businessLogic.exceptions.InvalidCredentialsException;
+import javafactura.gui.admin.AdminFX;
+import javafactura.gui.empresa.EmpresaFX;
+import javafactura.gui.individual.IndividualFX;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;

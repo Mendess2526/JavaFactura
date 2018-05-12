@@ -12,13 +12,13 @@ import javafx.stage.Stage;
 import static javafactura.gui.MainFX.HEIGHT;
 import static javafactura.gui.MainFX.WIDTH;
 
-abstract class FX {
+public abstract class FX {
 
-    final JavaFactura javaFactura;
-    final Stage primaryStage;
-    final Scene previousScene;
-    final Scene scene;
-    final GridPane gridPane;
+    protected final JavaFactura javaFactura;
+    protected final Stage primaryStage;
+    protected final Scene previousScene;
+    protected final Scene scene;
+    protected final GridPane gridPane;
 
     public FX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         this.javaFactura = javaFactura;
@@ -36,7 +36,7 @@ abstract class FX {
         this.scene = new Scene(this.gridPane, WIDTH, HEIGHT);
     }
 
-    protected boolean show(){
+    public boolean show(){
         this.primaryStage.setScene(this.scene);
         return true;
     }
@@ -45,7 +45,7 @@ abstract class FX {
         this.primaryStage.setScene(this.previousScene);
     }
 
-    HBox makeHBox(Node node, Pos alignment){
+    protected HBox makeHBox(Node node, Pos alignment){
         HBox hBox = new HBox(10);
         hBox.setAlignment(alignment);
         hBox.getChildren().add(node);

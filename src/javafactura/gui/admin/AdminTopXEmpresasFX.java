@@ -1,9 +1,10 @@
-package javafactura.gui;
+package javafactura.gui.admin;
 
 import javafactura.businessLogic.ContribuinteEmpresarial;
 import javafactura.businessLogic.JavaFactura;
 import javafactura.businessLogic.collections.Pair;
 import javafactura.businessLogic.exceptions.NotAdminException;
+import javafactura.gui.FX;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

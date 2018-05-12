@@ -1,9 +1,10 @@
-package javafactura.gui;
+package javafactura.gui.admin;
 
 import javafactura.businessLogic.JavaFactura;
 import javafactura.businessLogic.econSectors.EconSector;
 import javafactura.businessLogic.econSectors.Pendente;
 import javafactura.businessLogic.exceptions.EmpresarialAlreadyExistsException;
+import javafactura.gui.FormFX;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuButton;

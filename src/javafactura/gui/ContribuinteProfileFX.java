@@ -72,7 +72,7 @@ public abstract class ContribuinteProfileFX extends FX {
     }
 
     @Override
-    protected boolean show(){
+    public boolean show(){
         User u = this.javaFactura.getLoggedUser();
         if(!(u instanceof Contribuinte)) return false;
         Contribuinte c = (Contribuinte) u;
@@ -83,7 +83,7 @@ public abstract class ContribuinteProfileFX extends FX {
         return super.show();
     }
 
-    protected void saveChanges(){
+    private void saveChanges(){
         if(this.setEmail.getText().length() > 0){
             this.javaFactura.changeEmail(this.setEmail.getText());
             this.email.setText(this.setEmail.getText());

@@ -1,7 +1,8 @@
-package javafactura.gui;
+package javafactura.gui.empresa;
 
 import javafactura.businessLogic.JavaFactura;
 import javafactura.businessLogic.exceptions.NotEmpresaException;
+import javafactura.gui.ContribuinteProfileFX;
 import javafx.scene.Scene;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -13,11 +14,11 @@ public class EmpresaProfileFX extends ContribuinteProfileFX {
     public EmpresaProfileFX(JavaFactura javaFactura, Stage primaryStage,
                             Scene previousScene){
         super(javaFactura, primaryStage, previousScene);
-        this.econSectors = appendField("Sectores Economicos");
+        this.econSectors = appendField("Setores Económicos");
     }
 
     @Override
-    protected boolean show(){
+    public boolean show(){
         try{
             this.econSectors.setText(this.javaFactura.getLoggedUserSectors()
                                                      .stream()

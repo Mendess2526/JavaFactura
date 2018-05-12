@@ -1,10 +1,11 @@
-package javafactura.gui;
+package javafactura.gui.empresa;
 
 import javafactura.businessLogic.ContribuinteIndividual;
 import javafactura.businessLogic.Factura;
 import javafactura.businessLogic.JavaFactura;
 import javafactura.businessLogic.econSectors.EconSector;
 import javafactura.businessLogic.exceptions.NotEmpresaException;
+import javafactura.gui.FX;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -129,7 +130,7 @@ public class EmpresaFX extends FX {
     }
 
     @Override
-    protected boolean show(){
+    public boolean show(){
         try{
             this.totalFacturado.setText(String.format("Total faturado: %.2f€",
                                                       this.javaFactura.totalFaturado(LocalDateTime.MIN,

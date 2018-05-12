@@ -1,4 +1,4 @@
-package javafactura.gui;
+package javafactura.gui.individual;
 
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafactura.businessLogic.Factura;
@@ -7,6 +7,7 @@ import javafactura.businessLogic.econSectors.EconSector;
 import javafactura.businessLogic.econSectors.Pendente;
 import javafactura.businessLogic.exceptions.NotContribuinteException;
 import javafactura.businessLogic.exceptions.NotIndividualException;
+import javafactura.gui.FX;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -119,7 +120,7 @@ public class IndividualFX extends FX {
     }
 
     @Override
-    protected boolean show(){
+    public boolean show(){
         try{
             this.facturas.clear();
             this.facturas.addAll(this.javaFactura.getLoggedUserFacturas());
@@ -131,14 +132,14 @@ public class IndividualFX extends FX {
         return super.show();
     }
 
-    private void logOut(){
-        this.javaFactura.logout();
-        this.primaryStage.setScene(this.previousScene);
-    }
-
     @Override
     protected void goBack(){
         throw new UnsupportedOperationException();
+    }
+
+    private void logOut(){
+        this.javaFactura.logout();
+        this.primaryStage.setScene(this.previousScene);
     }
 
 }

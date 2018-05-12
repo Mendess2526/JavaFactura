@@ -1,10 +1,11 @@
-package javafactura.gui;
+package javafactura.gui.individual;
 
 import javafactura.businessLogic.Factura;
 import javafactura.businessLogic.JavaFactura;
 import javafactura.businessLogic.econSectors.EconSector;
 import javafactura.businessLogic.exceptions.InvalidEconSectorException;
 import javafactura.businessLogic.exceptions.NotIndividualException;
+import javafactura.gui.FX;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -20,7 +21,6 @@ import java.util.LinkedList;
 public class IndividualViewFacturaFX extends FX {
 
     private final ArrayList<Factura> history;
-    private int historyIndex;
     private final Button previousButton;
     private final Button nextButton;
     private final MenuButton editSector;
@@ -32,6 +32,7 @@ public class IndividualViewFacturaFX extends FX {
     private final Text description;
     private final Text value;
     private final Text econSector;
+    private int historyIndex;
 
     public IndividualViewFacturaFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene);
@@ -134,7 +135,7 @@ public class IndividualViewFacturaFX extends FX {
         this.editSector.getItems().clear();
         for(EconSector e : factura.getPossibleEconSectors()){
             EconMenuItem m = new EconMenuItem(e);
-            m.setOnAction(ae->{
+            m.setOnAction(ae -> {
                 Factura f = this.history.get(0);
                 EconSector econSector = ((EconMenuItem) ae.getSource()).getSector();
                 try{
@@ -165,7 +166,7 @@ public class IndividualViewFacturaFX extends FX {
         this.econSector.setText(factura.getType().toString());
     }
 
-    private class EconMenuItem extends MenuItem{
+    private class EconMenuItem extends MenuItem {
 
         private final EconSector sector;
 

@@ -1,20 +1,21 @@
-package javafactura.gui;
+package javafactura.gui.empresa;
 
 import javafactura.businessLogic.JavaFactura;
 import javafactura.businessLogic.exceptions.NoSuchIndividualException;
 import javafactura.businessLogic.exceptions.NotEmpresaException;
+import javafactura.gui.FormFX;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class EmpresaIssueReceiptFX extends FormFX{
+public class EmpresaIssueReceiptFX extends FormFX {
 
     private static final String[] defaultFields = {
             "Nif do cliente", "Valor", "Descrição"
     };
 
     public EmpresaIssueReceiptFX(JavaFactura javaFactura, Stage primaryStage,
-                          Scene previousScene){
+                                 Scene previousScene){
         super(javaFactura, primaryStage, previousScene, defaultFields);
     }
 

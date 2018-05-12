@@ -1,9 +1,10 @@
-package javafactura.gui;
+package javafactura.gui.admin;
 
 import javafactura.businessLogic.JavaFactura;
 import javafactura.businessLogic.econSectors.EconSector;
 import javafactura.businessLogic.exceptions.IndividualAlreadyExistsException;
 import javafactura.businessLogic.exceptions.InvalidNumberOfDependantsException;
+import javafactura.gui.FormFX;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -55,7 +56,7 @@ public class AdminAddIndividualFX extends FormFX {
         }catch(NumberFormatException e){
             this.errorTexts[field - 1].setText("Not a number");
         }catch(IndividualAlreadyExistsException e){
-                this.errorTexts[0].setText("Nif já existe");
+            this.errorTexts[0].setText("Nif já existe");
         }
     }
 }

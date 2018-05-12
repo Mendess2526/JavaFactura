@@ -1,6 +1,7 @@
-package javafactura.gui;
+package javafactura.gui.admin;
 
 import javafactura.businessLogic.JavaFactura;
+import javafactura.gui.FX;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -52,15 +53,15 @@ public class AdminFX extends FX {
 
         // [PASSWORD FIELD] The field to use to change the password
         PasswordField pwf = new PasswordField();
-        this.gridPane.add(pwf,1,1);
+        this.gridPane.add(pwf, 1, 1);
 
         // [PASSWORD ERROR] The error text for the password field
         Text pwfErrorText = new Text();
-        this.gridPane.add(pwfErrorText,1,3);
+        this.gridPane.add(pwfErrorText, 1, 3);
 
         // [PASSWORD BUTTON] The button to change to password
         Button pwfButton = new Button("Mudar password");
-        pwfButton.setOnAction(e ->{
+        pwfButton.setOnAction(e -> {
             if(pwf.getText().length() < 5){
                 pwfErrorText.setFill(Color.RED);
                 pwfErrorText.setText("Password tem de ter mais\ndo que 4 caracteres.");
@@ -70,7 +71,7 @@ public class AdminFX extends FX {
                 pwfErrorText.setText("Password alterada com sucesso.");
             }
         });
-        this.gridPane.add(makeHBox(pwfButton, Pos.CENTER_LEFT),1,2);
+        this.gridPane.add(makeHBox(pwfButton, Pos.CENTER_LEFT), 1, 2);
 
         // [BUTTON] Log out
         Button logOutButton = new Button("Log out");

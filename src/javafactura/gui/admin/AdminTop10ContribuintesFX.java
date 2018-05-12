@@ -1,7 +1,8 @@
-package javafactura.gui;
+package javafactura.gui.admin;
 
 import javafactura.businessLogic.JavaFactura;
 import javafactura.businessLogic.exceptions.NotAdminException;
+import javafactura.gui.FX;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -30,7 +31,7 @@ public class AdminTop10ContribuintesFX extends FX {
     }
 
     @Override
-    protected boolean show(){
+    public boolean show(){
         try{
             this.top10.clear();
             this.top10.addAll(this.javaFactura.getTop10Contrib().stream()
