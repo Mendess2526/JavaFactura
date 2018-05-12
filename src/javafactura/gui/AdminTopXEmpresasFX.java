@@ -17,8 +17,7 @@ import java.util.List;
 public class AdminTopXEmpresasFX extends FX {
 
     private final TextField numberPrompt;
-    private final Label totalValue;
-    private final ObservableList<ContribuinteEmpresarial> topX;
+    private final ObservableList<Pair<ContribuinteEmpresarial,Double>> topX;
 
     public AdminTopXEmpresasFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene);
@@ -36,23 +35,25 @@ public class AdminTopXEmpresasFX extends FX {
         searchButton.setOnAction(event -> fillList());
         this.gridPane.add(makeHBox(searchButton, Pos.CENTER), 2, 0);
 
-        // [LABEL] Total Value
-        this.gridPane.add(new Label("Total Value: "), 0, 1);
-        this.totalValue = new Label(Double.toString(0));
-        this.gridPane.add(totalValue, 1, 1);
-
-        // [LIST_VIEW] Top X
+        // [TABLE_VIEW] Top X
         this.topX = FXCollections.observableArrayList();
-        TableView<ContribuinteEmpresarial> topX = new TableView<>(this.topX);
+        TableView<Pair<ContribuinteEmpresarial,Double>> topX = new TableView<>(this.topX);
         topX.setMinWidth(this.gridPane.getMinWidth());
         topX.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         topX.setFocusTraversable(false);
-        TableColumn<ContribuinteEmpresarial, String> nif = new TableColumn<>("NIF");
-        nif.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().getNif()));
-        TableColumn<ContribuinteEmpresarial,String> name = new TableColumn<>("Nome");
-        name.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().getName()));
+
+        TableColumn<Pair<ContribuinteEmpresarial,Double>,String> nif = new TableColumn<>("NIF");
+        nif.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().fst().getNif()));
+
+        TableColumn<Pair<ContribuinteEmpresarial,Double>,String> name = new TableColumn<>("Nome");
+        name.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().fst().getName()));
+
+        TableColumn<Pair<ContribuinteEmpresarial,Double>,String> total = new TableColumn<>("Valor");
+        total.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(String.format("%.2f", param.getValue().snd())));
+
         topX.getColumns().add(nif);
         topX.getColumns().add(name);
+        topX.getColumns().add(total);
         this.gridPane.add(topX, 0, 2);
 
         // [BUTTON] Back button
@@ -64,15 +65,14 @@ public class AdminTopXEmpresasFX extends FX {
     private void fillList(){
         int num = Integer.parseInt(this.numberPrompt.getText());
         System.out.println("Getting top " + num + " companies");
-        Pair<List<ContribuinteEmpresarial>,Double> listDoublePair;
+        List<Pair<ContribuinteEmpresarial,Double>> listDoublePair;
         try{
             listDoublePair = this.javaFactura.getTopXEmpresas(num);
         }catch(NotAdminException e){
             goBack();
             return;
         }
-        this.totalValue.setText(Double.toString(listDoublePair.snd()));
         this.topX.clear();
-        this.topX.addAll(listDoublePair.fst());
+        this.topX.addAll(listDoublePair);
     }
 }
