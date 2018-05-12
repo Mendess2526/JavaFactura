@@ -3,8 +3,8 @@ package javafactura.businessLogic;
 import javafactura.businessLogic.econSectors.EconSector;
 import javafactura.businessLogic.econSectors.Pendente;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 public class ContribuinteEmpresarial extends Contribuinte {
@@ -16,19 +16,19 @@ public class ContribuinteEmpresarial extends Contribuinte {
     /**
      * The Economic Sectors this <tt>Contribuinte</tt> is eligible for
      */
-    private final List<EconSector> econActivities;
+    private final Set<EconSector> econActivities;
 
     /**
      * \brief Empty constructor
      */
     private ContribuinteEmpresarial(){
         super();
-        econActivities = new ArrayList<>();
+        econActivities = new HashSet<>();
         fiscalCoefficient = 0;
     }
 
     /**
-     * \brief
+     * \brief Parameterized constructor
      * @param nif               The NIF
      * @param email             The email
      * @param name              The Name
@@ -40,9 +40,9 @@ public class ContribuinteEmpresarial extends Contribuinte {
     public ContribuinteEmpresarial(String nif, String email, String name,
                                    String address, String password,
                                    double fiscalCoefficient,
-                                   Set<EconSector> econActivities){
+                                   Collection<EconSector> econActivities){
         super(nif, email, name, address, password);
-        this.econActivities = new ArrayList<>(econActivities);
+        this.econActivities = new HashSet<>(econActivities);
         this.econActivities.remove(Pendente.getInstance());
         this.fiscalCoefficient = fiscalCoefficient;
     }
@@ -61,8 +61,8 @@ public class ContribuinteEmpresarial extends Contribuinte {
      * Returns the economic activities
      * @return The economic activities
      */
-    public List<EconSector> getEconActivities(){
-        return econActivities;
+    public Set<EconSector> getEconActivities(){
+        return new HashSet<>(econActivities);
     }
 
     /**
@@ -70,7 +70,7 @@ public class ContribuinteEmpresarial extends Contribuinte {
      * @return The fiscal coefficient
      */
     public double getFiscalCoefficient(){
-        return fiscalCoefficient;
+        return this.fiscalCoefficient;
     }
 
     /**
@@ -92,7 +92,7 @@ public class ContribuinteEmpresarial extends Contribuinte {
         if(this.econActivities.size() > 1){
             econSector = Pendente.getInstance();
         }else{
-            econSector = this.econActivities.get(0);
+            econSector = this.econActivities.iterator().next();
         }
         Factura factura = new Factura(this.getNif(), this.getName(),
                                       buyer.getNif(), description, value, econSector, this.econActivities);

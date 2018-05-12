@@ -23,6 +23,10 @@ public class Admin implements User,
         this.password = admin.getPassword();
     }
 
+    public String getNif(){
+        return this.name;
+    }
+
     @Override
     public String getName(){
         return this.name;

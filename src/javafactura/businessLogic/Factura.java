@@ -8,9 +8,9 @@ import javafactura.businessLogic.exceptions.InvalidEconSectorException;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -88,8 +88,8 @@ public class Factura implements Comparable<Factura>,
      * @param possibleEconSectors The econ sectors of the company that issued this receipt
      */
     public Factura(String issuerNif, String issuerName, String clientNif,
-            String description, float value, EconSector econSector,
-            List<EconSector> possibleEconSectors){
+                   String description, float value, EconSector econSector,
+                   Collection<EconSector> possibleEconSectors){
         this.issuerNif = issuerNif;
         this.issuerName = issuerName;
         this.creationDate = LocalDateTime.now();
@@ -204,9 +204,9 @@ public class Factura implements Comparable<Factura>,
      * @param econSector the new economic sector
      */
     public void setEconSector(EconSector econSector) throws InvalidEconSectorException{
-        if(! this.possibleEconSectors.contains(econSector)) throw new InvalidEconSectorException(econSector.toString());
+        if(!this.possibleEconSectors.contains(econSector)) throw new InvalidEconSectorException(econSector.toString());
         this.possibleEconSectors.remove(econSector);
-        if(! (this.econSector instanceof Pendente)){
+        if(!(this.econSector instanceof Pendente)){
             this.possibleEconSectors.add(this.econSector);
         }
         this.history.addFirst(this.clone().cleanHistory());

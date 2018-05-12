@@ -87,7 +87,7 @@ public abstract class Contribuinte implements User,
      * Returns the email
      * @return The email
      */
-    private String getEmail(){
+    public String getEmail(){
         return email;
     }
 
@@ -111,7 +111,7 @@ public abstract class Contribuinte implements User,
      * Returns the address
      * @return The address
      */
-    private String getAddress(){
+    public String getAddress(){
         return address;
     }
 
@@ -180,4 +180,6 @@ public abstract class Contribuinte implements User,
                + ", facturas=" + facturas
                + '}';
     }
+
+    public abstract Contribuinte clone();
 }
