@@ -6,22 +6,30 @@ import java.util.Set;
 
 public abstract class EconSector implements Serializable {
 
-    private static final Set<EconSector> sectors = new HashSet<>();
-    static {
-        sectors.add(AlojamentoRestauracao.getInstance());
-        sectors.add(Cabeleireiro.getInstance());
-        sectors.add(Educacao.getInstance());
-        sectors.add(Familia.getInstance());
-        sectors.add(Habitacao.getInstance());
-        sectors.add(Lares.getInstance());
-        sectors.add(Pendente.getInstance());
-        sectors.add(Reparacoes.getInstance());
-        sectors.add(Saude.getInstance());
-        sectors.add(Veterinario.getInstance());
+    public static Set<EconSector> getAllSectors(){
+        return SectorWrapper.get();
     }
 
-    public static Set<EconSector> getAllSectors(){
-        return new HashSet<>(sectors);
+    private static final class SectorWrapper {
+
+        private static final Set<EconSector> sectors = new HashSet<>();
+
+        static{
+            sectors.add(AlojamentoRestauracao.getInstance());
+            sectors.add(Cabeleireiro.getInstance());
+            sectors.add(Educacao.getInstance());
+            sectors.add(Familia.getInstance());
+            sectors.add(Habitacao.getInstance());
+            sectors.add(Lares.getInstance());
+            sectors.add(Pendente.getInstance());
+            sectors.add(Reparacoes.getInstance());
+            sectors.add(Saude.getInstance());
+            sectors.add(Veterinario.getInstance());
+        }
+
+        private static Set<EconSector> get(){
+            return new HashSet<>(sectors);
+        }
     }
 
     @Override
