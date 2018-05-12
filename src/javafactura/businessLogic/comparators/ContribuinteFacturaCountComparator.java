@@ -1,4 +1,6 @@
-package javafactura.businessLogic;
+package javafactura.businessLogic.comparators;
+
+import javafactura.businessLogic.Contribuinte;
 
 import java.util.Comparator;
 

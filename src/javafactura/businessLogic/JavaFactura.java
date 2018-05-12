@@ -1,6 +1,8 @@
 package javafactura.businessLogic;
 
 import javafactura.businessLogic.collections.Pair;
+import javafactura.businessLogic.comparators.ContribuinteFacturaCountComparator;
+import javafactura.businessLogic.comparators.ContribuinteSpendingComparator;
 import javafactura.businessLogic.econSectors.EconSector;
 import javafactura.businessLogic.econSectors.Educacao;
 import javafactura.businessLogic.econSectors.Familia;
