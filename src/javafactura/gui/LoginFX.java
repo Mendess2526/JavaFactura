@@ -46,6 +46,10 @@ public class LoginFX extends FX {
         loginButton.setOnAction(event -> login());
         this.gridPane.add(makeHBox(loginButton, Pos.BOTTOM_RIGHT), 1, 4);
 
+        Button exitButton = new Button("Exit");
+        exitButton.setOnAction(event -> this.primaryStage.close());
+        this.gridPane.add(makeHBox(exitButton, Pos.BOTTOM_LEFT), 0, 4);
+
         this.errors = new Text();
         this.errors.setFill(Color.RED);
         this.gridPane.add(errors, 1, 6);

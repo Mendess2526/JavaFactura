@@ -1,6 +1,5 @@
 package javafactura.gui;
 
-import javafactura.businessLogic.ContribuinteEmpresarial;
 import javafactura.businessLogic.ContribuinteIndividual;
 import javafactura.businessLogic.Factura;
 import javafactura.businessLogic.JavaFactura;
@@ -14,28 +13,53 @@ import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 
 import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class EmpresaFX extends FX {
 
     private final Label totalFacturado;
     private final TableView<ContribuinteIndividual> clients;
     private final TableView<Factura> facturasClient;
-//TODO profile page
+
+    //TODO update facturas tabela
     public EmpresaFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene);
 
         EmpresaIssueReceiptFX empresaIssueReceiptFX
                 = new EmpresaIssueReceiptFX(this.javaFactura, this.primaryStage,
                                             this.scene);
+
+        EmpresaProfileFX empresaProfileFX = new EmpresaProfileFX(this.javaFactura, this.primaryStage, this.scene);
+
         int row = 0;
+        Button profileButton = new Button("Profile");
+        profileButton.setOnAction(e -> empresaProfileFX.show());
+        this.gridPane.add(makeHBox(profileButton, Pos.TOP_LEFT), 1, row);
+
         Button issueReceipt = new Button("Emitir Factura");
         issueReceipt.setOnAction(e -> empresaIssueReceiptFX.show());
-        this.gridPane.add(makeHBox(issueReceipt, Pos.TOP_LEFT), 0, row);
+        this.gridPane.add(makeHBox(issueReceipt, Pos.TOP_LEFT), 0, row++);
+
+        // Receipts Table
+        this.facturasClient = new TableView<>();
+        makeReceiptsTable();
+        this.gridPane.add(this.facturasClient, 1, row);
+
+        // Clients Table
+        this.clients = new TableView<>();
+        makeClientsTable();
+        this.gridPane.add(this.clients, 0, row++);
 
         this.totalFacturado = new Label();
-        this.gridPane.add(this.totalFacturado, 1, row++);
+        this.gridPane.add(this.totalFacturado, 0, row);
 
-        this.facturasClient = new TableView<>();
+        Button goBack = new Button("Back");
+        goBack.setOnAction(event -> goBack());
+        this.gridPane.add(makeHBox(goBack, Pos.BOTTOM_RIGHT), 1, row);
+    }
+
+    private void makeReceiptsTable(){
         this.facturasClient.setMinWidth(this.gridPane.getMinWidth());
         this.facturasClient.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -56,9 +80,9 @@ public class EmpresaFX extends FX {
         this.facturasClient.getColumns().add(date);
         this.facturasClient.getColumns().add(type);
         this.facturasClient.getColumns().add(value);
-        this.gridPane.add(this.facturasClient, 1, row);
+    }
 
-        this.clients = new TableView<>();
+    private void makeClientsTable(){
         this.clients.setMinWidth(this.gridPane.getMinWidth());
         this.clients.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -78,7 +102,7 @@ public class EmpresaFX extends FX {
                      .getFacturas()
                      .stream()
                      .filter(f -> f.getIssuerName()
-                                   .equals(((ContribuinteEmpresarial) this.javaFactura.getLoggedUser()).getNif()))
+                                   .equals(this.javaFactura.getLoggedUser().getNif()))
                      .count()));
 
         this.clients.setRowFactory(tv -> {
@@ -86,8 +110,15 @@ public class EmpresaFX extends FX {
             r.setOnMouseClicked(event -> {
                 if(event.getButton().equals(MouseButton.PRIMARY)
                    && !r.isEmpty()){
+                    String thisNif = this.javaFactura.getLoggedUser().getNif();
                     this.facturasClient.getItems().clear();
-                    this.facturasClient.getItems().addAll(r.getItem().getFacturas());
+                    Set<Factura> facturas = r.getItem()
+                                             .getFacturas()
+                                             .stream()
+                                             .filter(f -> f.getIssuerNif()
+                                                           .equals(thisNif))
+                                             .collect(Collectors.toSet());
+                    this.facturasClient.getItems().addAll(facturas);
                 }
             });
             return r;
@@ -95,12 +126,6 @@ public class EmpresaFX extends FX {
         this.clients.getColumns().add(nif);
         this.clients.getColumns().add(name);
         this.clients.getColumns().add(numCompras);
-
-        this.gridPane.add(this.clients, 0, row++);
-
-        Button goBack = new Button("Back");
-        goBack.setOnAction(event -> goBack());
-        this.gridPane.add(makeHBox(goBack, Pos.BOTTOM_RIGHT), 1, row);
     }
 
     @Override

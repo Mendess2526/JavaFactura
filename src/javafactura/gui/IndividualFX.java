@@ -6,6 +6,7 @@ import javafactura.businessLogic.JavaFactura;
 import javafactura.businessLogic.econSectors.EconSector;
 import javafactura.businessLogic.econSectors.Pendente;
 import javafactura.businessLogic.exceptions.NotContribuinteException;
+import javafactura.businessLogic.exceptions.NotIndividualException;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -14,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -22,9 +24,11 @@ import java.util.ArrayList;
 public class IndividualFX extends FX {
 
     private final ObservableList<Factura> facturas;
-    private final TableView<Factura> table;
+    private final Label totalDeducted;
+    private final TableView<Factura> receiptsTable;
     private final Label pendingNum;
-//TODO profile page
+    private final IndividualViewFacturaFX individualViewFacturaFX;
+
     public IndividualFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene);
         ColumnConstraints cc = new ColumnConstraints();
@@ -34,15 +38,43 @@ public class IndividualFX extends FX {
         this.facturas = new ObservableListWrapper<>(new ArrayList<>());
         this.facturas.addListener((ListChangeListener<Factura>) c -> updatePendingNum());
 
-        this.pendingNum = new Label("null");
-        this.gridPane.add(this.pendingNum, 0, 0);
+        this.individualViewFacturaFX = new IndividualViewFacturaFX(this.javaFactura,
+                                                                   this.primaryStage, this.scene);
 
-        IndividualViewFacturaFX individualViewFacturaFX = new IndividualViewFacturaFX(this.javaFactura,
-                                                                                      this.primaryStage, this.scene);
+        IndividualProfileFx individualProfileFx = new IndividualProfileFx(this.javaFactura, this.primaryStage,
+                                                                          this.scene);
 
-        this.table = new TableView<>();
-        this.table.setMinWidth(this.gridPane.getMinWidth());
-        this.table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        int row = 0;
+        Button profileButton = new Button("Profile");
+        profileButton.setOnAction(e -> individualProfileFx.show());
+        this.gridPane.add(makeHBox(profileButton, Pos.CENTER_RIGHT), 0, row++);
+
+        this.pendingNum = new Label();
+        this.totalDeducted = new Label();
+        HBox topRowHBox = new HBox(this.pendingNum, this.totalDeducted);
+        topRowHBox.setSpacing(100);
+
+        this.gridPane.add(topRowHBox, 0, row++);
+
+        this.receiptsTable = new TableView<>();
+        makeReceiptsTable();
+        this.gridPane.add(receiptsTable, 0, row++);
+
+        Button logoutButton = new Button("Logout");
+        logoutButton.setOnAction(event -> logOut());
+        this.gridPane.add(makeHBox(logoutButton, Pos.BOTTOM_RIGHT), 0, row);
+
+        this.primaryStage.sceneProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue.equals(this.scene)){
+                this.receiptsTable.refresh();
+                updatePendingNum();
+            }
+        });
+    }
+
+    private void makeReceiptsTable(){
+        this.receiptsTable.setMinWidth(this.gridPane.getMinWidth());
+        this.receiptsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         TableColumn<Factura,String> date = new TableColumn<>("Date");
         date.setMinWidth(Factura.dateFormat.toString().length());
@@ -53,40 +85,27 @@ public class IndividualFX extends FX {
         type.setMinWidth(100);
         type.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().getType()));
 
-        TableColumn<Factura,Float> value = new TableColumn<>("Value");
+        TableColumn<Factura,String> value = new TableColumn<>("Value");
         value.setMinWidth(100);
-        value.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().getValue()));
+        value.setCellValueFactory(
+                param -> new ReadOnlyObjectWrapper<>(String.format("%.2f", param.getValue().getValue())));
 
-        this.table.setRowFactory(tv -> {
-            TableRow<Factura> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
+        this.receiptsTable.setRowFactory(tv -> {
+            TableRow<Factura> r = new TableRow<>();
+            r.setOnMouseClicked(event -> {
                 if(event.getButton().equals(MouseButton.PRIMARY)
                    && event.getClickCount() == 2
-                   && !row.isEmpty()){
-                    individualViewFacturaFX
-                            .setFactura(row.getItem())
-                            .show();
+                   && !r.isEmpty()){
+                    this.individualViewFacturaFX.setFactura(r.getItem()).show();
                 }
             });
-            return row;
+            return r;
         });
-        this.table.getColumns().add(date);
-        this.table.getColumns().add(type);
-        this.table.getColumns().add(value);
-        this.table.setItems(this.facturas);
+        this.receiptsTable.getColumns().add(date);
+        this.receiptsTable.getColumns().add(type);
+        this.receiptsTable.getColumns().add(value);
+        this.receiptsTable.setItems(this.facturas);
 
-        this.gridPane.add(table, 0, 1);
-
-        Button logoutButton = new Button("Logout");
-        logoutButton.setOnAction(event -> logOut());
-        this.gridPane.add(makeHBox(logoutButton, Pos.BOTTOM_RIGHT), 0, 2);
-
-        this.primaryStage.sceneProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue.equals(this.scene)){
-                this.table.refresh();
-                updatePendingNum();
-            }
-        });
     }
 
     private void updatePendingNum(){
@@ -104,12 +123,12 @@ public class IndividualFX extends FX {
         try{
             this.facturas.clear();
             this.facturas.addAll(this.javaFactura.getLoggedUserFacturas());
-        }catch(NotContribuinteException e){
+            this.totalDeducted.setText("Total deduzido: " + this.javaFactura.getAccumulatedDeduction());
+        }catch(NotContribuinteException | NotIndividualException e){
             goBack();
             return false;
         }
-        super.show();
-        return true;
+        return super.show();
     }
 
     private void logOut(){
