@@ -69,7 +69,7 @@ public class IndividualFX extends ShowReceiptsFx {
         try{
             this.totalDeducted.setText("Total deduzido: " + this.javaFactura.getAccumulatedDeduction());
             this.totalDeductedFamily.setText("Total deduzido pelo agregado familiar: "
-                                             + this.javaFactura.getAccumulatedDeductionFamiliyAgregate());
+                                             + this.javaFactura.getAccumulatedDeductionFamilyAggregate());
         }catch(NotIndividualException e){
             goBack();
         }

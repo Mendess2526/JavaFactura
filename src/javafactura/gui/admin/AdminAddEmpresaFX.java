@@ -2,7 +2,6 @@ package javafactura.gui.admin;
 
 import javafactura.businessLogic.JavaFactura;
 import javafactura.businessLogic.econSectors.EconSector;
-import javafactura.businessLogic.econSectors.Pendente;
 import javafactura.businessLogic.exceptions.EmpresarialAlreadyExistsException;
 import javafactura.gui.FormFX;
 import javafx.scene.Scene;
@@ -11,9 +10,8 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextInputControl;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,16 +26,13 @@ public class AdminAddEmpresaFX extends FormFX {
     public AdminAddEmpresaFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene, defaultFields);
 
-        this.sectorsBox = new MenuButton();
-        List<CheckMenuItem> list = new ArrayList<>();
+        this.sectorsBox = new MenuButton("Setores Económicos");
         Set<EconSector> econSectors = this.javaFactura.getAllSectors();
         for(EconSector s : econSectors){
             CheckMenuItem checkMenuItem = new CheckMenuItem(s.toString());
-            list.add(checkMenuItem);
+            this.sectorsBox.getItems().add(checkMenuItem);
         }
-        this.sectorsBox.getItems().addAll(list);
         appendField("Setores económicos", this.sectorsBox);
-        //TODO familyAggregate
     }
 
     protected void submitData(){
@@ -49,8 +44,11 @@ public class AdminAddEmpresaFX extends FormFX {
                                                      .stream()
                                                      .map(CheckMenuItem.class::cast)
                                                      .filter(CheckMenuItem::isSelected)
-                                                     .map(c -> Pendente.getInstance()) //TODO finish this
+                                                     .map(CheckMenuItem::getText)
+                                                     .map(this.javaFactura::getSectorFromString)
+                                                     .filter(Objects::nonNull)
                                                      .collect(Collectors.toSet());
+            System.out.println(sectors);
             this.javaFactura.registarEmpresarial(
                     this.textFields[field++].getText(),
                     this.textFields[field++].getText(),

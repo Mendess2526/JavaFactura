@@ -107,6 +107,10 @@ public class JavaFactura implements Serializable {
         return allSectors;
     }
 
+    public EconSector getSectorFromString(String name){
+        return EconSector.getFromString(name);
+    }
+
     public void changeEmail(String newEmail){
         if(this.loggedInUser instanceof Contribuinte)
             ((Contribuinte) this.loggedInUser).setEmail(newEmail);
@@ -182,9 +186,9 @@ public class JavaFactura implements Serializable {
         return ((ContribuinteIndividual) this.loggedInUser).getFacturas().stream().mapToDouble(Factura::deducao).sum();
     }
 
-    public double getAccumulatedDeductionFamiliyAgregate() throws NotIndividualException{
+    public double getAccumulatedDeductionFamilyAggregate() throws NotIndividualException{
         if(!(this.loggedInUser instanceof ContribuinteIndividual)) throw new NotIndividualException();
-        List<String> nifList = ((ContribuinteIndividual) this.loggedInUser).getFamilyAggregate();
+        Set<String> nifList = ((ContribuinteIndividual) this.loggedInUser).getFamilyAggregate();
         double total = 0.0;
         for(String nif : nifList){
             total += this.contribuintes.get(nif).getFacturas().stream().mapToDouble(Factura::deducao).sum();

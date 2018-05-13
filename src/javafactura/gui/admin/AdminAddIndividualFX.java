@@ -27,6 +27,7 @@ public class AdminAddIndividualFX extends FormFX {
         this.sectorsBox = new ComboBox<>();
         this.sectorsBox.getItems().addAll(this.javaFactura.getAllSectors());
         appendField("Setores económicos", this.sectorsBox);
+        //TODO familyAggregate
     }
 
     protected void submitData(){
