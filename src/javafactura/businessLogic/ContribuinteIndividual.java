@@ -4,9 +4,8 @@ import javafactura.businessLogic.econSectors.EconSector;
 import javafactura.businessLogic.exceptions.InvalidEconSectorException;
 import javafactura.businessLogic.exceptions.InvalidNumberOfDependantsException;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 
@@ -16,7 +15,7 @@ public class ContribuinteIndividual extends Contribuinte {
     /**
      * The NIFs of the people dependant of this Contribuinte
      */
-    private List<String> familyAggregate;
+    private Set<String> familyAggregate;
     /**
      * Number of dependants
      */
@@ -29,7 +28,7 @@ public class ContribuinteIndividual extends Contribuinte {
     private Set<EconSector> econActivities;
 
     private ContribuinteIndividual(){
-        this.familyAggregate = new ArrayList<>();
+        this.familyAggregate = new HashSet<>();
         this.numDependants = 0;
         this.fiscalCoefficient = 0.0;
         this.econActivities = new HashSet<>();
@@ -51,11 +50,11 @@ public class ContribuinteIndividual extends Contribuinte {
      */
     public ContribuinteIndividual(String nif, String email, String nome,
                                   String address, String password, int numDependants,
-                                  List<String> familyAggregate, double fiscalCoefficient,
+                                  Collection<String> familyAggregate, double fiscalCoefficient,
                                   Set<EconSector> econActivities) throws
                                                                   InvalidNumberOfDependantsException{
         super(nif, email, nome, address, password);
-        this.familyAggregate = familyAggregate;
+        this.familyAggregate = new HashSet<>(familyAggregate);
         this.setNumDependants(numDependants);
         this.fiscalCoefficient = fiscalCoefficient;
         this.econActivities = new HashSet<>(econActivities);
@@ -70,24 +69,28 @@ public class ContribuinteIndividual extends Contribuinte {
         this.econActivities = contribuinteIndividual.getEconActivities();
     }
 
-    public List<String> getFamilyAggregate(){
-        return familyAggregate;
+    public Set<String> getFamilyAggregate(){
+        return new HashSet<>(familyAggregate);
     }
 
     public int getNumDependants(){
-        return numDependants;
+        return this.numDependants;
     }
 
     public double getFiscalCoefficient(){
-        return fiscalCoefficient;
+        return this.fiscalCoefficient;
     }
 
     public Set<EconSector> getEconActivities(){
-        return econActivities;
+        return new HashSet<>(this.econActivities);
     }
 
-    public void setFamilyAggregate(List<String> familyAggregate){
-        this.familyAggregate = familyAggregate;
+    public boolean addToFamilyAggregate(String nif){
+        return this.familyAggregate.add(nif);
+    }
+
+    public boolean removeFromFamilyAggregate(String nif){
+        return this.familyAggregate.remove(nif);
     }
 
     public void setNumDependants(int numDependants) throws InvalidNumberOfDependantsException{
@@ -102,8 +105,12 @@ public class ContribuinteIndividual extends Contribuinte {
         this.fiscalCoefficient = fiscalCoefficient;
     }
 
-    public void setEconActivities(Set<EconSector> econActivities){
-        this.econActivities = econActivities;
+    public boolean addEconActivity(EconSector econSector){
+        return this.econActivities.add(econSector);
+    }
+
+    public boolean removeEconActivity(EconSector econSector){
+        return this.econActivities.add(econSector);
     }
 
     public Factura changeFatura(Factura f, EconSector e) throws InvalidEconSectorException{
@@ -111,6 +118,10 @@ public class ContribuinteIndividual extends Contribuinte {
         changedF.setEconSector(e);
         f.setEconSector(e);
         return f;
+    }
+
+    public long countFacturas(String nif){
+        return this.facturas.stream().filter(f -> f.getIssuerNif().equals(nif)).count();
     }
 
     @Override
@@ -130,10 +141,10 @@ public class ContribuinteIndividual extends Contribuinte {
     @Override
     public String toString(){
         return "ContribuinteIndividual{" +
-               "familyAggregate=" + familyAggregate
-               + ", numDependants=" + numDependants
-               + ", fiscalCoefficient=" + fiscalCoefficient
-               + ", econActivities=" + econActivities
+               "familyAggregate=" + this.familyAggregate
+               + ", numDependants=" + this.numDependants
+               + ", fiscalCoefficient=" + this.fiscalCoefficient
+               + ", econActivities=" + this.econActivities
                + "} " + super.toString();
     }
 

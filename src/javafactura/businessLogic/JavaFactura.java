@@ -46,6 +46,11 @@ public class JavaFactura implements Serializable {
         return this.loggedInUser.clone();
     }
 
+    public String getLoggedUserNif(){
+        if(this.loggedInUser == null) return null;
+        return this.loggedInUser.getNif();
+    }
+
     public void setAdminPassword(String newPassword){
         this.admin.setPassword(newPassword);
     }
@@ -146,7 +151,7 @@ public class JavaFactura implements Serializable {
 
     public List<Factura> getLoggedUserFacturas() throws NotContribuinteException{
         if(!(this.loggedInUser instanceof Contribuinte)) throw new NotContribuinteException();
-        return this.contribuintes.get(this.loggedInUser.getNif()).getFacturas();
+        return ((Contribuinte) this.loggedInUser).getFacturas();
     }
 
     public List<Factura> getLoggedUserFacturas(Comparator<Factura> comparator) throws
@@ -174,10 +179,14 @@ public class JavaFactura implements Serializable {
 
     public double getAccumulatedDeduction() throws NotIndividualException{
         if(!(this.loggedInUser instanceof ContribuinteIndividual)) throw new NotIndividualException();
-        List<String> nifs = ((ContribuinteIndividual) this.loggedInUser).getFamilyAggregate();
-        nifs.add(this.loggedInUser.getNif());
+        return ((ContribuinteIndividual) this.loggedInUser).getFacturas().stream().mapToDouble(Factura::deducao).sum();
+    }
+
+    public double getAccumulatedDeductionFamiliyAgregate() throws NotIndividualException{
+        if(!(this.loggedInUser instanceof ContribuinteIndividual)) throw new NotIndividualException();
+        List<String> nifList = ((ContribuinteIndividual) this.loggedInUser).getFamilyAggregate();
         double total = 0.0;
-        for(String nif : nifs){
+        for(String nif : nifList){
             total += this.contribuintes.get(nif).getFacturas().stream().mapToDouble(Factura::deducao).sum();
         }
         return total;
@@ -185,22 +194,22 @@ public class JavaFactura implements Serializable {
 
     public Set<ContribuinteIndividual> getClients() throws NotEmpresaException{
         if(!(this.loggedInUser instanceof ContribuinteEmpresarial)) throw new NotEmpresaException();
-        return this.contribuintes.get(this.loggedInUser.getNif()).getFacturas()
-                                 .stream()
-                                 .map(f -> this.contribuintes.get(f.getClientNif()))
-                                 .filter(ContribuinteIndividual.class::isInstance)
-                                 .map(ContribuinteIndividual.class::cast)
-                                 .collect(Collectors.toSet());
+        return ((ContribuinteEmpresarial) this.loggedInUser).getFacturas()
+                                                            .stream()
+                                                            .map(f -> this.contribuintes.get(f.getClientNif()))
+                                                            .filter(ContribuinteIndividual.class::isInstance)
+                                                            .map(ContribuinteIndividual.class::cast)
+                                                            .collect(Collectors.toSet());
     }
 
     public double totalFaturado(LocalDateTime from, LocalDateTime to) throws NotEmpresaException{
         if(!(this.loggedInUser instanceof ContribuinteEmpresarial)) throw new NotEmpresaException();
-        return this.contribuintes.get(this.loggedInUser.getNif()).getFacturas()
-                                 .stream()
-                                 .filter(f -> f.getCreationDate().isAfter(from))
-                                 .filter(f -> f.getCreationDate().isBefore(to))
-                                 .mapToDouble(Factura::getValue)
-                                 .sum();
+        return ((ContribuinteEmpresarial) this.loggedInUser).getFacturas()
+                                                            .stream()
+                                                            .filter(f -> f.getCreationDate().isAfter(from))
+                                                            .filter(f -> f.getCreationDate().isBefore(to))
+                                                            .mapToDouble(Factura::getValue)
+                                                            .sum();
     }
 
     public List<Contribuinte> getTop10Contrib() throws NotAdminException{

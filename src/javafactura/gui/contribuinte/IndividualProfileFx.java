@@ -1,7 +1,6 @@
-package javafactura.gui.individual;
+package javafactura.gui.contribuinte;
 
 import javafactura.businessLogic.JavaFactura;
-import javafactura.gui.ContribuinteProfileFX;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 

@@ -1,4 +1,4 @@
-package javafactura.gui.empresa;
+package javafactura.gui.contribuinte;
 
 import javafactura.businessLogic.JavaFactura;
 import javafactura.businessLogic.exceptions.NoSuchIndividualException;

@@ -1,8 +1,9 @@
-package javafactura.gui;
+package javafactura.gui.contribuinte;
 
 import javafactura.businessLogic.Contribuinte;
 import javafactura.businessLogic.JavaFactura;
 import javafactura.businessLogic.User;
+import javafactura.gui.FX;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;

@@ -1,8 +1,7 @@
-package javafactura.gui.empresa;
+package javafactura.gui.contribuinte;
 
 import javafactura.businessLogic.JavaFactura;
 import javafactura.businessLogic.exceptions.NotEmpresaException;
-import javafactura.gui.ContribuinteProfileFX;
 import javafx.scene.Scene;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;

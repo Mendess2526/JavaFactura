@@ -1,4 +1,4 @@
-package javafactura.gui.individual;
+package javafactura.gui.contribuinte;
 
 import javafactura.businessLogic.Factura;
 import javafactura.businessLogic.JavaFactura;
@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class IndividualViewFacturaFX extends FX {
+public class ViewFacturaFX extends FX {
 
     private final ArrayList<Factura> history;
     private final Button previousButton;
@@ -34,7 +34,7 @@ public class IndividualViewFacturaFX extends FX {
     private final Text econSector;
     private int historyIndex;
 
-    public IndividualViewFacturaFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
+    public ViewFacturaFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene, boolean canEdit){
         super(javaFactura, primaryStage, previousScene);
 
         this.historyIndex = 0;
@@ -82,8 +82,12 @@ public class IndividualViewFacturaFX extends FX {
         this.gridPane.add(econSectorLabel, 0, row);
         this.gridPane.add(this.econSector, 1, row++);
 
-        this.editSector = new MenuButton("Mudar Setor");
-        this.gridPane.add(editSector, 0, row++);
+        if(canEdit){
+            this.editSector = new MenuButton("Mudar Setor");
+            this.gridPane.add(editSector, 0, row++);
+        }else{
+            this.editSector = null;
+        }
 
         this.previousButton = new Button("Previous");
         this.previousButton.setOnAction(event1 -> previousFactura());
@@ -126,29 +130,31 @@ public class IndividualViewFacturaFX extends FX {
         return this.historyIndex > 0;
     }
 
-    public IndividualViewFacturaFX setFactura(Factura factura){
+    public ViewFacturaFX setFactura(Factura factura){
         LinkedList<Factura> linkedList = factura.getHistory();
         linkedList.addFirst(factura);
         this.history.clear();
         this.history.addAll(linkedList);
         this.historyIndex = 0;
-        this.editSector.getItems().clear();
-        for(EconSector e : factura.getPossibleEconSectors()){
-            EconMenuItem m = new EconMenuItem(e);
-            m.setOnAction(ae -> {
-                Factura f = this.history.get(0);
-                EconSector econSector = ((EconMenuItem) ae.getSource()).getSector();
-                try{
-                    f = this.javaFactura.changeFactura(f, econSector);
-                }catch(NotIndividualException e1){
-                    this.goBack();
-                }catch(InvalidEconSectorException ignored){
-                } // using setFactura will fix this if it ever happens
-                this.setFactura(f);
-            });
-            this.editSector.getItems().add(m);
+        if(this.editSector != null){
+            this.editSector.getItems().clear();
+            for(EconSector e : factura.getPossibleEconSectors()){
+                EconMenuItem m = new EconMenuItem(e);
+                m.setOnAction(ae -> {
+                    Factura f = this.history.get(0);
+                    EconSector econSector = ((EconMenuItem) ae.getSource()).getSector();
+                    try{
+                        f = this.javaFactura.changeFactura(f, econSector);
+                    }catch(NotIndividualException e1){
+                        this.goBack();
+                    }catch(InvalidEconSectorException ignored){
+                    } // using setFactura will fix this if it ever happens
+                    this.setFactura(f);
+                });
+                this.editSector.getItems().add(m);
+            }
+            this.editSector.setDisable(this.editSector.getItems().isEmpty());
         }
-        this.editSector.setDisable(this.editSector.getItems().isEmpty());
         updateFields(this.history.get(this.historyIndex));
         updateButtons();
         return this;
