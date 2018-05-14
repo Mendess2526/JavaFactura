@@ -160,7 +160,6 @@ public class ViewFacturaFX extends FX {
         return this;
     }
 
-    @SuppressWarnings("Duplicates")
     private void updateFields(Factura factura){
         this.issuerNif.setText(factura.getIssuerNif());
         this.issuerName.setText(factura.getIssuerName());

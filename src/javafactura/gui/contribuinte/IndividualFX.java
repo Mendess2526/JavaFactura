@@ -5,10 +5,12 @@ import javafactura.businessLogic.JavaFactura;
 import javafactura.businessLogic.econSectors.Pendente;
 import javafactura.businessLogic.exceptions.NotIndividualException;
 import javafx.collections.ListChangeListener;
+import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -32,9 +34,25 @@ public class IndividualFX extends ShowReceiptsFx {
                                                                           this.scene);
 
         int row = 0;
+
+        FilteredList<Factura> filteredFacturas = new FilteredList<>(this.facturas, p -> true);
+        this.receiptsTable.setItems(filteredFacturas);
+
         Button profileButton = new Button("Profile");
         profileButton.setOnAction(e -> individualProfileFx.show());
         this.gridPane.add(makeHBox(profileButton, Pos.CENTER_RIGHT), 0, row++);
+
+        TextField searchBar = new TextField();
+        searchBar.textProperty().addListener(
+                (observable, oldValue, newValue) -> filteredFacturas.setPredicate(factura -> {
+                    if(newValue == null || newValue.isEmpty()){
+                        return true;
+                    }
+                    String lowerCaseFilter = newValue.toLowerCase();
+                    return factura.getIssuerName().toLowerCase().contains(lowerCaseFilter);
+                })
+        );
+        this.gridPane.add(searchBar, 0, row++);
 
         this.pendingNum = new Label();
         this.totalDeducted = new Label();
@@ -61,7 +79,8 @@ public class IndividualFX extends ShowReceiptsFx {
     private void updateTotals(){
         long count = this.facturas
                 .stream()
-                .filter(f -> f.getType() instanceof Pendente)
+                .map(Factura::getType)
+                .filter(Pendente.class::isInstance)
                 .count();
         this.pendingNum.setText(String.valueOf(count) + " facturas pendente(s)");
         if(count == 0) this.pendingNum.setTextFill(Color.GREEN);

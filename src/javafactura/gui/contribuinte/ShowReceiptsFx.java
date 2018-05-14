@@ -47,6 +47,10 @@ public class ShowReceiptsFx extends FX {
         type.setMinWidth(100);
         type.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().getType()));
 
+        TableColumn<Factura,String> name = new TableColumn<>("Empresa");
+        name.setMinWidth(100);
+        name.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().getIssuerName()));
+
         TableColumn<Factura,String> value = new TableColumn<>("Value");
         value.setMinWidth(100);
         value.setCellValueFactory(
@@ -65,6 +69,7 @@ public class ShowReceiptsFx extends FX {
         });
         this.receiptsTable.getColumns().add(date);
         this.receiptsTable.getColumns().add(type);
+        this.receiptsTable.getColumns().add(name);
         this.receiptsTable.getColumns().add(value);
         this.receiptsTable.setItems(this.facturas);
 

@@ -68,8 +68,6 @@ public abstract class ContribuinteProfileFX extends FX {
         goBackButton.setOnAction(e -> goBack());
         this.backButtonBox = makeHBox(goBackButton, Pos.BOTTOM_RIGHT);
         this.gridPane.add(this.backButtonBox, 2, row);
-
-        this.gridPane.setGridLinesVisible(true);
     }
 
     @Override
