@@ -26,7 +26,7 @@ public class EmpresaFX extends ShowReceiptsFx {
     private final TableView<ContribuinteIndividual> clients;
     private final EmpresaViewClientFX viewClientFX;
 
-    //TODO update facturas tabela
+    //TODO update facturas tabela after emitting
     public EmpresaFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene, false);
 

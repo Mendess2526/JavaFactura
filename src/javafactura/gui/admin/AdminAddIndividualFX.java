@@ -6,12 +6,15 @@ import javafactura.businessLogic.exceptions.IndividualAlreadyExistsException;
 import javafactura.businessLogic.exceptions.InvalidNumberOfDependantsException;
 import javafactura.gui.FormFX;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class AdminAddIndividualFX extends FormFX {
 
@@ -19,13 +22,17 @@ public class AdminAddIndividualFX extends FormFX {
             "NIF:", "Email:", "Nome", "Address", "Password", "Number of dependants", "Fiscal Coefficient"
     };
 
-    private final ComboBox<EconSector> sectorsBox;
+    private final MenuButton sectorsBox;
 
     public AdminAddIndividualFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene, defaultFields);
 
-        this.sectorsBox = new ComboBox<>();
-        this.sectorsBox.getItems().setAll(this.javaFactura.getAllSectors());
+        this.sectorsBox = new MenuButton("Setores Económicos");
+        Set<EconSector> econSectors = this.javaFactura.getAllSectors();
+        for(EconSector s : econSectors){
+            CheckMenuItem checkMenuItem = new CheckMenuItem(s.toString());
+            this.sectorsBox.getItems().add(checkMenuItem);
+        }
         appendField("Setores económicos", this.sectorsBox);
         //TODO familyAggregate
     }
@@ -35,8 +42,14 @@ public class AdminAddIndividualFX extends FormFX {
         if(fieldsNotFilled()) return;
         int field = 0;
         try{
-            HashSet<EconSector> sectors = new HashSet<>();
-            sectors.add(this.sectorsBox.getValue());
+            Set<EconSector> sectors = this.sectorsBox.getItems()
+                                                     .stream()
+                                                     .map(CheckMenuItem.class::cast)
+                                                     .filter(CheckMenuItem::isSelected)
+                                                     .map(CheckMenuItem::getText)
+                                                     .map(this.javaFactura::getSectorFromString)
+                                                     .filter(Objects::nonNull)
+                                                     .collect(Collectors.toSet());
             this.javaFactura.registarIndividual(
                     this.textFields[field++].getText(),
                     this.textFields[field++].getText(),
@@ -50,7 +63,7 @@ public class AdminAddIndividualFX extends FormFX {
             );
             for(TextField t : this.textFields)
                 t.clear();
-            this.sectorsBox.getSelectionModel().clearSelection();
+            this.sectorsBox.getItems().stream().map(CheckMenuItem.class::cast).forEach(c -> c.setSelected(false));
             confirm("Individual adicionado");
         }catch(InvalidNumberOfDependantsException e){
             this.errorTexts[5].setText("Too many dependents");

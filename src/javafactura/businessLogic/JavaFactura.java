@@ -37,8 +37,9 @@ public class JavaFactura implements Serializable {
 
 
     private JavaFactura(){
-        this.contribuintes = generateContribuintes();
-        generateFacturas();
+        this.contribuintes = new HashMap<>();
+        //this.contribuintes = generateContribuintes();
+        //generateFacturas();
         this.loggedInUser = null;
         this.admin = new Admin();
     }
