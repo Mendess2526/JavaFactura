@@ -8,7 +8,8 @@ public final class Reparacoes extends EconSector implements Deductible {
         return instance;
     }
 
-    private Reparacoes(){}
+    private Reparacoes(){
+    }
 
     @Override
     public float deduction(float value){

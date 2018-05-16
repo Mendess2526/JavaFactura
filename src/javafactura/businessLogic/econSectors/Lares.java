@@ -8,7 +8,8 @@ public final class Lares extends EconSector implements Deductible {
         return instance;
     }
 
-    private Lares(){}
+    private Lares(){
+    }
 
     @Override
     public float deduction(float value){

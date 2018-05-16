@@ -28,8 +28,8 @@ public abstract class ShowReceiptsFx extends FX {
     protected final HBox sortBox;
     protected LocalDate from;
     protected LocalDate to;
-    protected DatePicker datePickerFrom;
-    protected DatePicker datePickerTo;
+    protected final DatePicker datePickerFrom;
+    protected final DatePicker datePickerTo;
     private boolean valueSort;
     private boolean dateSort;
 

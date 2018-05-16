@@ -8,7 +8,8 @@ public final class Familia extends EconSector implements Deductible {
         return instance;
     }
 
-    private Familia(){}
+    private Familia(){
+    }
 
     @Override
     public float deduction(float value){

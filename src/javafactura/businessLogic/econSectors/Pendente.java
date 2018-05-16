@@ -8,6 +8,7 @@ public final class Pendente extends EconSector {
         return instance;
     }
 
-    private Pendente(){}
+    private Pendente(){
+    }
 
 }

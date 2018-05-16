@@ -176,8 +176,8 @@ public class JavaFactura implements Serializable {
     }
 
     public List<Factura> getFaturasOfIndividual(String clientNif, LocalDate from, LocalDate to) throws
-                                                                                                  NotEmpresaException,
-                                                                                                  NotIndividualException{
+                                                                                                NotEmpresaException,
+                                                                                                NotIndividualException{
         if(!(this.loggedInUser instanceof ContribuinteEmpresarial)) throw new NotEmpresaException();
         Contribuinte c = this.contribuintes.get(clientNif);
         if(!(c instanceof ContribuinteIndividual)) throw new NotIndividualException();

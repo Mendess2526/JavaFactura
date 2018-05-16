@@ -8,7 +8,8 @@ public final class Habitacao extends EconSector implements Deductible {
         return instance;
     }
 
-    private Habitacao(){}
+    private Habitacao(){
+    }
 
     @Override
     public float deduction(float value){

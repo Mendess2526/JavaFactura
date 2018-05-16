@@ -8,7 +8,8 @@ public final class Cabeleireiro extends EconSector implements Deductible {
         return instance;
     }
 
-    private Cabeleireiro(){}
+    private Cabeleireiro(){
+    }
 
     @Override
     public float deduction(float value){

@@ -8,7 +8,8 @@ public final class Veterinario extends EconSector implements Deductible {
         return instance;
     }
 
-    private Veterinario(){}
+    private Veterinario(){
+    }
 
     @Override
     public float deduction(float value){

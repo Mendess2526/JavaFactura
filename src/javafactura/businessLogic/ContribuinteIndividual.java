@@ -15,7 +15,7 @@ public class ContribuinteIndividual extends Contribuinte {
     /**
      * The NIFs of the people dependant of this Contribuinte
      */
-    private Set<String> familyAggregate;
+    private final Set<String> familyAggregate;
     /**
      * Number of dependants
      */

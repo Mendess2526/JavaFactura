@@ -19,6 +19,7 @@ public abstract class EconSector implements Serializable {
     private static final class SectorWrapper {
 
         private static final Set<EconSector> sectors = new HashSet<>();
+
         static{
             sectors.add(AlojamentoRestauracao.getInstance());
             sectors.add(Cabeleireiro.getInstance());
