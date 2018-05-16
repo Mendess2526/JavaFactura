@@ -1,5 +1,5 @@
 package javafactura.businessLogic.exceptions;
 
-public class NoSuchIndividualException extends Throwable {
+public class NoSuchIndividualException extends Exception {
 
 }

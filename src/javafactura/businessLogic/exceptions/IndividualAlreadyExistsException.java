@@ -1,5 +1,5 @@
 package javafactura.businessLogic.exceptions;
 
-public class IndividualAlreadyExistsException extends Throwable {
+public class IndividualAlreadyExistsException extends Exception {
 
 }

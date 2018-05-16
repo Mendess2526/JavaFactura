@@ -1,6 +1,6 @@
 package javafactura.businessLogic.exceptions;
 
-public class InvalidNumberOfDependantsException extends Throwable {
+public class InvalidNumberOfDependantsException extends Exception {
 
     private final int numDependants;
 

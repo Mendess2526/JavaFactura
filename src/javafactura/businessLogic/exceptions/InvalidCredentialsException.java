@@ -1,5 +1,5 @@
 package javafactura.businessLogic.exceptions;
 
-public class InvalidCredentialsException extends Throwable {
+public class InvalidCredentialsException extends Exception {
 
 }

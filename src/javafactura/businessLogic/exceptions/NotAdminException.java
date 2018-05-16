@@ -1,5 +1,5 @@
 package javafactura.businessLogic.exceptions;
 
-public class NotAdminException extends Throwable {
+public class NotAdminException extends Exception {
 
 }
