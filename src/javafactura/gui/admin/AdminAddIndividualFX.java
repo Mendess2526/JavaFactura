@@ -25,7 +25,7 @@ public class AdminAddIndividualFX extends FormFX {
         super(javaFactura, primaryStage, previousScene, defaultFields);
 
         this.sectorsBox = new ComboBox<>();
-        this.sectorsBox.getItems().addAll(this.javaFactura.getAllSectors());
+        this.sectorsBox.getItems().setAll(this.javaFactura.getAllSectors());
         appendField("Setores económicos", this.sectorsBox);
         //TODO familyAggregate
     }

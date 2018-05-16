@@ -3,6 +3,7 @@ package javafactura.gui.contribuinte;
 import javafactura.businessLogic.Factura;
 import javafactura.businessLogic.JavaFactura;
 import javafactura.businessLogic.econSectors.Pendente;
+import javafactura.businessLogic.exceptions.NotContribuinteException;
 import javafactura.businessLogic.exceptions.NotIndividualException;
 import javafx.collections.ListChangeListener;
 import javafx.collections.transformation.FilteredList;
@@ -11,7 +12,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -24,9 +24,6 @@ public class IndividualFX extends ShowReceiptsFx {
 
     public IndividualFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene, true);
-        ColumnConstraints cc = new ColumnConstraints();
-        cc.setPercentWidth(90);
-        this.gridPane.getColumnConstraints().add(cc);
 
         this.facturas.addListener((ListChangeListener<Factura>) c -> updateTotals());
 
@@ -52,7 +49,10 @@ public class IndividualFX extends ShowReceiptsFx {
                     return factura.getIssuerName().toLowerCase().contains(lowerCaseFilter);
                 })
         );
-        this.gridPane.add(searchBar, 0, row++);
+        Label searchLabel = new Label("Procurar Empresa");
+        HBox searchBox = new HBox(searchLabel, searchBar);
+        searchBox.setSpacing(100);
+        this.gridPane.add(searchBox, 0, row++);
 
         this.pendingNum = new Label();
         this.totalDeducted = new Label();
@@ -61,6 +61,8 @@ public class IndividualFX extends ShowReceiptsFx {
         topRowHBox.setSpacing(100);
 
         this.gridPane.add(topRowHBox, 0, row++);
+
+        this.gridPane.add(this.sortBox, 0, row++);
 
         this.gridPane.add(receiptsTable, 0, row++);
 
@@ -104,4 +106,14 @@ public class IndividualFX extends ShowReceiptsFx {
         this.primaryStage.setScene(this.previousScene);
     }
 
+    @Override
+    protected boolean updateReceipts(){
+        try{
+            this.facturas.setAll(this.javaFactura.getLoggedUserFacturas());
+        }catch(NotContribuinteException e){
+            goBack();
+            return false;
+        }
+        return true;
+    }
 }

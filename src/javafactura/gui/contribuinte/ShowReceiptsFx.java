@@ -3,32 +3,73 @@ package javafactura.gui.contribuinte;
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafactura.businessLogic.Factura;
 import javafactura.businessLogic.JavaFactura;
+import javafactura.businessLogic.comparators.FacturaValorComparator;
 import javafactura.businessLogic.econSectors.EconSector;
-import javafactura.businessLogic.exceptions.NotContribuinteException;
 import javafactura.gui.FX;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 
-public class ShowReceiptsFx extends FX {
+public abstract class ShowReceiptsFx extends FX {
 
     protected final ObservableList<Factura> facturas;
     protected final TableView<Factura> receiptsTable;
     private final ViewFacturaFX viewFacturaFX;
+    protected final HBox sortBox;
+    protected LocalDate from;
+    protected LocalDate to;
+    protected DatePicker datePickerFrom;
+    protected DatePicker datePickerTo;
+    private boolean valueSort;
+    private boolean dateSort;
 
 
     public ShowReceiptsFx(JavaFactura javaFactura, Stage primaryStage,
                           Scene previousScene, boolean canEdit){
         super(javaFactura, primaryStage, previousScene);
-
+        ColumnConstraints cc = new ColumnConstraints();
+        cc.setFillWidth(true);
+        this.gridPane.getColumnConstraints().add(cc);
         this.facturas = new ObservableListWrapper<>(new ArrayList<>());
+
+        this.valueSort = false;
+        this.dateSort = false;
+        Button sortValue = new Button("Ordenar por valor");
+        sortValue.setOnAction(e -> {
+            if(this.valueSort = !this.valueSort) this.facturas.sort(new FacturaValorComparator());
+            else this.facturas.sort(new FacturaValorComparator().reversed());
+        });
+        Button sortDate = new Button("Ordenar por data");
+        sortDate.setOnAction(e -> {
+            if(this.dateSort = !this.dateSort) this.facturas.sort(Comparator.reverseOrder());
+            else this.facturas.sort(Comparator.reverseOrder());
+        });
+        this.sortBox = new HBox(sortDate, sortValue);
+        sortBox.setSpacing(100);
+
+        this.from = null;
+        this.datePickerFrom = new DatePicker();
+        this.datePickerFrom.setOnAction(t -> {
+            this.from = datePickerFrom.getValue();
+            updateReceipts();
+        });
+        this.to = null;
+        this.datePickerTo = new DatePicker();
+        this.datePickerTo.setOnAction(t -> {
+            this.to = datePickerTo.getValue();
+            updateReceipts();
+        });
+
         this.receiptsTable = new TableView<>();
         makeReceiptsTable();
         this.viewFacturaFX = new ViewFacturaFX(this.javaFactura, this.primaryStage, this.scene, canEdit);
@@ -39,7 +80,7 @@ public class ShowReceiptsFx extends FX {
         this.receiptsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         TableColumn<Factura,String> date = new TableColumn<>("Date");
-        date.setMinWidth(Factura.dateFormat.toString().length());
+        date.setMinWidth(LocalDateTime.now().format(Factura.dateFormat).length() * 10);
         date.setCellValueFactory(
                 param -> new ReadOnlyObjectWrapper<>(param.getValue().getCreationDate().format(Factura.dateFormat)));
 
@@ -77,13 +118,8 @@ public class ShowReceiptsFx extends FX {
 
     @Override
     public boolean show(){
-        try{
-            this.facturas.clear();
-            this.facturas.addAll(this.javaFactura.getLoggedUserFacturas());
-        }catch(NotContribuinteException e){
-            goBack();
-            return false;
-        }
-        return super.show();
+        return super.show() && updateReceipts();
     }
+
+    protected abstract boolean updateReceipts();
 }

@@ -33,8 +33,7 @@ public class AdminTop10ContribuintesFX extends FX {
     @Override
     public boolean show(){
         try{
-            this.top10.clear();
-            this.top10.addAll(this.javaFactura.getTop10Contrib().stream()
+            this.top10.setAll(this.javaFactura.getTop10Contrib().stream()
                                               .map(c -> c.getNif() + " " + c.getName())
                                               .collect(Collectors.toList()));
         }catch(NotAdminException e){

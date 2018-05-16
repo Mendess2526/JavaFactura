@@ -3,19 +3,26 @@ package javafactura.gui.contribuinte;
 import javafactura.businessLogic.ContribuinteIndividual;
 import javafactura.businessLogic.Factura;
 import javafactura.businessLogic.JavaFactura;
+import javafactura.businessLogic.exceptions.NotContribuinteException;
 import javafactura.businessLogic.exceptions.NotEmpresaException;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class EmpresaFX extends ShowReceiptsFx {
 
-    private final Label totalFacturado;
+    private final TextFlow totalFacturado;
     private final TableView<ContribuinteIndividual> clients;
     private final EmpresaViewClientFX viewClientFX;
 
@@ -41,6 +48,7 @@ public class EmpresaFX extends ShowReceiptsFx {
         this.gridPane.add(makeHBox(issueReceipt, Pos.TOP_LEFT), 0, row++);
 
         // Receipts Table
+        this.gridPane.add(this.sortBox, 0, row++);
         this.gridPane.add(this.receiptsTable, 0, row);
 
         // Clients Table
@@ -48,8 +56,13 @@ public class EmpresaFX extends ShowReceiptsFx {
         makeClientsTable();
         this.gridPane.add(this.clients, 1, row++);
 
-        this.totalFacturado = new Label();
-        this.gridPane.add(this.totalFacturado, 0, row);
+        this.totalFacturado = new TextFlow();
+
+        this.from = null;
+        this.to = null;
+        HBox toFactBox = new HBox(this.totalFacturado, datePickerFrom, datePickerTo);
+        toFactBox.setSpacing(10);
+        this.gridPane.add(toFactBox, 0, row++);
 
         Button goBack = new Button("Back");
         goBack.setOnAction(event -> goBack());
@@ -92,16 +105,32 @@ public class EmpresaFX extends ShowReceiptsFx {
 
     @Override
     public boolean show(){
+        if(!super.show()) return false;
         try{
-            this.totalFacturado.setText(String.format("Total faturado: %.2f€",
-                                                      this.javaFactura.totalFaturado(LocalDateTime.MIN,
-                                                                                     LocalDateTime.MAX)));
-            this.clients.getItems().clear();
-            this.clients.getItems().addAll(this.javaFactura.getClients());
+            if(!updateReceipts()) return false;
+            this.clients.getItems().setAll(this.javaFactura.getClients());
         }catch(NotEmpresaException e){
             goBack();
             return false;
         }
-        return super.show();
+        return true;
+    }
+
+    @Override
+    protected boolean updateReceipts(){
+        LocalDate from = this.from != null ? this.from : LocalDate.MIN;
+        LocalDate to = this.to != null ? this.to : LocalDate.MAX;
+        try{
+            Text a = new Text("Total faturado: ");
+            a.setStyle("-fx-font-weight: bold");
+            Text b = new Text(
+                    String.format("%.2f€", this.javaFactura.totalFaturado(from, to)));
+            this.totalFacturado.getChildren().setAll(a, b);
+            this.facturas.setAll(this.javaFactura.getLoggedUserFacturas(from, to));
+        }catch(NotContribuinteException e){
+            goBack();
+            return false;
+        }
+        return true;
     }
 }

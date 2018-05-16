@@ -73,7 +73,6 @@ public class AdminTopXEmpresasFX extends FX {
             goBack();
             return;
         }
-        this.topX.clear();
-        this.topX.addAll(listDoublePair);
+        this.topX.setAll(listDoublePair);
     }
 }
