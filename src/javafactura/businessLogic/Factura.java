@@ -18,7 +18,7 @@ public class Factura implements Comparable<Factura>,
                                 Serializable {
 
     /** The format the creationDate will be printed with when toString is called on this */
-    public static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyy kk:mm:ss");
+    public static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyy\tkk:mm:ss");
 
     /**
      * \brief The NIF of the entity that issued this Receipt
