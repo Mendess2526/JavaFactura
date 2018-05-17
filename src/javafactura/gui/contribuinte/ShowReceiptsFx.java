@@ -3,7 +3,6 @@ package javafactura.gui.contribuinte;
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafactura.businessLogic.Factura;
 import javafactura.businessLogic.JavaFactura;
-import javafactura.businessLogic.comparators.FacturaValorComparator;
 import javafactura.businessLogic.econSectors.EconSector;
 import javafactura.gui.FX;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -18,10 +17,10 @@ import javafx.stage.Stage;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 
 public abstract class ShowReceiptsFx extends FX {
 
+    private SortState valueSort;
     protected final ObservableList<Factura> facturas;
     protected final TableView<Factura> receiptsTable;
     private final ViewFacturaFX viewFacturaFX;
@@ -30,10 +29,7 @@ public abstract class ShowReceiptsFx extends FX {
     protected LocalDate to;
     protected final DatePicker datePickerFrom;
     protected final DatePicker datePickerTo;
-    private boolean valueSort;
-    private boolean dateSort;
-
-
+    private SortState dateSort;
     public ShowReceiptsFx(JavaFactura javaFactura, Stage primaryStage,
                           Scene previousScene, boolean canEdit){
         super(javaFactura, primaryStage, previousScene);
@@ -42,17 +38,19 @@ public abstract class ShowReceiptsFx extends FX {
         this.gridPane.getColumnConstraints().add(cc);
         this.facturas = new ObservableListWrapper<>(new ArrayList<>());
 
-        this.valueSort = false;
-        this.dateSort = false;
+        this.valueSort = SortState.NONE;
+        this.dateSort = SortState.NONE;
         Button sortValue = new Button("Ordenar por valor");
         sortValue.setOnAction(e -> {
-            if(this.valueSort = !this.valueSort) this.facturas.sort(new FacturaValorComparator());
-            else this.facturas.sort(new FacturaValorComparator().reversed());
+            this.valueSort = this.valueSort.reverse;
+            this.dateSort = SortState.NONE;
+            updateReceipts();
         });
         Button sortDate = new Button("Ordenar por data");
         sortDate.setOnAction(e -> {
-            if(this.dateSort = !this.dateSort) this.facturas.sort(Comparator.reverseOrder());
-            else this.facturas.sort(Comparator.reverseOrder());
+            this.dateSort = this.dateSort.reverse;
+            this.valueSort = SortState.NONE;
+            updateReceipts();
         });
         this.sortBox = new HBox(sortDate, sortValue);
         sortBox.setSpacing(100);
@@ -73,6 +71,32 @@ public abstract class ShowReceiptsFx extends FX {
         this.receiptsTable = new TableView<>();
         makeReceiptsTable();
         this.viewFacturaFX = new ViewFacturaFX(this.javaFactura, this.primaryStage, this.scene, canEdit);
+    }
+
+    protected SortState getValueSort(){
+        return this.valueSort;
+    }
+
+    protected SortState getDateSort(){
+        return this.dateSort;
+    }
+
+    public enum SortState {
+        DESCENDING,
+        ASCENDING,
+        NONE;
+
+        static{
+            DESCENDING.reverse = ASCENDING;
+            ASCENDING.reverse = DESCENDING;
+            NONE.reverse = DESCENDING;
+        }
+
+        private SortState reverse;
+
+        SortState none(){
+            return NONE;
+        }
     }
 
     private void makeReceiptsTable(){

@@ -3,6 +3,7 @@ package javafactura.gui.contribuinte;
 import javafactura.businessLogic.ContribuinteIndividual;
 import javafactura.businessLogic.Factura;
 import javafactura.businessLogic.JavaFactura;
+import javafactura.businessLogic.comparators.FacturaValorComparator;
 import javafactura.businessLogic.exceptions.NotContribuinteException;
 import javafactura.businessLogic.exceptions.NotEmpresaException;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -19,6 +20,7 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 
 public class EmpresaFX extends ShowReceiptsFx {
 
@@ -126,7 +128,21 @@ public class EmpresaFX extends ShowReceiptsFx {
             Text b = new Text(
                     String.format("%.2f€", this.javaFactura.totalFaturado(from, to)));
             this.totalFacturado.getChildren().setAll(a, b);
-            this.facturas.setAll(this.javaFactura.getLoggedUserFacturas(from, to));
+            Comparator<Factura> c;
+            if(getValueSort() == SortState.ASCENDING)
+                c = new FacturaValorComparator().reversed();
+            else if(getValueSort() == SortState.DESCENDING)
+                c = new FacturaValorComparator();
+            else if(getDateSort() == SortState.ASCENDING)
+                c = Comparator.reverseOrder();
+            else if(getDateSort() == SortState.DESCENDING)
+                c = Comparator.naturalOrder();
+            else
+                c = null;
+            if(c == null)
+                this.facturas.setAll(this.javaFactura.getLoggedUserFacturas(from, to));
+            else
+                this.facturas.setAll(this.javaFactura.getLoggedUserFacturas(c, from, to));
         }catch(NotContribuinteException e){
             goBack();
             return false;

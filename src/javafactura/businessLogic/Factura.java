@@ -215,6 +215,10 @@ public class Factura implements Comparable<Factura>,
         this.lastEditDate = LocalDateTime.now();
     }
 
+    /**
+     * Cleans the history.
+     * @return Returns the instance.
+     */
     private Factura cleanHistory(){
         this.history.clear();
         this.possibleEconSectors.clear();
@@ -284,10 +288,10 @@ public class Factura implements Comparable<Factura>,
                + ", lastEditDate=" + lastEditDate
                + ", clientNif='" + clientNif + '\''
                + ", description='" + description + '\''
-               + ", value=" + value
-               + ", econSector=" + econSector
-               + ", possibleEconSectors=" + possibleEconSectors
-               + ", history=" + history
+               + ", value=" + value + '\''
+               + ", econSector=" + econSector + '\''
+               + ", possibleEconSectors=" + possibleEconSectors + '\''
+               + ", history=" + history + '\''
                + '}';
     }
 
@@ -298,8 +302,6 @@ public class Factura implements Comparable<Factura>,
 
     @Override
     public int compareTo(Factura o){
-        if(this.creationDate.isBefore(o.getCreationDate())) return -1;
-        if(this.creationDate.isAfter(o.getCreationDate())) return 1;
-        return 0;
+        return this.creationDate.compareTo(o.getCreationDate());
     }
 }
