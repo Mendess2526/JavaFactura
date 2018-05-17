@@ -88,15 +88,14 @@ public class ContribuinteEmpresarial extends Contribuinte {
      * @param description The description of the purchase
      * @param value       The value of the purchase
      */
-    Factura issueFactura(Contribuinte buyer, String description, float value){
+    Factura issueFactura(ContribuinteIndividual buyer, String description, float value){
         EconSector econSector;
         if(this.econActivities.size() > 1){
             econSector = Pendente.getInstance();
         }else{
             econSector = this.econActivities.iterator().next();
         }
-        Factura factura = new Factura(this.getNif(), this.getName(),
-                                      buyer.getNif(), description, value, econSector, this.econActivities);
+        Factura factura = new Factura(this, buyer, description, value);
         this.associateFactura(factura);
         buyer.associateFactura(factura);
         return factura.clone();

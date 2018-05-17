@@ -138,9 +138,10 @@ public class JavaFactura implements Serializable {
         if(!(this.loggedInUser instanceof ContribuinteEmpresarial)) throw new NotEmpresaException();
 
         Contribuinte client = this.contribuintes.get(clientNif);
-        if(client == null) throw new NoSuchIndividualException();
+        if(client == null || !(client instanceof ContribuinteIndividual)) throw new NoSuchIndividualException();
 
-        return ((ContribuinteEmpresarial) this.loggedInUser).issueFactura(client, description, value);
+        return ((ContribuinteEmpresarial) this.loggedInUser)
+                .issueFactura((ContribuinteIndividual) client, description, value);
     }
 
     public Factura changeFactura(Factura factura, EconSector econSector) throws NotIndividualException,

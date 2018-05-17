@@ -17,7 +17,7 @@ public final class Saude extends EconSector implements Deductible {
     }
 
     @Override
-    public float deduction(float value, boolean interior, int aggregateSize, float coefEmpresa, float coefIndividual){
+    public float deduction(float value, boolean interior, int aggregateSize, double coefEmpresa, double coefIndividual){
         return 0;
     }
 }

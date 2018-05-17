@@ -8,7 +8,6 @@ import javafactura.businessLogic.exceptions.InvalidEconSectorException;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
@@ -72,12 +71,11 @@ public class Factura implements Comparable<Factura>,
     /**
      * \brief The fiscal coefficient of the company at the time of emission
      */
-    private float coefEmpresa;
+    private double coefEmpresa;
     /**
      * \brief The fiscal coefficient of the individual at the time of emission
      */
-    private float coefIndividual;
-
+    private double coefIndividual;
 
     /**
      * Empty constructor
@@ -93,36 +91,41 @@ public class Factura implements Comparable<Factura>,
         this.history = new LinkedList<>();
         this.econSector = Pendente.getInstance();
         this.possibleEconSectors = new HashSet<>();
+        this.isEmpresaInterior = false;
+        this.aggregateSize = 0;
+        this.coefEmpresa = 0.0;
+        this.coefIndividual = 0.0;
     }
 
     /**
      * \brief Fully parametrised constructor for <tt>Factura</tt>
-     * @param issuerNif           The NIF of the entity that issued this Receipt
-     * @param issuerName          The name of the entity that issued this Receipt
-     * @param clientNif           The NIF of the client to whom this Receipt was issued
+     * @param company           The NIF of the entity that issued this Receipt
+     * @param individual          The name of the entity that issued this Receipt
      * @param description         The description of the purchase
      * @param value               The value of the purchase
-     * @param econSector          The economic sector of this Factura
-     * @param possibleEconSectors The econ sectors of the company that issued this receipt
      */
-    public Factura(String issuerNif, String issuerName, String clientNif,
-                   String description, float value, EconSector econSector,
-                   Collection<EconSector> possibleEconSectors){
-        this.issuerNif = issuerNif;
-        this.issuerName = issuerName;
+    public Factura(ContribuinteEmpresarial company, ContribuinteIndividual individual,
+                   String description, float value){
+        this.issuerNif = company.getNif();
+        this.issuerName = individual.getName();
         this.creationDate = LocalDateTime.now();
         this.lastEditDate = this.creationDate;
-        this.clientNif = clientNif;
+        this.clientNif = individual.getNif();
         this.description = description;
         this.value = value;
         this.history = new LinkedList<>();
-        this.econSector = econSector;
-        if(econSector instanceof Pendente){
-            this.possibleEconSectors = new HashSet<>(possibleEconSectors);
+        if(company.getEconActivities().size() > 1){
+            this.econSector = Pendente.getInstance();
+            this.possibleEconSectors = new HashSet<>(company.getEconActivities());
             this.possibleEconSectors.remove(Pendente.getInstance());
         }else{
+            this.econSector = company.getEconActivities().iterator().next();
             this.possibleEconSectors = new HashSet<>();
         }
+        this.isEmpresaInterior = false; //TODO empresa do interior
+        this.aggregateSize = individual.getNumDependants();
+        this.coefEmpresa = company.getFiscalCoefficient();
+        this.coefIndividual = individual.getFiscalCoefficient();
     }
 
     /**
@@ -140,6 +143,10 @@ public class Factura implements Comparable<Factura>,
         this.history = factura.getHistory();
         this.econSector = factura.getEconSector();
         this.possibleEconSectors = factura.getPossibleEconSectors();
+        this.isEmpresaInterior = factura.isEmpresaInterior();
+        this.aggregateSize = factura.getAggregateSize();
+        this.coefEmpresa = factura.getCoefEmpresa();
+        this.coefIndividual = factura.getCoefIndividual();
     }
 
     /**
@@ -256,6 +263,22 @@ public class Factura implements Comparable<Factura>,
      */
     public Set<EconSector> getPossibleEconSectors(){
         return new HashSet<>(this.possibleEconSectors);
+    }
+
+    public boolean isEmpresaInterior(){
+        return this.isEmpresaInterior;
+    }
+
+    public int getAggregateSize(){
+        return this.aggregateSize;
+    }
+
+    public double getCoefEmpresa(){
+        return this.coefEmpresa;
+    }
+
+    public double getCoefIndividual(){
+        return this.coefIndividual;
     }
 
     /**
