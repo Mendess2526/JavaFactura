@@ -12,6 +12,7 @@ import java.util.Set;
 public class ContribuinteIndividual extends Contribuinte {
 
 
+    private static final long serialVersionUID = -325271230861013347L;
     /**
      * The NIFs of the people dependant of this Contribuinte
      */

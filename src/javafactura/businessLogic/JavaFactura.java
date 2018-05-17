@@ -4,10 +4,7 @@ import javafactura.businessLogic.collections.Pair;
 import javafactura.businessLogic.comparators.ContribuinteFacturaCountComparator;
 import javafactura.businessLogic.comparators.ContribuinteSpendingComparator;
 import javafactura.businessLogic.comparators.FacturaValorComparator;
-import javafactura.businessLogic.econSectors.EconSector;
-import javafactura.businessLogic.econSectors.Educacao;
-import javafactura.businessLogic.econSectors.Familia;
-import javafactura.businessLogic.econSectors.Pendente;
+import javafactura.businessLogic.econSectors.*;
 import javafactura.businessLogic.exceptions.*;
 
 import java.io.*;
@@ -18,30 +15,28 @@ import java.util.stream.Collectors;
 
 public class JavaFactura implements Serializable {
 
+    private static final long serialVersionUID = -1056267908102555293L;
     private static final String SAVE_STATE_FILE = "javaFactura.dat";
-
-    public static JavaFactura loadState(){
-        try(ObjectInputStream is = new ObjectInputStream(new FileInputStream(SAVE_STATE_FILE))){
-            return (JavaFactura) is.readObject();
-        }catch(IOException | ClassNotFoundException e){
-            return new JavaFactura();
-        }
-    }
-
-
     private final Map<String,Contribuinte> contribuintes;
-
-    private User loggedInUser;
-
     private final Admin admin;
-
+    private User loggedInUser;
 
     private JavaFactura(){
         this.contribuintes = new HashMap<>();
-        //this.contribuintes = generateContribuintes();
-        //generateFacturas();
+        generateContribuintes();
+        generateFacturas();
         this.loggedInUser = null;
         this.admin = new Admin();
+    }
+
+    public static JavaFactura loadState(){
+        try(ObjectInputStream is = new ObjectInputStream(new FileInputStream(SAVE_STATE_FILE))){
+            JavaFactura j = (JavaFactura) is.readObject();
+            j.loggedInUser = null;
+            return j;
+        }catch(IOException | ClassNotFoundException e){
+            return new JavaFactura();
+        }
     }
 
     public User getLoggedUser(){
@@ -90,9 +85,11 @@ public class JavaFactura implements Serializable {
                 econSectors));
     }
 
-    public void registarEmpresarial(String nif, String email, String nome, String address, String password,
-                                    double fiscalCoefficient, Set<EconSector> econSectors) throws
-                                                                                           EmpresarialAlreadyExistsException{
+    public void registarEmpresarial(String nif, String email, String nome,
+                                    String address, String password,
+                                    double fiscalCoefficient,
+                                    Set<EconSector> econSectors) throws
+                                                                 EmpresarialAlreadyExistsException{
         if(this.contribuintes.containsKey(nif)) throw new EmpresarialAlreadyExistsException();
         this.contribuintes.put(nif, new ContribuinteEmpresarial(
                 nif,
@@ -135,7 +132,7 @@ public class JavaFactura implements Serializable {
         throw new NotEmpresaException();
     }
 
-    public void emitirFactura(String clientNif, float value, String description) throws
+    public Factura emitirFactura(String clientNif, float value, String description) throws
                                                                                  NotEmpresaException,
                                                                                  NoSuchIndividualException{
         if(!(this.loggedInUser instanceof ContribuinteEmpresarial)) throw new NotEmpresaException();
@@ -143,7 +140,7 @@ public class JavaFactura implements Serializable {
         Contribuinte client = this.contribuintes.get(clientNif);
         if(client == null) throw new NoSuchIndividualException();
 
-        ((ContribuinteEmpresarial) this.loggedInUser).issueFactura(client, description, value);
+        return ((ContribuinteEmpresarial) this.loggedInUser).issueFactura(client, description, value);
     }
 
     public Factura changeFactura(Factura factura, EconSector econSector) throws NotIndividualException,
@@ -161,10 +158,13 @@ public class JavaFactura implements Serializable {
         return ((Contribuinte) this.loggedInUser).getFacturas().stream().sorted().collect(Collectors.toList());
     }
 
-    public List<Factura> getLoggedUserFacturas(Comparator<Factura> comparator) throws NotContribuinteException{
+    public List<Factura> getLoggedUserFacturas(Comparator<Factura> comparator, LocalDate from, LocalDate to)
+            throws NotContribuinteException{
         if(!(this.loggedInUser instanceof Contribuinte)) throw new NotContribuinteException();
         return ((Contribuinte) this.loggedInUser).getFacturas()
                                                  .stream()
+                                                 .filter(f -> f.getCreationDate().isAfter(from.atStartOfDay()))
+                                                 .filter(f -> f.getCreationDate().isBefore(to.atTime(LocalTime.MAX)))
                                                  .sorted(comparator)
                                                  .collect(Collectors.toList());
     }
@@ -238,10 +238,6 @@ public class JavaFactura implements Serializable {
         return top10.stream().limit(10).collect(Collectors.toList());
     }
 
-    /*
-    determinar a relação das X empresas que mais facturas emitiram em t_odo o sistema e o montante de
-    deduções fiscais que as despesas registadas (dessas empresas) representam;
-     */
     public List<Pair<ContribuinteEmpresarial,Double>> getTopXEmpresas(int x) throws NotAdminException{
         if(!(this.loggedInUser instanceof Admin)) throw new NotAdminException();
 
@@ -261,90 +257,62 @@ public class JavaFactura implements Serializable {
     public void saveState() throws IOException{
         ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(SAVE_STATE_FILE));
         os.writeObject(this);
-        os.flush();
-        os.close();
+        os.close(); //Close ja faz flush [ObjectOutputStream.java:740]
     }
 
-    private Map<String,Contribuinte> generateContribuintes(){
-        Map<String,Contribuinte> contribuintes = new HashMap<>();
-        for(int i = 0; i < 5; i++){
-            String nif = "I" + i;
-            String email = "ci" + i + "@email.com";
-            String nome = "ci" + i;
-            String address = "Rua ci" + i;
-            String password = "pass";
-            List<String> dependants = new ArrayList<>();//TODO make some stubs here
-            double fiscal_coefficient = Math.random();
-            Set<EconSector> econActivities = new HashSet<>();
-            try{
-                contribuintes.put(nif, new ContribuinteIndividual(
-                        nif,
-                        email,
-                        nome,
-                        address,
-                        password,
-                        dependants.size(),
-                        dependants,
-                        fiscal_coefficient,
-                        econActivities));
-            }catch(InvalidNumberOfDependantsException e){
-                e.printStackTrace();
-            }
-
+    private void generateContribuintes(){
+        try{
+            registarIndividual("1", "um@email.com", "Um", "Rua Um", "pass",
+                               0, new ArrayList<>(), 0.3,
+                               new HashSet<>(Arrays.asList(Educacao.getInstance(), Familia.getInstance())));
+            registarIndividual("2", "dois@email.com", "Dois", "Rua Dois", "pass",
+                               0, new ArrayList<>(), 0.3,
+                               new HashSet<>(Arrays.asList(Educacao.getInstance(), Familia.getInstance())));
+            registarIndividual("3", "tres@email.com", "Tres", "Rua Tres", "pass",
+                               2, Arrays.asList("1", "2"), 0.3,
+                               new HashSet<>(Arrays.asList(Educacao.getInstance(), Familia.getInstance())));
+            registarIndividual("4", "quatro@email.com", "Quatro", "Rua quatro", "pass",
+                               1, Collections.singletonList("2"), 0.6,
+                               new HashSet<>(Arrays.asList(Reparacoes.getInstance(), Saude.getInstance())));
+            registarEmpresarial("5", "cinco@email.com", "Cinco", "Rua Cinco", "pass",
+                                0.1, new HashSet<>(
+                            Arrays.asList(Educacao.getInstance(), AlojamentoRestauracao.getInstance())));
+            registarEmpresarial("6", "seis@email.com", "Seis", "Rua Seis", "pass",
+                                0.7,
+                                new HashSet<>(Arrays.asList(Saude.getInstance(), AlojamentoRestauracao.getInstance())));
+        }catch(InvalidNumberOfDependantsException | IndividualAlreadyExistsException | EmpresarialAlreadyExistsException e){
+            e.printStackTrace();
         }
-        for(int i = 0; i < 3; i++){
-            String nif = "E" + i;
-            String email = "ce" + i + "@email.com";
-            String nome = "ce" + i;
-            String address = "Rua ce" + i;
-            String password = "pass";
-            double fiscal_coefficient = Math.random();
-            Set<EconSector> econActivities = new HashSet<>();
-            econActivities.add(Familia.getInstance());
-            econActivities.add(Educacao.getInstance());
-            contribuintes.put(nif, new ContribuinteEmpresarial(
-                    nif,
-                    email,
-                    nome,
-                    address,
-                    password,
-                    fiscal_coefficient,
-                    econActivities
-            ));
-
-        }
-        return contribuintes;
     }
 
     private void generateFacturas(){
         User u = this.loggedInUser;
         List<String> issuers = this.contribuintes.values()
                                                  .stream()
+                                                 .filter(ContribuinteEmpresarial.class::isInstance)
                                                  .map(Contribuinte::getNif)
-                                                 .filter(nif -> nif.startsWith("E"))
                                                  .collect(Collectors.toList());
         List<String> clients = this.contribuintes.values()
                                                  .stream()
+                                                 .filter(ContribuinteIndividual.class::isInstance)
                                                  .map(Contribuinte::getNif)
-                                                 .filter(nif -> nif.startsWith("I"))
                                                  .collect(Collectors.toList());
 
+        Random r = new Random();
         for(int i = 0; i < 40; i++){
             String issuerNif = issuers.get(new Random().nextInt(issuers.size()));
             String clientNif = clients.get(new Random().nextInt(clients.size()));
             String description = issuerNif + " -> " + clientNif;
-            float value = (float) Math.random() * 100;
+            float value = r.nextFloat() * 500;
 
             this.loggedInUser = this.contribuintes.get(issuerNif);
             try{
-                /*Factura f =*/
-                emitirFactura(clientNif, value, description);
-                //changeFactura(f, EconSector.T_CODE_FAMILIA);
-            }catch(NotEmpresaException | NoSuchIndividualException e){
+                Factura f = emitirFactura(clientNif, value, description);
+                if(value % 3 == 0) changeFactura(f, (EconSector) f.getPossibleEconSectors().toArray()[0]);
+            }catch(NotContribuinteException | NoSuchIndividualException | InvalidEconSectorException e){
                 e.printStackTrace();
             }
         }
         this.loggedInUser = u;
     }
-
 }

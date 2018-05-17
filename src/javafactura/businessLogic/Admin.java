@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Admin implements User,
                               Serializable {
 
+    private static final long serialVersionUID = 9103824574896562100L;
     private final String name;
     private String password;
 

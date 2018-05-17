@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 public class Factura implements Comparable<Factura>,
                                 Serializable {
 
+    private static final long serialVersionUID = 7367373616311847150L;
     /** The format the creationDate will be printed with when toString is called on this */
     public static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyy\tkk:mm:ss");
 

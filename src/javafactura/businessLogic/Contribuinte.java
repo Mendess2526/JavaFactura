@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 public abstract class Contribuinte implements User,
                                               Serializable {
 
+    private static final long serialVersionUID = 2591014538307976339L;
     /**
      * The NIF of the Contribuinte
      */

@@ -8,6 +8,8 @@ import java.util.Set;
 
 public abstract class EconSector implements Serializable {
 
+    private static final long serialVersionUID = 3640154128824268337L;
+
     public static Set<EconSector> getAllSectors(){
         return new HashSet<>(SectorWrapper.sectors);
     }
