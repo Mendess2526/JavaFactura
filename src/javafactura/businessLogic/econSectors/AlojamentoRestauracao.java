@@ -1,6 +1,6 @@
 package javafactura.businessLogic.econSectors;
 
-public final class AlojamentoRestauracao extends EconSector implements Deductible {
+public final class AlojamentoRestauracao extends EconSector {
 
     private static final AlojamentoRestauracao instance = new AlojamentoRestauracao();
     private static final long serialVersionUID = 2324835756438756007L;
@@ -16,8 +16,4 @@ public final class AlojamentoRestauracao extends EconSector implements Deductibl
         return getInstance();
     }
 
-    @Override
-    public float deduction(float value){
-        return 0;
-    }
 }

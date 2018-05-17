@@ -1,6 +1,6 @@
 package javafactura.businessLogic.econSectors;
 
-public final class Veterinario extends EconSector implements Deductible {
+public final class Veterinario extends EconSector {
 
     private static final Veterinario instance = new Veterinario();
     private static final long serialVersionUID = 784409379615980803L;
@@ -16,8 +16,4 @@ public final class Veterinario extends EconSector implements Deductible {
         return getInstance();
     }
 
-    @Override
-    public float deduction(float value){
-        return 0;
-    }
 }

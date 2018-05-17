@@ -61,6 +61,23 @@ public class Factura implements Comparable<Factura>,
      * \brief History of states of this <tt>Factura</tt>
      */
     private final LinkedList<Factura> history;
+    /**
+     * \brief A boolean to store if the company the issued the Receipt is to benefited
+     */
+    private boolean isEmpresaInterior;
+    /**
+     * \brief The size of the aggregate at the time of emission
+     */
+    private int aggregateSize;
+    /**
+     * \brief The fiscal coefficient of the company at the time of emission
+     */
+    private float coefEmpresa;
+    /**
+     * \brief The fiscal coefficient of the individual at the time of emission
+     */
+    private float coefIndividual;
+
 
     /**
      * Empty constructor
@@ -255,7 +272,8 @@ public class Factura implements Comparable<Factura>,
      */
     public float deducao(){
         if(this.isDeductible()){
-            return ((Deductible) this.econSector).deduction(this.value);
+            return ((Deductible) this.econSector).deduction(this.value, this.isEmpresaInterior, this.aggregateSize,
+                                                            this.coefEmpresa, this.coefIndividual);
         }
         return 0.0f;
     }

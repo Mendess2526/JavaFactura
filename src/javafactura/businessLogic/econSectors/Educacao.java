@@ -17,7 +17,9 @@ public final class Educacao extends EconSector implements Deductible {
     }
 
     @Override
-    public float deduction(float value){
-        return 0;
+    public float deduction(float value, boolean interior, int aggregateSize, float coefEmpresa, float coefIndividual){
+        float deduction = 0;
+
+        return deduction;
     }
 }
