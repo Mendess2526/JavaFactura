@@ -13,10 +13,21 @@ public class EmpresaIssueReceiptFX extends FormFX {
     private static final String[] defaultFields = {
             "Nif do cliente", "Valor", "Descrição"
     };
+    private final EmpresaFX.TableRefresher tableRefresher;
+    private boolean emitted;
 
     public EmpresaIssueReceiptFX(JavaFactura javaFactura, Stage primaryStage,
-                                 Scene previousScene){
+                                 Scene previousScene,
+                                 EmpresaFX.TableRefresher tableRefresher){
         super(javaFactura, primaryStage, previousScene, defaultFields);
+        this.tableRefresher = tableRefresher;
+        this.emitted = false;
+    }
+
+    @Override
+    protected void goBack(){
+        if(this.emitted) this.tableRefresher.refresh();
+        super.goBack();
     }
 
     protected void submitData(){
@@ -26,14 +37,15 @@ public class EmpresaIssueReceiptFX extends FormFX {
         try{
             this.javaFactura.emitirFactura(
                     this.textFields[field++].getText(),
-                    Float.parseFloat(textFields[field++].getText()),
+                    Float.parseFloat(textFields[field++].getText().replace(",", ".")),
                     this.textFields[field++].getText()
             );
             for(TextField t : this.textFields)
                 t.clear();
             confirm("Factura emitida");
+            this.emitted = true;
         }catch(NumberFormatException e){
-            this.errorTexts[field - 1].setText(this.textFields[field - 1].getText() + "não é um número");
+            this.errorTexts[field - 1].setText(this.textFields[field - 1].getText() + " não é um número");
         }catch(NotEmpresaException e){
             goBack();
         }catch(NoSuchIndividualException e){

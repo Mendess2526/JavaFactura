@@ -28,13 +28,12 @@ public class EmpresaFX extends ShowReceiptsFx {
     private final TableView<ContribuinteIndividual> clients;
     private final EmpresaViewClientFX viewClientFX;
 
-    //TODO update facturas tabela after emitting
     public EmpresaFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene, false);
 
         EmpresaIssueReceiptFX empresaIssueReceiptFX
                 = new EmpresaIssueReceiptFX(this.javaFactura, this.primaryStage,
-                                            this.scene);
+                                            this.scene, new TableRefresher());
 
         EmpresaProfileFX empresaProfileFX = new EmpresaProfileFX(this.javaFactura, this.primaryStage, this.scene);
 
@@ -148,5 +147,12 @@ public class EmpresaFX extends ShowReceiptsFx {
             return false;
         }
         return true;
+    }
+
+    class TableRefresher {
+
+        void refresh(){
+            updateReceipts();
+        }
     }
 }
