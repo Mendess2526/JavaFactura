@@ -24,14 +24,14 @@ public class ContribuinteIndividual extends Contribuinte {
     /**
      * The fiscal coefficient of this Contribuinte
      */
-    private double fiscalCoefficient;
+    private float fiscalCoefficient;
 
     private Set<EconSector> econActivities;
 
     private ContribuinteIndividual(){
         this.familyAggregate = new HashSet<>();
         this.numDependants = 0;
-        this.fiscalCoefficient = 0.0;
+        this.fiscalCoefficient = 0;
         this.econActivities = new HashSet<>();
     }
 
@@ -51,7 +51,7 @@ public class ContribuinteIndividual extends Contribuinte {
      */
     public ContribuinteIndividual(String nif, String email, String nome,
                                   String address, String password, int numDependants,
-                                  Collection<String> familyAggregate, double fiscalCoefficient,
+                                  Collection<String> familyAggregate, float fiscalCoefficient,
                                   Set<EconSector> econActivities) throws
                                                                   InvalidNumberOfDependantsException{
         super(nif, email, nome, address, password);
@@ -78,20 +78,12 @@ public class ContribuinteIndividual extends Contribuinte {
         return this.numDependants;
     }
 
-    public double getFiscalCoefficient(){
+    public float getFiscalCoefficient(){
         return this.fiscalCoefficient;
     }
 
     public Set<EconSector> getEconActivities(){
         return new HashSet<>(this.econActivities);
-    }
-
-    public boolean addToFamilyAggregate(String nif){
-        return this.familyAggregate.add(nif);
-    }
-
-    public boolean removeFromFamilyAggregate(String nif){
-        return this.familyAggregate.remove(nif);
     }
 
     public void setNumDependants(int numDependants) throws InvalidNumberOfDependantsException{
@@ -100,18 +92,6 @@ public class ContribuinteIndividual extends Contribuinte {
         }else{
             throw new InvalidNumberOfDependantsException(numDependants);
         }
-    }
-
-    public void setFiscalCoefficient(double fiscalCoefficient){
-        this.fiscalCoefficient = fiscalCoefficient;
-    }
-
-    public boolean addEconActivity(EconSector econSector){
-        return this.econActivities.add(econSector);
-    }
-
-    public boolean removeEconActivity(EconSector econSector){
-        return this.econActivities.add(econSector);
     }
 
     public Factura changeFatura(Factura f, EconSector e) throws InvalidEconSectorException{

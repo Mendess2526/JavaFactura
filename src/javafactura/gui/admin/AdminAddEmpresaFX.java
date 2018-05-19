@@ -55,7 +55,7 @@ public class AdminAddEmpresaFX extends FormFX {
                     this.textFields[field++].getText(),
                     this.textFields[field++].getText(),
                     this.textFields[field++].getText(),
-                    Double.parseDouble(this.textFields[field].getText()),
+                    Float.parseFloat(this.textFields[field].getText()),
                     sectors
             );
             Arrays.stream(this.textFields).forEach(TextInputControl::clear);

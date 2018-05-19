@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class Factura implements Comparable<Factura>,
                                 Serializable {
 
-    private static final long serialVersionUID = 7367373616311847150L;
+    private static final long serialVersionUID = 9214165720384168988L;
     /** The format the creationDate will be printed with when toString is called on this */
     public static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyy\tkk:mm:ss");
 
@@ -71,11 +71,15 @@ public class Factura implements Comparable<Factura>,
     /**
      * \brief The fiscal coefficient of the company at the time of emission
      */
-    private double coefEmpresa;
+    private float coefEmpresa;
     /**
      * \brief The fiscal coefficient of the individual at the time of emission
      */
-    private double coefIndividual;
+    private float coefIndividual;
+    /**
+     * \brief The economic sectors this is allowed to deduct
+     */
+    private Set<EconSector> individualEconSectors;
 
     /**
      * Empty constructor
@@ -87,14 +91,15 @@ public class Factura implements Comparable<Factura>,
         this.lastEditDate = this.creationDate;
         this.clientNif = "";
         this.description = "";
-        this.value = 0.0f;
+        this.value = 0;
         this.history = new LinkedList<>();
         this.econSector = Pendente.getInstance();
         this.possibleEconSectors = new HashSet<>();
         this.isEmpresaInterior = false;
         this.aggregateSize = 0;
-        this.coefEmpresa = 0.0;
-        this.coefIndividual = 0.0;
+        this.coefEmpresa = 0;
+        this.coefIndividual = 0;
+        this.individualEconSectors = new HashSet<>();
     }
 
     /**
@@ -107,7 +112,7 @@ public class Factura implements Comparable<Factura>,
     public Factura(ContribuinteEmpresarial company, ContribuinteIndividual individual,
                    String description, float value){
         this.issuerNif = company.getNif();
-        this.issuerName = individual.getName();
+        this.issuerName = company.getName();
         this.creationDate = LocalDateTime.now();
         this.lastEditDate = this.creationDate;
         this.clientNif = individual.getNif();
@@ -126,13 +131,14 @@ public class Factura implements Comparable<Factura>,
         this.aggregateSize = individual.getNumDependants();
         this.coefEmpresa = company.getFiscalCoefficient();
         this.coefIndividual = individual.getFiscalCoefficient();
+        this.individualEconSectors = individual.getEconActivities();
     }
 
     /**
      * Copy constructor for <tt>Factura</tt>
      * @param factura the <tt>Factura</tt> to copy
      */
-    private Factura(Factura factura){
+    public Factura(Factura factura){
         this.issuerNif = factura.getIssuerNif();
         this.issuerName = factura.getIssuerName();
         this.creationDate = factura.getCreationDate();
@@ -140,14 +146,16 @@ public class Factura implements Comparable<Factura>,
         this.clientNif = factura.getClientNif();
         this.description = factura.getDescription();
         this.value = factura.getValue();
-        this.history = factura.getHistory();
         this.econSector = factura.getEconSector();
         this.possibleEconSectors = factura.getPossibleEconSectors();
+        this.history = factura.getHistory();
         this.isEmpresaInterior = factura.isEmpresaInterior();
         this.aggregateSize = factura.getAggregateSize();
         this.coefEmpresa = factura.getCoefEmpresa();
         this.coefIndividual = factura.getCoefIndividual();
+        this.individualEconSectors = factura.getIndividualEconSectors();
     }
+
 
     /**
      * \brief The NIF of the entity that issued this Receipt
@@ -273,12 +281,16 @@ public class Factura implements Comparable<Factura>,
         return this.aggregateSize;
     }
 
-    public double getCoefEmpresa(){
+    public float getCoefEmpresa(){
         return this.coefEmpresa;
     }
 
-    public double getCoefIndividual(){
+    public float getCoefIndividual(){
         return this.coefIndividual;
+    }
+
+    public Set<EconSector> getIndividualEconSectors(){
+        return new HashSet<>(this.individualEconSectors);
     }
 
     /**
@@ -286,7 +298,8 @@ public class Factura implements Comparable<Factura>,
      * @return if the <tt>Factura</tt> is deductible
      */
     private boolean isDeductible(){
-        return this.econSector instanceof Deductible;
+        return this.econSector instanceof Deductible
+               && this.individualEconSectors.contains(this.econSector);
     }
 
     /**
@@ -298,7 +311,7 @@ public class Factura implements Comparable<Factura>,
             return ((Deductible) this.econSector).deduction(this.value, this.isEmpresaInterior, this.aggregateSize,
                                                             this.coefEmpresa, this.coefIndividual);
         }
-        return 0.0f;
+        return 0;
     }
 
     @Override
@@ -309,30 +322,40 @@ public class Factura implements Comparable<Factura>,
 
         Factura factura = (Factura) o;
         return this.value == factura.getValue()
+               && this.isEmpresaInterior == factura.isEmpresaInterior()
+               && this.aggregateSize == factura.getAggregateSize()
+               && this.coefEmpresa == factura.getCoefEmpresa()
+               && this.coefIndividual == factura.getCoefIndividual()
                && this.issuerNif.equals(factura.getIssuerNif())
                && this.issuerName.equals(factura.getIssuerName())
                && this.creationDate.equals(factura.getCreationDate())
                && this.lastEditDate.equals(factura.getLastEditDate())
                && this.clientNif.equals(factura.getClientNif())
                && this.description.equals(factura.getDescription())
-               && this.history.equals(factura.getHistory())
                && this.econSector.equals(factura.getEconSector())
-               && this.possibleEconSectors.equals(factura.getPossibleEconSectors());
+               && this.possibleEconSectors.equals(factura.getPossibleEconSectors())
+               && this.history.equals(factura.getHistory())
+               && this.individualEconSectors.equals(factura.getIndividualEconSectors());
     }
 
     @Override
     public String toString(){
-        return "Factura{"
-               + "issuerNif='" + issuerNif + '\''
+        return "Factura{" +
+               "issuerNif='" + issuerNif + '\''
                + ", issuerName='" + issuerName + '\''
                + ", creationDate=" + creationDate
                + ", lastEditDate=" + lastEditDate
                + ", clientNif='" + clientNif + '\''
                + ", description='" + description + '\''
-               + ", value=" + value + '\''
-               + ", econSector=" + econSector + '\''
-               + ", possibleEconSectors=" + possibleEconSectors + '\''
-               + ", history=" + history + '\''
+               + ", value=" + value
+               + ", econSector=" + econSector
+               + ", possibleEconSectors=" + possibleEconSectors
+               + ", history=" + history
+               + ", isEmpresaInterior=" + isEmpresaInterior
+               + ", aggregateSize=" + aggregateSize
+               + ", coefEmpresa=" + coefEmpresa
+               + ", coefIndividual=" + coefIndividual
+               + ", individualEconSectors=" + individualEconSectors
                + '}';
     }
 

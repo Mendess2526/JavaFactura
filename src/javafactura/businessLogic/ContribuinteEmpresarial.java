@@ -13,7 +13,7 @@ public class ContribuinteEmpresarial extends Contribuinte {
     /**
      * The fiscal coefficient
      */
-    private double fiscalCoefficient;
+    private float fiscalCoefficient;
     /**
      * The Economic Sectors this <tt>Contribuinte</tt> is eligible for
      */
@@ -40,7 +40,7 @@ public class ContribuinteEmpresarial extends Contribuinte {
      */
     public ContribuinteEmpresarial(String nif, String email, String name,
                                    String address, String password,
-                                   double fiscalCoefficient,
+                                   float fiscalCoefficient,
                                    Collection<EconSector> econActivities){
         super(nif, email, name, address, password);
         this.econActivities = new HashSet<>(econActivities);
@@ -70,7 +70,7 @@ public class ContribuinteEmpresarial extends Contribuinte {
      * Returns the fiscal coefficient
      * @return The fiscal coefficient
      */
-    public double getFiscalCoefficient(){
+    public float getFiscalCoefficient(){
         return this.fiscalCoefficient;
     }
 
@@ -78,7 +78,7 @@ public class ContribuinteEmpresarial extends Contribuinte {
      * Changes the fiscal coefficient
      * @param fiscalCoefficient the new fiscal coefficient
      */
-    public void setFiscalCoefficient(double fiscalCoefficient){
+    public void setFiscalCoefficient(float fiscalCoefficient){
         this.fiscalCoefficient = fiscalCoefficient;
     }
 
@@ -89,12 +89,6 @@ public class ContribuinteEmpresarial extends Contribuinte {
      * @param value       The value of the purchase
      */
     Factura issueFactura(ContribuinteIndividual buyer, String description, float value){
-        EconSector econSector;
-        if(this.econActivities.size() > 1){
-            econSector = Pendente.getInstance();
-        }else{
-            econSector = this.econActivities.iterator().next();
-        }
         Factura factura = new Factura(this, buyer, description, value);
         this.associateFactura(factura);
         buyer.associateFactura(factura);

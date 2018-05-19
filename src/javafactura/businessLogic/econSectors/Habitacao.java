@@ -17,7 +17,11 @@ public final class Habitacao extends EconSector implements Deductible {
     }
 
     @Override
-    public float deduction(float value, boolean interior, int aggregateSize, double coefEmpresa, double coefIndividual){
-        return 0;
+    public float deduction(float value, boolean interior, int aggregateSize, float coefEmpresa, float coefIndividual){
+        float deduction = 0;
+        if(aggregateSize > 6) deduction += 0.5;
+        if(interior) deduction -= 0.3;
+        deduction += coefEmpresa + coefIndividual;
+        return value * deduction;
     }
 }

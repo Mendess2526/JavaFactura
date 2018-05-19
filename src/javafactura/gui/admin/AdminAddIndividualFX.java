@@ -58,7 +58,7 @@ public class AdminAddIndividualFX extends FormFX {
                     this.textFields[field++].getText(),
                     Integer.parseInt(this.textFields[field++].getText()),
                     new ArrayList<>(), //TODO
-                    Double.parseDouble(this.textFields[field++].getText()),
+                    Float.parseFloat(this.textFields[field++].getText()),
                     sectors
             );
             for(TextField t : this.textFields)
