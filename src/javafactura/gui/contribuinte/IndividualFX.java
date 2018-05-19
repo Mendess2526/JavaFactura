@@ -14,13 +14,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 public class IndividualFX extends ShowReceiptsFx {
 
-    private final Label totalDeducted;
+    private final TextFlow totalDeducted;
     private final Label pendingNum;
-    private final Label totalDeductedFamily;
+    private final TextFlow totalDeductedFamily;
 
     public IndividualFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene, true);
@@ -55,10 +57,18 @@ public class IndividualFX extends ShowReceiptsFx {
         this.gridPane.add(searchBox, 0, row++);
 
         this.pendingNum = new Label();
-        this.totalDeducted = new Label();
-        this.totalDeductedFamily = new Label();
+        this.totalDeducted = new TextFlow();
+        Text textTD = new Text("Total deduzido: ");
+        textTD.setStyle("-fx-font-weight: bold");
+        Text valueTD = new Text("0");
+        this.totalDeducted.getChildren().addAll(textTD, valueTD);
+        this.totalDeductedFamily = new TextFlow();
+        Text textTDF = new Text("Total deduzido pelo agregado familiar: ");
+        textTDF.setStyle("-fx-font-weight: bold");
+        Text valueTDF = new Text("0");
+        this.totalDeductedFamily.getChildren().addAll(textTDF, valueTDF);
         HBox topRowHBox = new HBox(this.pendingNum, this.totalDeducted, this.totalDeductedFamily);
-        topRowHBox.setSpacing(100);
+        topRowHBox.setSpacing(70);
 
         this.gridPane.add(topRowHBox, 0, row++);
 
@@ -88,9 +98,10 @@ public class IndividualFX extends ShowReceiptsFx {
         if(count == 0) this.pendingNum.setTextFill(Color.GREEN);
         else this.pendingNum.setTextFill(Color.RED);
         try{
-            this.totalDeducted.setText("Total deduzido: " + this.javaFactura.getAccumulatedDeduction());
-            this.totalDeductedFamily.setText("Total deduzido pelo agregado familiar: "
-                                             + this.javaFactura.getAccumulatedDeductionFamilyAggregate());
+            ((Text) this.totalDeducted.getChildren().get(1)).setText(
+                    String.format("%.2f", this.javaFactura.getAccumulatedDeduction()));
+            ((Text) this.totalDeductedFamily.getChildren().get(1)).setText(
+                    String.format("%.2f", this.javaFactura.getAccumulatedDeductionFamilyAggregate()));
         }catch(NotIndividualException e){
             goBack();
         }
