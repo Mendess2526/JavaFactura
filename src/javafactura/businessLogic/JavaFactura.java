@@ -4,7 +4,8 @@ import javafactura.businessLogic.collections.Pair;
 import javafactura.businessLogic.comparators.ContribuinteFacturaCountComparator;
 import javafactura.businessLogic.comparators.ContribuinteSpendingComparator;
 import javafactura.businessLogic.comparators.FacturaValorComparator;
-import javafactura.businessLogic.econSectors.*;
+import javafactura.businessLogic.econSectors.EconSector;
+import javafactura.businessLogic.econSectors.Pendente;
 import javafactura.businessLogic.exceptions.*;
 
 import java.io.*;
@@ -69,7 +70,7 @@ public class JavaFactura implements Serializable {
     }
 
     public void registarIndividual(String nif, String email, String nome, String address, String password,
-                                   int numDependants, List<String> dependants, double fiscalCoefficient,
+                                   int numDependants, List<String> dependants, float fiscalCoefficient,
                                    Set<EconSector> econSectors) throws
                                                                 InvalidNumberOfDependantsException,
                                                                 IndividualAlreadyExistsException{
@@ -87,7 +88,7 @@ public class JavaFactura implements Serializable {
 
     public void registarEmpresarial(String nif, String email, String nome,
                                     String address, String password,
-                                    double fiscalCoefficient,
+                                    float fiscalCoefficient,
                                     Set<EconSector> econSectors) throws
                                                                  EmpresarialAlreadyExistsException{
         if(this.contribuintes.containsKey(nif)) throw new EmpresarialAlreadyExistsException();
@@ -262,27 +263,57 @@ public class JavaFactura implements Serializable {
     }
 
     private void generateContribuintes(){
-        try{
-            registarIndividual("1", "um@email.com", "Um", "Rua Um", "pass",
-                               0, new ArrayList<>(), 0.3,
-                               new HashSet<>(Arrays.asList(Educacao.getInstance(), Familia.getInstance())));
-            registarIndividual("2", "dois@email.com", "Dois", "Rua Dois", "pass",
-                               0, new ArrayList<>(), 0.3,
-                               new HashSet<>(Arrays.asList(Educacao.getInstance(), Familia.getInstance())));
-            registarIndividual("3", "tres@email.com", "Tres", "Rua Tres", "pass",
-                               2, Arrays.asList("1", "2"), 0.3,
-                               new HashSet<>(Arrays.asList(Educacao.getInstance(), Familia.getInstance())));
-            registarIndividual("4", "quatro@email.com", "Quatro", "Rua quatro", "pass",
-                               1, Collections.singletonList("2"), 0.6,
-                               new HashSet<>(Arrays.asList(Reparacoes.getInstance(), Saude.getInstance())));
-            registarEmpresarial("5", "cinco@email.com", "Cinco", "Rua Cinco", "pass",
-                                0.1, new HashSet<>(
-                            Arrays.asList(Educacao.getInstance(), AlojamentoRestauracao.getInstance())));
-            registarEmpresarial("6", "seis@email.com", "Seis", "Rua Seis", "pass",
-                                0.7,
-                                new HashSet<>(Arrays.asList(Saude.getInstance(), AlojamentoRestauracao.getInstance())));
-        }catch(InvalidNumberOfDependantsException | IndividualAlreadyExistsException | EmpresarialAlreadyExistsException e){
-            e.printStackTrace();
+        String[] names = new String[]{
+                "Zero",
+                "Um",
+                "Dois",
+                "Três",
+                "Quatro",
+                "Cinco",
+                "Seis",
+                "Sete",
+                "Oito",
+                "Nove",
+                "Dez",
+                "Onze"
+        };
+        Random r = new Random();
+        for(int i = 1; i < names.length; i++){
+            String nif = String.valueOf(i);
+            String name = names[i];
+            String email = i % 2 == 1 ? "indiv." : "empr." + name.toLowerCase() + "@email.com";
+            String address = "Rua " + name;
+            String pass = "pass";
+            float fiscalCoefficient = r.nextFloat() % 0.3f;
+            // Escolhe setores aleatoriamente
+            Set<EconSector> econSectors = new HashSet<>();
+            Set<EconSector> allSectors = getAllSectors();
+            for(EconSector allSector : allSectors)
+                if(r.nextInt(10) > ((i % 2 == 1) ? 5 : 8)) econSectors.add(allSector);
+            if(econSectors.isEmpty()) econSectors.add(allSectors.iterator().next());
+            if(i % 2 == 1){
+                try{
+                    List<String> aggreg = new ArrayList<>();
+                    for(int j = i - 2; j > 1; j--)
+                        aggreg.add(String.valueOf(j)); //Adiciona todos os individuais anteriores ao agregado
+                    int numDependants = aggreg.size() > 0 ? r.nextInt(aggreg.size()) : 0;
+                    registarIndividual(nif, "individ." + email, name, address, pass, numDependants, aggreg,
+                                       fiscalCoefficient, econSectors);
+                    System.out.println(
+                            new ContribuinteIndividual(nif, email, name, address, pass, numDependants, aggreg,
+                                                       fiscalCoefficient, econSectors));
+                }catch(InvalidNumberOfDependantsException | IndividualAlreadyExistsException e){
+                    e.printStackTrace();
+                }
+            }else{
+                try{
+                    registarEmpresarial(nif, "empr." + email, name, address, pass, fiscalCoefficient, econSectors);
+                    System.out.println(new ContribuinteEmpresarial(nif, email, name, address, pass, fiscalCoefficient,
+                                                                   econSectors));
+                }catch(EmpresarialAlreadyExistsException e){
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
