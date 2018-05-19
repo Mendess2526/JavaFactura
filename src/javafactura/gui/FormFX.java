@@ -1,6 +1,7 @@
 package javafactura.gui;
 
 import javafactura.businessLogic.JavaFactura;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -66,14 +67,17 @@ public abstract class FormFX extends FX {
         return allFilled;
     }
 
-    //TODO fix ordering of tab navigation
     protected void appendField(@SuppressWarnings("SameParameterValue") String label, Node node){
         int rowIndex = GridPane.getRowIndex(this.confirmText);
-        GridPane.setRowIndex(this.confirmText, rowIndex + 1);
-        GridPane.setRowIndex(this.submitButtonHBox, rowIndex + 2);
-        GridPane.setRowIndex(this.goBackButtonHBox, rowIndex + 2);
+        ObservableList<Node> children = this.gridPane.getChildren();
+        children.remove(this.confirmText);
+        children.remove(this.submitButtonHBox);
+        children.remove(this.goBackButtonHBox);
         this.gridPane.add(new Label(label), 0, rowIndex);
         this.gridPane.add(node, 1, rowIndex);
+        this.gridPane.add(this.confirmText, 1, rowIndex + 1);
+        this.gridPane.add(this.submitButtonHBox, 0, rowIndex + 2);
+        this.gridPane.add(this.goBackButtonHBox, 2, rowIndex + 2);
     }
 
     protected abstract void submitData();
