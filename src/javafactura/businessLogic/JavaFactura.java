@@ -75,7 +75,7 @@ public class JavaFactura implements Serializable {
     }
 
     public void registarIndividual(String nif, String email, String nome, String address, String password,
-                                   int numDependants, List<String> dependants, float fiscalCoefficient,
+                                   float fiscalCoefficient, Collection<String> dependants, int numDependants,
                                    Set<EconSector> econSectors) throws
                                                                 InvalidNumberOfDependantsException,
                                                                 IndividualAlreadyExistsException{
@@ -296,8 +296,8 @@ public class JavaFactura implements Serializable {
                     //Adiciona todos os individuais anteriores ao agregado
                     for(j = i - 2; j > 0; j -= 2) aggregate.add(String.valueOf(j));
                     int numDependants = aggregate.size() > 0 ? r.nextInt(aggregate.size()) : 0;
-                    registarIndividual(nif, email, name, address, pass, numDependants, aggregate,
-                                       fiscalCoefficient, econSectors);
+                    registarIndividual(nif, email, name, address, pass, fiscalCoefficient, aggregate, numDependants,
+                                       econSectors);
                 }catch(InvalidNumberOfDependantsException | IndividualAlreadyExistsException e){
                     e.printStackTrace();
                 }
