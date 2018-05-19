@@ -10,14 +10,14 @@ import javafx.stage.Stage;
 public class IndividualProfileFx extends ContribuinteProfileFX {
 
     private final Text numDependants;
-    private final Text dependantes;
+    private final Text dependants;
 
     public IndividualProfileFx(JavaFactura javaFactura, Stage primaryStage,
                                Scene previousScene){
         super(javaFactura, primaryStage, previousScene);
 
         this.numDependants = appendField("#dependentes: ");
-        this.dependantes = appendField("Agregado Familiar: ");
+        this.dependants = appendField("Agregado Familiar: ");
     }
 
     @Override
@@ -27,9 +27,9 @@ public class IndividualProfileFx extends ContribuinteProfileFX {
         if(!(u instanceof ContribuinteIndividual)) return false;
         ContribuinteIndividual ci = (ContribuinteIndividual) u;
         this.numDependants.setText(String.valueOf((ci.getNumDependants())));
-        this.dependantes.setText(ci.getFamilyAggregate()
-                                   .stream()
-                                   .reduce("", (s, s2) -> s + " " + s2));
+        this.dependants.setText(ci.getFamilyAggregate()
+                                  .stream()
+                                  .reduce("", (s, s2) -> s + " " + s2));
         return true;
     }
 }

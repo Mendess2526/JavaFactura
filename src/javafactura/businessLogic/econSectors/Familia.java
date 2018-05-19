@@ -17,12 +17,12 @@ public final class Familia extends EconSector implements Deductible {
     }
 
     @Override
-    public float deduction(float value, boolean interior, int aggregateSize, float coefEmpresa, float coefIndividual){
+    public float deduction(float value, boolean interior, int aggregateSize, float coeffEmpresa, float coeffIndividual){
         float deduction = 0;
         deduction += 0.1 * aggregateSize;
         deduction = deduction > 0.5 ? 0.5f : deduction;
         deduction += interior ? 0 : 0;
-        deduction += coefEmpresa + coefIndividual;
+        deduction += coeffEmpresa + coeffIndividual;
         return value * deduction;
     }
 }
