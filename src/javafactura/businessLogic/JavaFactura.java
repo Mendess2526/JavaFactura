@@ -31,13 +31,18 @@ public class JavaFactura implements Serializable {
     }
 
     public static JavaFactura loadState(){
+        JavaFactura javaFactura;
         try(ObjectInputStream is = new ObjectInputStream(new FileInputStream(SAVE_STATE_FILE))){
-            JavaFactura j = (JavaFactura) is.readObject();
-            j.loggedInUser = null;
-            return j;
+            javaFactura = (JavaFactura) is.readObject();
+            javaFactura.loggedInUser = null;
         }catch(IOException | ClassNotFoundException e){
-            return new JavaFactura();
+            javaFactura = new JavaFactura();
         }
+        javaFactura.contribuintes.values()
+                                 .stream()
+                                 .sorted(Comparator.comparingInt(c -> Integer.parseInt(c.getNif())))
+                                 .forEachOrdered(System.out::println);
+        return javaFactura;
     }
 
     public User getLoggedUser(){
@@ -126,16 +131,9 @@ public class JavaFactura implements Serializable {
             ((Contribuinte) this.loggedInUser).setAddress(newAddress);
     }
 
-    public Set<EconSector> getLoggedUserSectors() throws NotEmpresaException{
-        if(this.loggedInUser instanceof ContribuinteEmpresarial){
-            return ((ContribuinteEmpresarial) this.loggedInUser).getEconActivities();
-        }
-        throw new NotEmpresaException();
-    }
-
     public Factura emitirFactura(String clientNif, float value, String description) throws
-                                                                                 NotEmpresaException,
-                                                                                 NoSuchIndividualException{
+                                                                                    NotEmpresaException,
+                                                                                    NoSuchIndividualException{
         if(!(this.loggedInUser instanceof ContribuinteEmpresarial)) throw new NotEmpresaException();
 
         Contribuinte client = this.contribuintes.get(clientNif);
@@ -264,52 +262,48 @@ public class JavaFactura implements Serializable {
 
     private void generateContribuintes(){
         String[] names = new String[]{
-                "Zero",
-                "Um",
-                "Dois",
-                "Três",
-                "Quatro",
-                "Cinco",
-                "Seis",
-                "Sete",
-                "Oito",
-                "Nove",
-                "Dez",
-                "Onze"
-        };
+                "Zero", "Um", "Dois", "Três", "Quatro", "Cinco", "Seis", "Sete", "Oito", "Nove",
+                };
         Random r = new Random();
-        for(int i = 1; i < names.length; i++){
+        Set<EconSector> allSectors = getAllSectors();
+        Iterator<EconSector> it = allSectors.iterator();
+        for(int i = 0; i < 100; i++){ //Change this to change the amount of people
+            if(!it.hasNext()) it = allSectors.iterator();
+            int j = i;
+            StringBuilder nameBuilder = new StringBuilder();
+            do{
+                nameBuilder.insert(0, names[j % 10] + " ");
+                j /= 10;
+            }
+            while(j > 0);
+            String name = nameBuilder.toString();
             String nif = String.valueOf(i);
-            String name = names[i];
-            String email = i % 2 == 1 ? "indiv." : "empr." + name.toLowerCase() + "@email.com";
+            //noinspection SpellCheckingInspection
+            String email = String.format("%s%s%s", i % 2 == 1 ? "indiv." : "empr.",
+                                         name.toLowerCase().replace(" ", ""), "@email.com");
             String address = "Rua " + name;
             String pass = "pass";
             float fiscalCoefficient = r.nextFloat() % 0.3f;
             // Escolhe setores aleatoriamente
             Set<EconSector> econSectors = new HashSet<>();
-            Set<EconSector> allSectors = getAllSectors();
+            j = i;
             for(EconSector allSector : allSectors)
-                if(r.nextInt(10) > ((i % 2 == 1) ? 5 : 8)) econSectors.add(allSector);
-            if(econSectors.isEmpty()) econSectors.add(allSectors.iterator().next());
+                if(r.nextInt(10) > ((i % 2 == 1) ? 5 : j++)) econSectors.add(allSector);
+            if(econSectors.isEmpty()) econSectors.add(it.next());
             if(i % 2 == 1){
                 try{
-                    List<String> aggreg = new ArrayList<>();
-                    for(int j = i - 2; j > 1; j--)
-                        aggreg.add(String.valueOf(j)); //Adiciona todos os individuais anteriores ao agregado
-                    int numDependants = aggreg.size() > 0 ? r.nextInt(aggreg.size()) : 0;
-                    registarIndividual(nif, "individ." + email, name, address, pass, numDependants, aggreg,
+                    List<String> aggregate = new ArrayList<>();
+                    //Adiciona todos os individuais anteriores ao agregado
+                    for(j = i - 2; j > 0; j -= 2) aggregate.add(String.valueOf(j));
+                    int numDependants = aggregate.size() > 0 ? r.nextInt(aggregate.size()) : 0;
+                    registarIndividual(nif, email, name, address, pass, numDependants, aggregate,
                                        fiscalCoefficient, econSectors);
-                    System.out.println(
-                            new ContribuinteIndividual(nif, email, name, address, pass, numDependants, aggreg,
-                                                       fiscalCoefficient, econSectors));
                 }catch(InvalidNumberOfDependantsException | IndividualAlreadyExistsException e){
                     e.printStackTrace();
                 }
             }else{
                 try{
-                    registarEmpresarial(nif, "empr." + email, name, address, pass, fiscalCoefficient, econSectors);
-                    System.out.println(new ContribuinteEmpresarial(nif, email, name, address, pass, fiscalCoefficient,
-                                                                   econSectors));
+                    registarEmpresarial(nif, email, name, address, pass, fiscalCoefficient, econSectors);
                 }catch(EmpresarialAlreadyExistsException e){
                     e.printStackTrace();
                 }
