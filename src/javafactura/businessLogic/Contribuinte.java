@@ -1,7 +1,12 @@
 package javafactura.businessLogic;
 
+import javafactura.businessLogic.econSectors.EconSector;
+
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class Contribuinte implements User,
@@ -28,23 +33,18 @@ public abstract class Contribuinte implements User,
      * The password of the Contribuinte
      */
     private String password;
-
+    /**
+     * The fiscal coefficient
+     */
+    private final float fiscalCoefficient;
+    /**
+     * The Economic Sectors this <tt>Contribuinte</tt> is eligible for
+     */
+    private final Set<EconSector> econActivities;
     /**
      * The receipts
      */
     protected final LinkedList<Factura> facturas;
-
-    /**
-     * The empty constructor
-     */
-    public Contribuinte(){
-        this.nif = "";
-        this.email = "";
-        this.name = "";
-        this.address = "";
-        this.password = "";
-        this.facturas = new LinkedList<>();
-    }
 
     /**
      * Parametrised constructor
@@ -53,13 +53,18 @@ public abstract class Contribuinte implements User,
      * @param name     The Name
      * @param address  The Address
      * @param password The Password
+     * @param fiscalCoefficient The fiscal coefficient
+     * @param econActivities The economic sectors
      */
-    public Contribuinte(String nif, String email, String name, String address, String password){
+    protected Contribuinte(String nif, String email, String name, String address, String password,
+                           float fiscalCoefficient, Collection<EconSector> econActivities){
         this.nif = nif;
         this.email = email;
         this.name = name;
         this.address = address;
         this.password = password;
+        this.fiscalCoefficient = fiscalCoefficient;
+        this.econActivities = new HashSet<>(econActivities);
         this.facturas = new LinkedList<>();
     }
 
@@ -67,14 +72,17 @@ public abstract class Contribuinte implements User,
      * Copy constructor
      * @param contribuinte The Contribuinte to copy
      */
-    public Contribuinte(Contribuinte contribuinte){
+    protected Contribuinte(Contribuinte contribuinte){
         this.nif = contribuinte.getNif();
         this.email = contribuinte.getEmail();
         this.name = contribuinte.getName();
         this.address = contribuinte.getAddress();
         this.password = contribuinte.getPassword();
+        this.fiscalCoefficient = contribuinte.getFiscalCoefficient();
+        this.econActivities = contribuinte.getEconActivities();
         this.facturas = contribuinte.getFacturas();
     }
+
 
     /**
      * Returns the NIF
@@ -140,6 +148,14 @@ public abstract class Contribuinte implements User,
         this.password = password;
     }
 
+    public float getFiscalCoefficient(){
+        return this.fiscalCoefficient;
+    }
+
+    public Set<EconSector> getEconActivities(){
+        return new HashSet<>(this.econActivities);
+    }
+
     /**
      * Returns the list of Facturas associated
      * @return The list of Facturas associated
@@ -162,12 +178,14 @@ public abstract class Contribuinte implements User,
         if(o == null || this.getClass() != o.getClass()) return false;
 
         Contribuinte that = (Contribuinte) o;
-        return this.nif.equals(that.getNif())
+        return this.fiscalCoefficient == that.getFiscalCoefficient()
+               && this.nif.equals(that.getNif())
                && this.email.equals(that.getEmail())
                && this.name.equals(that.getName())
                && this.address.equals(that.getAddress())
                && this.password.equals(that.getPassword())
-               && this.facturas.equals(that.getFacturas());
+               && this.facturas.equals(that.getFacturas())
+               && this.econActivities.equals(that.getEconActivities());
     }
 
     @Override
@@ -178,7 +196,9 @@ public abstract class Contribuinte implements User,
                + ", name='" + name + '\''
                + ", address='" + address + '\''
                + ", password='" + password + '\''
-               + ", facturas=" + facturas
+               + ", fiscalCoefficient=" + fiscalCoefficient + '\''
+               + ", econActivities=" + econActivities + '\''
+               + ", facturas=" + facturas + '\''
                + '}';
     }
 

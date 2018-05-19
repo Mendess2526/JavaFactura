@@ -21,19 +21,6 @@ public class ContribuinteIndividual extends Contribuinte {
      * Number of dependants
      */
     private int numDependants;
-    /**
-     * The fiscal coefficient of this Contribuinte
-     */
-    private float fiscalCoefficient;
-
-    private Set<EconSector> econActivities;
-
-    private ContribuinteIndividual(){
-        this.familyAggregate = new HashSet<>();
-        this.numDependants = 0;
-        this.fiscalCoefficient = 0;
-        this.econActivities = new HashSet<>();
-    }
 
     /**
      * Fully parametrised constructor for <tt>Contribuinte Individual</tt>
@@ -52,22 +39,26 @@ public class ContribuinteIndividual extends Contribuinte {
     public ContribuinteIndividual(String nif, String email, String nome,
                                   String address, String password, int numDependants,
                                   Collection<String> familyAggregate, float fiscalCoefficient,
-                                  Set<EconSector> econActivities) throws
-                                                                  InvalidNumberOfDependantsException{
-        super(nif, email, nome, address, password);
+                                  Collection<EconSector> econActivities) throws
+                                                                         InvalidNumberOfDependantsException{
+        super(nif, email, nome, address, password, fiscalCoefficient, econActivities);
         this.familyAggregate = new HashSet<>(familyAggregate);
         this.setNumDependants(numDependants);
-        this.fiscalCoefficient = fiscalCoefficient;
-        this.econActivities = new HashSet<>(econActivities);
 
+    }
+
+    private void setNumDependants(int numDependants) throws InvalidNumberOfDependantsException{
+        if(numDependants <= this.familyAggregate.size()){
+            this.numDependants = numDependants;
+        }else{
+            throw new InvalidNumberOfDependantsException(numDependants);
+        }
     }
 
     private ContribuinteIndividual(ContribuinteIndividual contribuinteIndividual){
         super(contribuinteIndividual);
         this.familyAggregate = contribuinteIndividual.getFamilyAggregate();
         this.numDependants = contribuinteIndividual.getNumDependants();
-        this.fiscalCoefficient = contribuinteIndividual.getFiscalCoefficient();
-        this.econActivities = contribuinteIndividual.getEconActivities();
     }
 
     public Set<String> getFamilyAggregate(){
@@ -78,20 +69,16 @@ public class ContribuinteIndividual extends Contribuinte {
         return this.numDependants;
     }
 
-    public float getFiscalCoefficient(){
-        return this.fiscalCoefficient;
-    }
+    @Override
+    public boolean equals(Object o){
+        if(this == o) return true;
 
-    public Set<EconSector> getEconActivities(){
-        return new HashSet<>(this.econActivities);
-    }
+        if(o == null || this.getClass() != o.getClass()) return false;
 
-    public void setNumDependants(int numDependants) throws InvalidNumberOfDependantsException{
-        if(numDependants <= this.familyAggregate.size()){
-            this.numDependants = numDependants;
-        }else{
-            throw new InvalidNumberOfDependantsException(numDependants);
-        }
+        ContribuinteIndividual that = (ContribuinteIndividual) o;
+        return super.equals(o)
+               && this.numDependants == that.getNumDependants()
+               && this.familyAggregate.equals(that.getFamilyAggregate());
     }
 
     public Factura changeFatura(Factura f, EconSector e) throws InvalidEconSectorException{
@@ -106,26 +93,10 @@ public class ContribuinteIndividual extends Contribuinte {
     }
 
     @Override
-    public boolean equals(Object o){
-        if(this == o) return true;
-
-        if(o == null || this.getClass() != o.getClass()) return false;
-
-        ContribuinteIndividual that = (ContribuinteIndividual) o;
-        return super.equals(o)
-               && this.numDependants == that.getNumDependants()
-               && this.fiscalCoefficient == that.getFiscalCoefficient()
-               && this.familyAggregate.equals(that.getFamilyAggregate())
-               && this.econActivities.equals(that.getEconActivities());
-    }
-
-    @Override
     public String toString(){
         return "ContribuinteIndividual{" +
-               "familyAggregate=" + this.familyAggregate
-               + ", numDependants=" + this.numDependants
-               + ", fiscalCoefficient=" + this.fiscalCoefficient
-               + ", econActivities=" + this.econActivities
+               "familyAggregate=" + familyAggregate + '\''
+               + ", numDependants=" + numDependants + '\''
                + "} " + super.toString();
     }
 

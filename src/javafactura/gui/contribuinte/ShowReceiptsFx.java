@@ -20,18 +20,8 @@ import java.util.ArrayList;
 
 public abstract class ShowReceiptsFx extends FX {
 
-    private SortState valueSort;
-    protected final ObservableList<Factura> facturas;
-    protected final TableView<Factura> receiptsTable;
-    private final ViewFacturaFX viewFacturaFX;
-    protected final HBox sortBox;
-    protected LocalDate from;
-    protected LocalDate to;
-    protected final DatePicker datePickerFrom;
-    protected final DatePicker datePickerTo;
-    private SortState dateSort;
-    public ShowReceiptsFx(JavaFactura javaFactura, Stage primaryStage,
-                          Scene previousScene, boolean canEdit){
+    protected ShowReceiptsFx(JavaFactura javaFactura, Stage primaryStage,
+                             Scene previousScene, boolean canEdit){
         super(javaFactura, primaryStage, previousScene);
         ColumnConstraints cc = new ColumnConstraints();
         cc.setFillWidth(true);
@@ -73,13 +63,16 @@ public abstract class ShowReceiptsFx extends FX {
         this.viewFacturaFX = new ViewFacturaFX(this.javaFactura, this.primaryStage, this.scene, canEdit);
     }
 
-    protected SortState getValueSort(){
-        return this.valueSort;
-    }
-
-    protected SortState getDateSort(){
-        return this.dateSort;
-    }
+    private SortState valueSort;
+    protected final ObservableList<Factura> facturas;
+    protected final TableView<Factura> receiptsTable;
+    private final ViewFacturaFX viewFacturaFX;
+    protected final HBox sortBox;
+    protected LocalDate from;
+    protected LocalDate to;
+    protected final DatePicker datePickerFrom;
+    protected final DatePicker datePickerTo;
+    private SortState dateSort;
 
     public enum SortState {
         DESCENDING,
@@ -93,10 +86,14 @@ public abstract class ShowReceiptsFx extends FX {
         }
 
         private SortState reverse;
+    }
 
-        SortState none(){
-            return NONE;
-        }
+    protected SortState getValueSort(){
+        return this.valueSort;
+    }
+
+    protected SortState getDateSort(){
+        return this.dateSort;
     }
 
     private void makeReceiptsTable(){

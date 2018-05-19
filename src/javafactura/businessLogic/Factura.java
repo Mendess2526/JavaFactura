@@ -63,51 +63,30 @@ public class Factura implements Comparable<Factura>,
     /**
      * \brief A boolean to store if the company the issued the Receipt is to benefited
      */
-    private boolean isEmpresaInterior;
+    private final boolean isEmpresaInterior;
     /**
      * \brief The size of the aggregate at the time of emission
      */
-    private int aggregateSize;
+    private final int aggregateSize;
     /**
      * \brief The fiscal coefficient of the company at the time of emission
      */
-    private float coefEmpresa;
+    private final float coeffEmpresa;
     /**
      * \brief The fiscal coefficient of the individual at the time of emission
      */
-    private float coefIndividual;
+    private final float coeffIndividual;
     /**
      * \brief The economic sectors this is allowed to deduct
      */
-    private Set<EconSector> individualEconSectors;
-
-    /**
-     * Empty constructor
-     */
-    private Factura(){
-        this.issuerNif = "";
-        this.issuerName = "";
-        this.creationDate = LocalDateTime.now();
-        this.lastEditDate = this.creationDate;
-        this.clientNif = "";
-        this.description = "";
-        this.value = 0;
-        this.history = new LinkedList<>();
-        this.econSector = Pendente.getInstance();
-        this.possibleEconSectors = new HashSet<>();
-        this.isEmpresaInterior = false;
-        this.aggregateSize = 0;
-        this.coefEmpresa = 0;
-        this.coefIndividual = 0;
-        this.individualEconSectors = new HashSet<>();
-    }
+    private final Set<EconSector> individualEconSectors;
 
     /**
      * \brief Fully parametrised constructor for <tt>Factura</tt>
-     * @param company           The NIF of the entity that issued this Receipt
-     * @param individual          The name of the entity that issued this Receipt
-     * @param description         The description of the purchase
-     * @param value               The value of the purchase
+     * @param company     The company that issued the receipt
+     * @param individual  The individual that made the purchase
+     * @param description The description of the purchase
+     * @param value       The value of the purchase
      */
     public Factura(ContribuinteEmpresarial company, ContribuinteIndividual individual,
                    String description, float value){
@@ -129,8 +108,8 @@ public class Factura implements Comparable<Factura>,
         }
         this.isEmpresaInterior = false; //TODO empresa do interior
         this.aggregateSize = individual.getNumDependants();
-        this.coefEmpresa = company.getFiscalCoefficient();
-        this.coefIndividual = individual.getFiscalCoefficient();
+        this.coeffEmpresa = company.getFiscalCoefficient();
+        this.coeffIndividual = individual.getFiscalCoefficient();
         this.individualEconSectors = individual.getEconActivities();
     }
 
@@ -138,7 +117,7 @@ public class Factura implements Comparable<Factura>,
      * Copy constructor for <tt>Factura</tt>
      * @param factura the <tt>Factura</tt> to copy
      */
-    public Factura(Factura factura){
+    private Factura(Factura factura){
         this.issuerNif = factura.getIssuerNif();
         this.issuerName = factura.getIssuerName();
         this.creationDate = factura.getCreationDate();
@@ -151,8 +130,8 @@ public class Factura implements Comparable<Factura>,
         this.history = factura.getHistory();
         this.isEmpresaInterior = factura.isEmpresaInterior();
         this.aggregateSize = factura.getAggregateSize();
-        this.coefEmpresa = factura.getCoefEmpresa();
-        this.coefIndividual = factura.getCoefIndividual();
+        this.coeffEmpresa = factura.getCoeffEmpresa();
+        this.coeffIndividual = factura.getCoeffIndividual();
         this.individualEconSectors = factura.getIndividualEconSectors();
     }
 
@@ -273,23 +252,23 @@ public class Factura implements Comparable<Factura>,
         return new HashSet<>(this.possibleEconSectors);
     }
 
-    public boolean isEmpresaInterior(){
+    private boolean isEmpresaInterior(){
         return this.isEmpresaInterior;
     }
 
-    public int getAggregateSize(){
+    private int getAggregateSize(){
         return this.aggregateSize;
     }
 
-    public float getCoefEmpresa(){
-        return this.coefEmpresa;
+    private float getCoeffEmpresa(){
+        return this.coeffEmpresa;
     }
 
-    public float getCoefIndividual(){
-        return this.coefIndividual;
+    private float getCoeffIndividual(){
+        return this.coeffIndividual;
     }
 
-    public Set<EconSector> getIndividualEconSectors(){
+    private Set<EconSector> getIndividualEconSectors(){
         return new HashSet<>(this.individualEconSectors);
     }
 
@@ -309,7 +288,7 @@ public class Factura implements Comparable<Factura>,
     public float deducao(){
         if(this.isDeductible()){
             return ((Deductible) this.econSector).deduction(this.value, this.isEmpresaInterior, this.aggregateSize,
-                                                            this.coefEmpresa, this.coefIndividual);
+                                                            this.coeffEmpresa, this.coeffIndividual);
         }
         return 0;
     }
@@ -324,8 +303,8 @@ public class Factura implements Comparable<Factura>,
         return this.value == factura.getValue()
                && this.isEmpresaInterior == factura.isEmpresaInterior()
                && this.aggregateSize == factura.getAggregateSize()
-               && this.coefEmpresa == factura.getCoefEmpresa()
-               && this.coefIndividual == factura.getCoefIndividual()
+               && this.coeffEmpresa == factura.getCoeffEmpresa()
+               && this.coeffIndividual == factura.getCoeffIndividual()
                && this.issuerNif.equals(factura.getIssuerNif())
                && this.issuerName.equals(factura.getIssuerName())
                && this.creationDate.equals(factura.getCreationDate())
@@ -353,8 +332,8 @@ public class Factura implements Comparable<Factura>,
                + ", history=" + history
                + ", isEmpresaInterior=" + isEmpresaInterior
                + ", aggregateSize=" + aggregateSize
-               + ", coefEmpresa=" + coefEmpresa
-               + ", coefIndividual=" + coefIndividual
+               + ", coeffEmpresa=" + coeffEmpresa
+               + ", coeffIndividual=" + coeffIndividual
                + ", individualEconSectors=" + individualEconSectors
                + '}';
     }

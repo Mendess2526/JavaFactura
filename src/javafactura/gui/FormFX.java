@@ -24,7 +24,7 @@ public abstract class FormFX extends FX {
     private final HBox submitButtonHBox;
     private final HBox goBackButtonHBox;
 
-    public FormFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene, String[] fields){
+    protected FormFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene, String[] fields){
         super(javaFactura, primaryStage, previousScene);
         this.fields = Arrays.copyOf(fields, fields.length);
         this.textFields = new TextField[fields.length];

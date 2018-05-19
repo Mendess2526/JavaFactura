@@ -25,39 +25,53 @@ public abstract class ContribuinteProfileFX extends FX {
     private final TextField setEmail;
     private final Text name;
     private final Text address;
+    private final Text fiscalCoefficient;
+    private final Text econSectors;
     private final PasswordField setPassword;
     private final TextField setAddress;
     private final HBox saveChangesBox;
     private final HBox backButtonBox;
 
-    public ContribuinteProfileFX(JavaFactura javaFactura, Stage primaryStage,
-                                 Scene previousScene){
+    protected ContribuinteProfileFX(JavaFactura javaFactura, Stage primaryStage,
+                                    Scene previousScene){
         super(javaFactura, primaryStage, previousScene);
 
         int row = 0;
-        this.gridPane.add(new Label("NIF"), 0, row);
+        this.gridPane.add(new Label("NIF: "), 0, row);
         this.nif = new Text();
         this.gridPane.add(this.nif, 1, row++);
 
-        this.gridPane.add(new Label("Email"), 0, row);
+        this.gridPane.add(new Label("Email: "), 0, row);
         this.email = new Text();
         this.gridPane.add(this.email, 1, row);
         this.setEmail = new TextField();
         this.gridPane.add(this.setEmail, 2, row++);
 
-        this.gridPane.add(new Label("Name"), 0, row);
+        this.gridPane.add(new Label("Name: "), 0, row);
         this.name = new Text();
         this.gridPane.add(this.name, 1, row++);
 
-        this.gridPane.add(new Label("Address"), 0, row);
+        this.gridPane.add(new Label("Address: "), 0, row);
         this.address = new Text();
         this.gridPane.add(this.address, 1, row);
         this.setAddress = new TextField();
         this.gridPane.add(this.setAddress, 2, row++);
 
-        this.gridPane.add(new Label("Password"), 0, row);
+        this.gridPane.add(new Label("Password: "), 0, row);
         this.setPassword = new PasswordField();
         this.gridPane.add(this.setPassword, 2, row++);
+
+        this.gridPane.add(new Label("Coeficiente Fiscal: "), 0, row);
+        this.fiscalCoefficient = new Text();
+        this.gridPane.add(this.fiscalCoefficient, 1, row++);
+
+        Label label = new Label("Setores Económicos");
+        label.setAlignment(Pos.TOP_LEFT);
+        label.setTextAlignment(TextAlignment.CENTER);
+        this.gridPane.add(label, 0, row++);
+        this.econSectors = new Text();
+        this.econSectors.setTextOrigin(VPos.BOTTOM);
+        this.gridPane.add(this.econSectors, 1, row++);
 
         Button saveChangesButton = new Button("Gravar alterações");
         saveChangesButton.setOnAction(e -> saveChanges());
@@ -72,6 +86,7 @@ public abstract class ContribuinteProfileFX extends FX {
 
     @Override
     public boolean show(){
+        if(!super.show()) return false;
         User u = this.javaFactura.getLoggedUser();
         if(!(u instanceof Contribuinte)) return false;
         Contribuinte c = (Contribuinte) u;
@@ -79,7 +94,12 @@ public abstract class ContribuinteProfileFX extends FX {
         this.name.setText(c.getName());
         this.email.setText(c.getEmail());
         this.address.setText(c.getAddress());
-        return super.show();
+        this.fiscalCoefficient.setText(String.valueOf(c.getFiscalCoefficient()));
+        this.econSectors.setText(c.getEconActivities()
+                                  .stream()
+                                  .map(econSector -> econSector.toString() + ";\n")
+                                  .reduce("", (s, s2) -> s + "" + s2));
+        return true;
     }
 
     private void saveChanges(){

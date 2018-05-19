@@ -1,32 +1,12 @@
 package javafactura.businessLogic;
 
 import javafactura.businessLogic.econSectors.EconSector;
-import javafactura.businessLogic.econSectors.Pendente;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 public class ContribuinteEmpresarial extends Contribuinte {
 
     private static final long serialVersionUID = 6172164103937149552L;
-    /**
-     * The fiscal coefficient
-     */
-    private float fiscalCoefficient;
-    /**
-     * The Economic Sectors this <tt>Contribuinte</tt> is eligible for
-     */
-    private final Set<EconSector> econActivities;
-
-    /**
-     * \brief Empty constructor
-     */
-    private ContribuinteEmpresarial(){
-        super();
-        econActivities = new HashSet<>();
-        fiscalCoefficient = 0;
-    }
 
     /**
      * \brief Parameterized constructor
@@ -42,10 +22,7 @@ public class ContribuinteEmpresarial extends Contribuinte {
                                    String address, String password,
                                    float fiscalCoefficient,
                                    Collection<EconSector> econActivities){
-        super(nif, email, name, address, password);
-        this.econActivities = new HashSet<>(econActivities);
-        this.econActivities.remove(Pendente.getInstance());
-        this.fiscalCoefficient = fiscalCoefficient;
+        super(nif, email, name, address, password, fiscalCoefficient, econActivities);
     }
 
     /**
@@ -54,32 +31,6 @@ public class ContribuinteEmpresarial extends Contribuinte {
      */
     private ContribuinteEmpresarial(ContribuinteEmpresarial contribuinteEmpresarial){
         super(contribuinteEmpresarial);
-        this.econActivities = contribuinteEmpresarial.getEconActivities();
-        this.fiscalCoefficient = contribuinteEmpresarial.getFiscalCoefficient();
-    }
-
-    /**
-     * Returns the economic activities
-     * @return The economic activities
-     */
-    public Set<EconSector> getEconActivities(){
-        return new HashSet<>(econActivities);
-    }
-
-    /**
-     * Returns the fiscal coefficient
-     * @return The fiscal coefficient
-     */
-    public float getFiscalCoefficient(){
-        return this.fiscalCoefficient;
-    }
-
-    /**
-     * Changes the fiscal coefficient
-     * @param fiscalCoefficient the new fiscal coefficient
-     */
-    public void setFiscalCoefficient(float fiscalCoefficient){
-        this.fiscalCoefficient = fiscalCoefficient;
     }
 
     /**
@@ -96,23 +47,8 @@ public class ContribuinteEmpresarial extends Contribuinte {
     }
 
     @Override
-    public boolean equals(Object o){
-        if(this == o) return true;
-
-        if(o == null || this.getClass() != o.getClass()) return false;
-
-        ContribuinteEmpresarial that = (ContribuinteEmpresarial) o;
-        return super.equals(o)
-               && this.fiscalCoefficient == that.getFiscalCoefficient()
-               && this.econActivities.equals(that.getEconActivities());
-    }
-
-    @Override
     public String toString(){
-        return "ContribuinteEmpresarial{" +
-               "fiscalCoefficient=" + fiscalCoefficient
-               + ", econActivities=" + econActivities
-               + "} " + super.toString();
+        return "ContribuinteEmpresarial{" + "}" + super.toString();
     }
 
     public ContribuinteEmpresarial clone(){

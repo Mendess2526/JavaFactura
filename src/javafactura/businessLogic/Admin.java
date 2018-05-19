@@ -14,11 +14,6 @@ public class Admin implements User,
         this.password = "admin";
     }
 
-    public Admin(String name, String password){
-        this.name = name;
-        this.password = password;
-    }
-
     private Admin(Admin admin){
         this.name = admin.getName();
         this.password = admin.getPassword();

@@ -20,7 +20,7 @@ public abstract class FX {
     protected final Scene scene;
     protected final GridPane gridPane;
 
-    public FX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
+    protected FX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         this.javaFactura = javaFactura;
         this.primaryStage = primaryStage;
         this.previousScene = previousScene;
