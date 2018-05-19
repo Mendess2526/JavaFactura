@@ -18,6 +18,9 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
+import java.time.LocalDate;
+import java.util.Comparator;
+
 public class IndividualFX extends ShowReceiptsFx {
 
     private final TextFlow totalDeducted;
@@ -97,6 +100,7 @@ public class IndividualFX extends ShowReceiptsFx {
         this.pendingNum.setText(String.valueOf(count) + " facturas pendente(s)");
         if(count == 0) this.pendingNum.setTextFill(Color.GREEN);
         else this.pendingNum.setTextFill(Color.RED);
+
         try{
             ((Text) this.totalDeducted.getChildren().get(1)).setText(
                     String.format("%.2f", this.javaFactura.getAccumulatedDeduction()));
@@ -119,12 +123,19 @@ public class IndividualFX extends ShowReceiptsFx {
 
     @Override
     protected boolean updateReceipts(){
+        LocalDate from = this.from != null ? this.from : LocalDate.MIN;
+        LocalDate to = this.to != null ? this.to : LocalDate.MAX;
         try{
-            this.facturas.setAll(this.javaFactura.getLoggedUserFacturas());
+            Comparator<Factura> c = getFacturaComparator();
+            if(c == null)
+                this.facturas.setAll(this.javaFactura.getLoggedUserFacturas(from, to));
+            else
+                this.facturas.setAll(this.javaFactura.getLoggedUserFacturas(c, from, to));
         }catch(NotContribuinteException e){
             goBack();
             return false;
         }
         return true;
     }
+
 }

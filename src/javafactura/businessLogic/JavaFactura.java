@@ -133,11 +133,13 @@ public class JavaFactura implements Serializable {
 
     public Factura emitirFactura(String clientNif, float value, String description) throws
                                                                                     NotEmpresaException,
-                                                                                    NoSuchIndividualException{
+                                                                                    NoSuchIndividualException,
+                                                                                    NotIndividualException{
         if(!(this.loggedInUser instanceof ContribuinteEmpresarial)) throw new NotEmpresaException();
 
         Contribuinte client = this.contribuintes.get(clientNif);
-        if(client == null || !(client instanceof ContribuinteIndividual)) throw new NoSuchIndividualException();
+        if(client == null) throw new NoSuchIndividualException();
+        if(!(client instanceof ContribuinteIndividual)) throw new NotIndividualException();
 
         return ((ContribuinteEmpresarial) this.loggedInUser)
                 .issueFactura((ContribuinteIndividual) client, description, value);

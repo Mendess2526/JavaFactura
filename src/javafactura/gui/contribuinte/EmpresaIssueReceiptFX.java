@@ -3,6 +3,7 @@ package javafactura.gui.contribuinte;
 import javafactura.businessLogic.JavaFactura;
 import javafactura.businessLogic.exceptions.NoSuchIndividualException;
 import javafactura.businessLogic.exceptions.NotEmpresaException;
+import javafactura.businessLogic.exceptions.NotIndividualException;
 import javafactura.gui.FormFX;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
@@ -50,6 +51,8 @@ public class EmpresaIssueReceiptFX extends FormFX {
             goBack();
         }catch(NoSuchIndividualException e){
             this.errorTexts[0].setText("Contribuinte não existe");
+        }catch(NotIndividualException e){
+            this.errorTexts[0].setText("Não é um contribuinte individual");
         }
     }
 }

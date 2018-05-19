@@ -3,9 +3,7 @@ package javafactura.gui.contribuinte;
 import javafactura.businessLogic.ContribuinteIndividual;
 import javafactura.businessLogic.Factura;
 import javafactura.businessLogic.JavaFactura;
-import javafactura.businessLogic.comparators.FacturaValorComparator;
 import javafactura.businessLogic.exceptions.NotContribuinteException;
-import javafactura.businessLogic.exceptions.NotEmpresaException;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -106,15 +104,7 @@ public class EmpresaFX extends ShowReceiptsFx {
 
     @Override
     public boolean show(){
-        if(!super.show()) return false;
-        try{
-            if(!updateReceipts()) return false;
-            this.clients.getItems().setAll(this.javaFactura.getClients());
-        }catch(NotEmpresaException e){
-            goBack();
-            return false;
-        }
-        return true;
+        return super.show() && updateReceipts();
     }
 
     @Override
@@ -127,21 +117,13 @@ public class EmpresaFX extends ShowReceiptsFx {
             Text b = new Text(
                     String.format("%.2f€", this.javaFactura.totalFaturado(from, to)));
             this.totalFacturado.getChildren().setAll(a, b);
-            Comparator<Factura> c;
-            if(getValueSort() == SortState.ASCENDING)
-                c = new FacturaValorComparator().reversed();
-            else if(getValueSort() == SortState.DESCENDING)
-                c = new FacturaValorComparator();
-            else if(getDateSort() == SortState.ASCENDING)
-                c = Comparator.reverseOrder();
-            else if(getDateSort() == SortState.DESCENDING)
-                c = Comparator.naturalOrder();
-            else
-                c = null;
+            Comparator<Factura> c = getFacturaComparator();
             if(c == null)
                 this.facturas.setAll(this.javaFactura.getLoggedUserFacturas(from, to));
             else
                 this.facturas.setAll(this.javaFactura.getLoggedUserFacturas(c, from, to));
+
+            this.clients.getItems().setAll(this.javaFactura.getClients());
         }catch(NotContribuinteException e){
             goBack();
             return false;

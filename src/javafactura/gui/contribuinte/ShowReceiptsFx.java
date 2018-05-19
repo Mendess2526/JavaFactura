@@ -3,6 +3,7 @@ package javafactura.gui.contribuinte;
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafactura.businessLogic.Factura;
 import javafactura.businessLogic.JavaFactura;
+import javafactura.businessLogic.comparators.FacturaValorComparator;
 import javafactura.businessLogic.econSectors.EconSector;
 import javafactura.gui.FX;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -17,6 +18,7 @@ import javafx.stage.Stage;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public abstract class ShowReceiptsFx extends FX {
 
@@ -74,6 +76,21 @@ public abstract class ShowReceiptsFx extends FX {
     protected final DatePicker datePickerTo;
     private SortState dateSort;
 
+    protected Comparator<Factura> getFacturaComparator(){
+        Comparator<Factura> c;
+        if(this.valueSort == SortState.ASCENDING)
+            c = new FacturaValorComparator().reversed();
+        else if(this.valueSort == SortState.DESCENDING)
+            c = new FacturaValorComparator();
+        else if(this.dateSort == SortState.ASCENDING)
+            c = Comparator.reverseOrder();
+        else if(this.dateSort == SortState.DESCENDING)
+            c = Comparator.naturalOrder();
+        else
+            c = null;
+        return c;
+    }
+
     public enum SortState {
         DESCENDING,
         ASCENDING,
@@ -86,14 +103,6 @@ public abstract class ShowReceiptsFx extends FX {
         }
 
         private SortState reverse;
-    }
-
-    protected SortState getValueSort(){
-        return this.valueSort;
-    }
-
-    protected SortState getDateSort(){
-        return this.dateSort;
     }
 
     private void makeReceiptsTable(){

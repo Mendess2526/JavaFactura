@@ -13,6 +13,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -28,6 +29,7 @@ public abstract class ContribuinteProfileFX extends FX {
     private final Text fiscalCoefficient;
     private final Text econSectors;
     private final PasswordField setPassword;
+    private final Text passwordError;
     private final TextField setAddress;
     private final HBox saveChangesBox;
     private final HBox backButtonBox;
@@ -60,10 +62,13 @@ public abstract class ContribuinteProfileFX extends FX {
         this.gridPane.add(new Label("Password: "), 0, row);
         this.setPassword = new PasswordField();
         this.gridPane.add(this.setPassword, 2, row++);
+        this.passwordError = new Text();
+        this.gridPane.add(this.passwordError, 2, row);
 
         this.gridPane.add(new Label("Coeficiente Fiscal: "), 0, row);
         this.fiscalCoefficient = new Text();
         this.gridPane.add(this.fiscalCoefficient, 1, row++);
+
 
         Label label = new Label("Setores Económicos");
         label.setAlignment(Pos.TOP_LEFT);
@@ -116,6 +121,10 @@ public abstract class ContribuinteProfileFX extends FX {
         if(this.setPassword.getText().length() > 4){
             this.javaFactura.changePassword(this.setPassword.getText());
             this.setPassword.setText("");
+            this.passwordError.setText("");
+        }else{
+            this.passwordError.setFill(Color.RED);
+            this.passwordError.setText("Mínimo 4 caracteres");
         }
     }
 
