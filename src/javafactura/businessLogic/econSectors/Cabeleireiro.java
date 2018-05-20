@@ -12,15 +12,15 @@ public final class Cabeleireiro extends EconSector {
      */
     private static final Cabeleireiro instance = new Cabeleireiro();
 
+    private Cabeleireiro(){
+    }
+
     /**
      * Returns the singleton instance of this class
      * @return the singleton instance of this class
      */
     public static Cabeleireiro getInstance(){
         return instance;
-    }
-
-    private Cabeleireiro(){
     }
 
     /**

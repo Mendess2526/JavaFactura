@@ -51,6 +51,10 @@ public abstract class EconSector implements Serializable {
          * The Set of all sectors
          */
         private static final Set<EconSector> sectors = new HashSet<>();
+        /**
+         * The HashMap that associates a String to each Economic Sector
+         */
+        private static final Map<String,EconSector> STRING_ECON_SECTOR_MAP = new HashMap<>();
 
         static{
             sectors.add(AlojamentoRestauracao.getInstance());
@@ -63,14 +67,6 @@ public abstract class EconSector implements Serializable {
             sectors.add(Reparacoes.getInstance());
             sectors.add(Saude.getInstance());
             sectors.add(Veterinario.getInstance());
-        }
-
-        /**
-         * The HashMap that associates a String to each Economic Sector
-         */
-        private static final Map<String,EconSector> STRING_ECON_SECTOR_MAP = new HashMap<>();
-
-        static{
             sectors.forEach(e -> STRING_ECON_SECTOR_MAP.put(e.toString(), e));
         }
     }

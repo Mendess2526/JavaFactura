@@ -22,15 +22,15 @@ public class MainFX extends Application {
      */
     private final JavaFactura javaFactura;
 
-    public static void main(String[] args){
-        launch(args);
-    }
-
     /**
      * Constructor for main class
      */
     public MainFX(){
         this.javaFactura = JavaFactura.loadState();
+    }
+
+    public static void main(String[] args){
+        launch(args);
     }
 
     /** {@inheritDoc} */

@@ -100,6 +100,15 @@ public class ContribuinteIndividual extends Contribuinte {
                && this.familyAggregate.equals(that.getFamilyAggregate());
     }
 
+    /**
+     * Creates a deep copy of the instance
+     * @return a deep copy of the instance
+     */
+    @Override
+    public ContribuinteIndividual clone(){
+        return new ContribuinteIndividual(this);
+    }
+
     /** {@inheritDoc} */
     @Override
     public String toString(){
@@ -130,15 +139,6 @@ public class ContribuinteIndividual extends Contribuinte {
      */
     public long countFacturas(String companyNif){
         return this.facturas.stream().filter(f -> f.getIssuerNif().equals(companyNif)).count();
-    }
-
-    /**
-     * Creates a deep copy of the instance
-     * @return a deep copy of the instance
-     */
-    @Override
-    public ContribuinteIndividual clone(){
-        return new ContribuinteIndividual(this);
     }
 
     /**

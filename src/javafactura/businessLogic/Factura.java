@@ -20,10 +20,9 @@ import java.util.stream.Collectors;
 public class Factura implements Comparable<Factura>,
                                 Serializable {
 
-    private static final long serialVersionUID = 9214165720384168988L;
     /** The format the creationDate will be printed with when toString is called on this */
     public static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyy\tkk:mm:ss");
-
+    private static final long serialVersionUID = 9214165720384168988L;
     /**
      * The NIF of the entity that issued this Receipt
      */

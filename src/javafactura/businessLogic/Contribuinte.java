@@ -15,25 +15,17 @@ public abstract class Contribuinte implements User,
 
     private static final long serialVersionUID = 2591014538307976339L;
     /**
+     * The receipts
+     */
+    protected final LinkedList<Factura> facturas;
+    /**
      * The NIF of the Contribuinte
      */
     private final String nif;
     /**
-     * The email of the Contribuinte
-     */
-    private String email;
-    /**
      * The name of the Contribuinte
      */
     private final String name;
-    /**
-     * The address of the Contribuinte
-     */
-    private String address;
-    /**
-     * The password of the Contribuinte
-     */
-    private String password;
     /**
      * The fiscal coefficient
      */
@@ -43,9 +35,17 @@ public abstract class Contribuinte implements User,
      */
     private final Set<EconSector> econActivities;
     /**
-     * The receipts
+     * The email of the Contribuinte
      */
-    protected final LinkedList<Factura> facturas;
+    private String email;
+    /**
+     * The address of the Contribuinte
+     */
+    private String address;
+    /**
+     * The password of the Contribuinte
+     */
+    private String password;
 
     /**
      * Parametrised constructor
@@ -90,14 +90,6 @@ public abstract class Contribuinte implements User,
         return nif;
     }
 
-    /**
-     * Returns the email
-     * @return The email
-     */
-    public String getEmail(){
-        return email;
-    }
-
     /** {@inheritDoc} */
     @Override
     public String getName(){
@@ -110,18 +102,18 @@ public abstract class Contribuinte implements User,
         return password;
     }
 
-    /**
-     * Returns the address
-     * @return The address
-     */
-    public String getAddress(){
-        return address;
-    }
-
     /** {@inheritDoc} */
     @Override
     public void setPassword(String password){
         this.password = password;
+    }
+
+    /**
+     * Returns the email
+     * @return The email
+     */
+    public String getEmail(){
+        return email;
     }
 
     /**
@@ -130,6 +122,14 @@ public abstract class Contribuinte implements User,
      */
     public void setEmail(String email){
         this.email = email;
+    }
+
+    /**
+     * Returns the address
+     * @return The address
+     */
+    public String getAddress(){
+        return address;
     }
 
     /**
@@ -242,6 +242,13 @@ public abstract class Contribuinte implements User,
                && this.econActivities.equals(that.getEconActivities());
     }
 
+    /**
+     * Returns a deep copy of the instance
+     * @return A deep copy of the instance
+     */
+    @Override
+    public abstract Contribuinte clone();
+
     /** {@inheritDoc} */
     @Override
     public String toString(){
@@ -256,11 +263,4 @@ public abstract class Contribuinte implements User,
                + ", facturas=" + facturas + '\''
                + '}';
     }
-
-    /**
-     * Returns a deep copy of the instance
-     * @return A deep copy of the instance
-     */
-    @Override
-    public abstract Contribuinte clone();
 }

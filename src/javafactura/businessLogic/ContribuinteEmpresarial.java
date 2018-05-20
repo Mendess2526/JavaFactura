@@ -101,12 +101,6 @@ public class ContribuinteEmpresarial extends Contribuinte {
                             .sum();
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public String toString(){
-        return "ContribuinteEmpresarial{}" + super.toString();
-    }
-
     /**
      * Creates a deep copy of the instance
      * @return a deep copy of the instance
@@ -114,5 +108,11 @@ public class ContribuinteEmpresarial extends Contribuinte {
     @Override
     public ContribuinteEmpresarial clone(){
         return new ContribuinteEmpresarial(this);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String toString(){
+        return "ContribuinteEmpresarial{}" + super.toString();
     }
 }
