@@ -8,9 +8,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-
+/**
+ * Represents a individual in the application
+ */
 public class ContribuinteIndividual extends Contribuinte {
-
 
     private static final long serialVersionUID = -325271230861013347L;
     /**
@@ -23,7 +24,7 @@ public class ContribuinteIndividual extends Contribuinte {
     private int numDependants;
 
     /**
-     * Fully parametrised constructor for <tt>Contribuinte Individual</tt>
+     * Fully parametrised constructor
      * @param nif               The NIF
      * @param email             The email
      * @param nome              The name
@@ -47,6 +48,37 @@ public class ContribuinteIndividual extends Contribuinte {
 
     }
 
+    /**
+     * The copy constructor
+     * @param contribuinteIndividual The instance to copy
+     */
+    private ContribuinteIndividual(ContribuinteIndividual contribuinteIndividual){
+        super(contribuinteIndividual);
+        this.familyAggregate = contribuinteIndividual.getFamilyAggregate();
+        this.numDependants = contribuinteIndividual.getNumDependants();
+    }
+
+    /**
+     * Returns the family aggregate
+     * @return The family aggregate
+     */
+    public Set<String> getFamilyAggregate(){
+        return new HashSet<>(familyAggregate);
+    }
+
+    /**
+     * Returns the number of dependants
+     * @return The number of dependants
+     */
+    public int getNumDependants(){
+        return this.numDependants;
+    }
+
+    /**
+     * Sets the number of dependents, preforming a check against the size of the aggregate
+     * @param numDependants The number of dependents
+     * @throws InvalidNumberOfDependantsException if the numDependants is higher then the size of the aggregate
+     */
     private void setNumDependants(int numDependants) throws InvalidNumberOfDependantsException{
         if(numDependants <= this.familyAggregate.size()){
             this.numDependants = numDependants;
@@ -55,43 +87,20 @@ public class ContribuinteIndividual extends Contribuinte {
         }
     }
 
-    private ContribuinteIndividual(ContribuinteIndividual contribuinteIndividual){
-        super(contribuinteIndividual);
-        this.familyAggregate = contribuinteIndividual.getFamilyAggregate();
-        this.numDependants = contribuinteIndividual.getNumDependants();
-    }
-
-    public Set<String> getFamilyAggregate(){
-        return new HashSet<>(familyAggregate);
-    }
-
-    public int getNumDependants(){
-        return this.numDependants;
-    }
-
+    /** {@inheritDoc} */
     @Override
-    public boolean equals(Object o){
-        if(this == o) return true;
+    public boolean equals(Object obj){
+        if(this == obj) return true;
 
-        if(o == null || this.getClass() != o.getClass()) return false;
+        if(obj == null || this.getClass() != obj.getClass()) return false;
 
-        ContribuinteIndividual that = (ContribuinteIndividual) o;
-        return super.equals(o)
+        ContribuinteIndividual that = (ContribuinteIndividual) obj;
+        return super.equals(obj)
                && this.numDependants == that.getNumDependants()
                && this.familyAggregate.equals(that.getFamilyAggregate());
     }
 
-    public Factura changeFatura(Factura f, EconSector e) throws InvalidEconSectorException{
-        Factura changedF = this.facturas.get(this.facturas.indexOf(f));
-        changedF.setEconSector(e);
-        f.setEconSector(e);
-        return f;
-    }
-
-    public long countFacturas(String nif){
-        return this.facturas.stream().filter(f -> f.getIssuerNif().equals(nif)).count();
-    }
-
+    /** {@inheritDoc} */
     @Override
     public String toString(){
         return "ContribuinteIndividual{" +
@@ -100,6 +109,35 @@ public class ContribuinteIndividual extends Contribuinte {
                + "} " + super.toString();
     }
 
+    /**
+     * Change the {@link EconSector} of a {@link Factura}
+     * @param f The factura to change
+     * @param e The new sector
+     * @return A copy of the changed f
+     *
+     * @throws InvalidEconSectorException if the sector is not in the list of valid sectors
+     */
+    public Factura changeFatura(Factura f, EconSector e) throws InvalidEconSectorException{
+        Factura changedF = this.facturas.get(this.facturas.indexOf(f));
+        changedF.setEconSector(e);
+        f.setEconSector(e);
+        return f;
+    }
+
+    /**
+     * Counts the number of {@link Factura}s emitted by a given {@link ContribuinteEmpresarial}
+     * @param companyNif The company nif
+     * @return The number of {@link Factura}s emitted by a given {@link ContribuinteEmpresarial}
+     */
+    public long countFacturas(String companyNif){
+        return this.facturas.stream().filter(f -> f.getIssuerNif().equals(companyNif)).count();
+    }
+
+    /**
+     * Creates a deep copy of the instance
+     * @return a deep copy of the instance
+     */
+    @Override
     public ContribuinteIndividual clone(){
         return new ContribuinteIndividual(this);
     }

@@ -1,21 +1,38 @@
 package javafactura.businessLogic.econSectors;
 
+/**
+ * Educação
+ * {@inheritDoc}
+ */
 public final class Educacao extends EconSector implements Deductible {
 
-    private static final Educacao instance = new Educacao();
     private static final long serialVersionUID = -3203220403125757525L;
+    /**
+     * The singleton instance of this sector
+     */
+    private static final Educacao instance = new Educacao();
 
+    /** Private constructor to force singleton pattern */
+    private Educacao(){
+    }
+
+    /**
+     * Returns the singleton instance of this class
+     * @return the singleton instance of this class
+     */
     public static Educacao getInstance(){
         return instance;
     }
 
-    private Educacao(){
-    }
-
+    /**
+     * Method used during deserialization to maintain the singleton pattern
+     * @return The singleton instance
+     */
     protected Object readResolve(){
         return getInstance();
     }
 
+    /** {@inheritDoc} */
     @Override
     public float deduction(float value, boolean interior, int aggregateSize, float coeffEmpresa, float coeffIndividual){
         float deduction = 0;

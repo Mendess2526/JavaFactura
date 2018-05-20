@@ -13,6 +13,10 @@ import java.util.LinkedList;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Representation of a receipt in the application
+ * {@link Factura}s are comparable based on their creation date
+ */
 public class Factura implements Comparable<Factura>,
                                 Serializable {
 
@@ -53,11 +57,11 @@ public class Factura implements Comparable<Factura>,
      */
     private EconSector econSector;
     /**
-     * \brief The econ sectors of the company that issued this receipt
+     * \brief The {@link EconSector}s of the company that issued this receipt
      */
     private final Set<EconSector> possibleEconSectors;
     /**
-     * \brief History of states of this <tt>Factura</tt>
+     * \brief History of states of this {@link Factura}
      */
     private final LinkedList<Factura> history;
     /**
@@ -212,8 +216,9 @@ public class Factura implements Comparable<Factura>,
     }
 
     /**
-     * Changes the economic sector of the <tt>Factura</tt>
-     * @param econSector the new economic sector
+     * Changes the {@link EconSector}
+     * @param econSector the new {@link EconSector}
+     * @throws InvalidEconSectorException if the requested sector is not among the valid sectors
      */
     public void setEconSector(EconSector econSector) throws InvalidEconSectorException{
         if(!this.possibleEconSectors.contains(econSector)) throw new InvalidEconSectorException(econSector.toString());
@@ -245,36 +250,56 @@ public class Factura implements Comparable<Factura>,
     }
 
     /**
-     * Returns the list of possible econ sectors
-     * @return The list of possible econ sectors
+     * Returns the list of possible {@link EconSector}s
+     * @return The list of possible {@link EconSector}s
      */
     public Set<EconSector> getPossibleEconSectors(){
         return new HashSet<>(this.possibleEconSectors);
     }
 
+    /**
+     * Returns if the issuing {@link ContribuinteEmpresarial} is to be benefited for being from the interior
+     * @return If the issuing {@link ContribuinteEmpresarial} is to be benefited for being from the interior
+     */
     private boolean isEmpresaInterior(){
         return this.isEmpresaInterior;
     }
 
+    /**
+     * Returns the size of the family aggregate of the {@link ContribuinteIndividual} at the time of emission
+     * @return The size of the family aggregate of the {@link ContribuinteIndividual} at the time of emission
+     */
     private int getAggregateSize(){
         return this.aggregateSize;
     }
 
+    /**
+     * Returns the fiscal coefficient of the issuing {@link ContribuinteEmpresarial}
+     * @return The fiscal coefficient of the issuing {@link ContribuinteEmpresarial}
+     */
     private float getCoeffEmpresa(){
         return this.coeffEmpresa;
     }
 
+    /**
+     * Returns the fiscal coefficient of the {@link ContribuinteIndividual}
+     * @return The fiscal coefficient of the {@link ContribuinteIndividual}
+     */
     private float getCoeffIndividual(){
         return this.coeffIndividual;
     }
 
+    /**
+     * Returns the list of {@link EconSector}s that can be deducted from
+     * @return The list of {@link EconSector}s that can be deducted from
+     */
     private Set<EconSector> getIndividualEconSectors(){
         return new HashSet<>(this.individualEconSectors);
     }
 
     /**
-     * Returns if the <tt>Factura</tt> is deductible
-     * @return if the <tt>Factura</tt> is deductible
+     * Checks if it is deductible
+     * @return {@code true} if is is deductible {@code false} otherwise
      */
     private boolean isDeductible(){
         return this.econSector instanceof Deductible
@@ -293,13 +318,14 @@ public class Factura implements Comparable<Factura>,
         return 0;
     }
 
+    /** {@inheritDoc} */
     @Override
-    public boolean equals(Object o){
-        if(this == o) return true;
+    public boolean equals(Object obj){
+        if(this == obj) return true;
 
-        if(o == null || this.getClass() != o.getClass()) return false;
+        if(obj == null || this.getClass() != obj.getClass()) return false;
 
-        Factura factura = (Factura) o;
+        Factura factura = (Factura) obj;
         return this.value == factura.getValue()
                && this.isEmpresaInterior == factura.isEmpresaInterior()
                && this.aggregateSize == factura.getAggregateSize()
@@ -317,6 +343,16 @@ public class Factura implements Comparable<Factura>,
                && this.individualEconSectors.equals(factura.getIndividualEconSectors());
     }
 
+    /**
+     * Returns a deep copy
+     * @return a deep copy
+     */
+    @Override
+    public Factura clone(){
+        return new Factura(this);
+    }
+
+    /** {@inheritDoc} */
     @Override
     public String toString(){
         return "Factura{" +
@@ -338,11 +374,11 @@ public class Factura implements Comparable<Factura>,
                + '}';
     }
 
-    @Override
-    public Factura clone(){
-        return new Factura(this);
-    }
-
+    /**
+     * Compares against another {@link Factura} based on time
+     * @param o The factura to compare against
+     * @return {@inheritDoc}
+     */
     @Override
     public int compareTo(Factura o){
         return this.creationDate.compareTo(o.getCreationDate());

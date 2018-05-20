@@ -4,6 +4,9 @@ import javafactura.businessLogic.econSectors.EconSector;
 
 import java.util.Collection;
 
+/**
+ * The class that represents a company in the application.
+ */
 public class ContribuinteEmpresarial extends Contribuinte {
 
     private static final long serialVersionUID = 6172164103937149552L;
@@ -34,7 +37,7 @@ public class ContribuinteEmpresarial extends Contribuinte {
     }
 
     /**
-     * \brief Issues a <tt>Factura</tt>
+     * \brief Issues a {@link Factura}
      * @param buyer       The buyer
      * @param description The description of the purchase
      * @param value       The value of the purchase
@@ -46,11 +49,17 @@ public class ContribuinteEmpresarial extends Contribuinte {
         return factura.clone();
     }
 
+    /** {@inheritDoc} */
     @Override
     public String toString(){
-        return "ContribuinteEmpresarial{" + "}" + super.toString();
+        return "ContribuinteEmpresarial{}" + super.toString();
     }
 
+    /**
+     * Creates a deep copy of the instance
+     * @return a deep copy of the instance
+     */
+    @Override
     public ContribuinteEmpresarial clone(){
         return new ContribuinteEmpresarial(this);
     }

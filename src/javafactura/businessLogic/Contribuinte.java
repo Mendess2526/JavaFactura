@@ -9,6 +9,9 @@ import java.util.LinkedList;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * The abstract Contribuinte from which the other ones extend
+ */
 public abstract class Contribuinte implements User,
                                               Serializable {
 
@@ -48,13 +51,13 @@ public abstract class Contribuinte implements User,
 
     /**
      * Parametrised constructor
-     * @param nif      The NIF
-     * @param email    The email
-     * @param name     The Name
-     * @param address  The Address
-     * @param password The Password
+     * @param nif               The NIF
+     * @param email             The email
+     * @param name              The Name
+     * @param address           The Address
+     * @param password          The Password
      * @param fiscalCoefficient The fiscal coefficient
-     * @param econActivities The economic sectors
+     * @param econActivities    The economic sectors
      */
     protected Contribuinte(String nif, String email, String name, String address, String password,
                            float fiscalCoefficient, Collection<EconSector> econActivities){
@@ -83,11 +86,8 @@ public abstract class Contribuinte implements User,
         this.facturas = contribuinte.getFacturas();
     }
 
-
-    /**
-     * Returns the NIF
-     * @return The NIF
-     */
+    /** {@inheritDoc} */
+    @Override
     public String getNif(){
         return nif;
     }
@@ -100,20 +100,16 @@ public abstract class Contribuinte implements User,
         return email;
     }
 
-    /**
-     * Sets the email
-     * @param email the new email
-     */
-    public void setEmail(String email){
-        this.email = email;
-    }
-
-    /**
-     * Returns the name
-     * @return The name
-     */
+    /** {@inheritDoc} */
+    @Override
     public String getName(){
         return name;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getPassword(){
+        return password;
     }
 
     /**
@@ -124,8 +120,22 @@ public abstract class Contribuinte implements User,
         return address;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public void setPassword(String password){
+        this.password = password;
+    }
+
     /**
-     * Sets the new address
+     * Changes the email
+     * @param email the new email
+     */
+    public void setEmail(String email){
+        this.email = email;
+    }
+
+    /**
+     * Changes the address
      * @param address the new address
      */
     public void setAddress(String address){
@@ -133,25 +143,27 @@ public abstract class Contribuinte implements User,
     }
 
     /**
-     * Returns the password
-     * @return The password
+     * Returns the fiscal coefficient
+     * @return The fiscal coefficient
      */
-    public String getPassword(){
-        return password;
-    }
-
-    /**
-     * Changes the password
-     * @param password The new password
-     */
-    public void setPassword(String password){
-        this.password = password;
-    }
-
     public float getFiscalCoefficient(){
         return this.fiscalCoefficient;
     }
 
+    /**
+     * \brief Returns the {@link EconSector}s associated with this {@link Contribuinte}
+     * <ul>
+     * <li>
+     * In the case of a {@link ContribuinteEmpresarial} they represent the sectors this company's
+     * {@link Factura}s can have.
+     * </li>
+     * <li>
+     * In the case of a {@link ContribuinteIndividual} they represent the sectors this individual
+     * can deduct from.
+     * </li>
+     * </ul>
+     * @return The {@link EconSector}s associated
+     */
     public Set<EconSector> getEconActivities(){
         return new HashSet<>(this.econActivities);
     }
@@ -167,17 +179,22 @@ public abstract class Contribuinte implements User,
                 .collect(Collectors.toCollection(LinkedList::new));
     }
 
+    /**
+     * Associates a new {@link Factura}
+     * @param f the factura
+     */
     protected void associateFactura(Factura f){
         this.facturas.addFirst(f);
     }
 
+    /** {@inheritDoc} */
     @Override
-    public boolean equals(Object o){
-        if(this == o) return true;
+    public boolean equals(Object obj){
+        if(this == obj) return true;
 
-        if(o == null || this.getClass() != o.getClass()) return false;
+        if(obj == null || this.getClass() != obj.getClass()) return false;
 
-        Contribuinte that = (Contribuinte) o;
+        Contribuinte that = (Contribuinte) obj;
         return this.fiscalCoefficient == that.getFiscalCoefficient()
                && this.nif.equals(that.getNif())
                && this.email.equals(that.getEmail())
@@ -188,6 +205,7 @@ public abstract class Contribuinte implements User,
                && this.econActivities.equals(that.getEconActivities());
     }
 
+    /** {@inheritDoc} */
     @Override
     public String toString(){
         return "Contribuinte{" +
@@ -201,6 +219,4 @@ public abstract class Contribuinte implements User,
                + ", facturas=" + facturas + '\''
                + '}';
     }
-
-    public abstract Contribuinte clone();
 }
