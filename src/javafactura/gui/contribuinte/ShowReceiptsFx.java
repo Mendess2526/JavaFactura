@@ -62,7 +62,8 @@ public abstract class ShowReceiptsFx extends FX {
 
         this.receiptsTable = new TableView<>();
         makeReceiptsTable();
-        this.viewFacturaFX = new ViewFacturaFX(this.javaFactura, this.primaryStage, this.scene, canEdit);
+        this.viewFacturaFX = new ViewFacturaFX(this.javaFactura, this.primaryStage, this.scene,
+                                               canEdit ? new TableRefresher() : null);
     }
 
     private SortState valueSort;
@@ -152,4 +153,11 @@ public abstract class ShowReceiptsFx extends FX {
     }
 
     protected abstract boolean updateReceipts();
+
+    class TableRefresher {
+
+        void refresh(){
+            updateReceipts();
+        }
+    }
 }

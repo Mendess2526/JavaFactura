@@ -31,7 +31,7 @@ public class EmpresaFX extends ShowReceiptsFx {
 
         EmpresaIssueReceiptFX empresaIssueReceiptFX
                 = new EmpresaIssueReceiptFX(this.javaFactura, this.primaryStage,
-                                            this.scene, new TableRefresher());
+                                            this.scene, new ShowReceiptsFx.TableRefresher());
 
         EmpresaProfileFX empresaProfileFX = new EmpresaProfileFX(this.javaFactura, this.primaryStage, this.scene);
 
@@ -137,12 +137,5 @@ public class EmpresaFX extends ShowReceiptsFx {
             return false;
         }
         return true;
-    }
-
-    class TableRefresher {
-
-        void refresh(){
-            updateReceipts();
-        }
     }
 }

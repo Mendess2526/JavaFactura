@@ -67,7 +67,7 @@ public abstract class FormFX extends FX {
         return allFilled;
     }
 
-    protected void appendField(@SuppressWarnings("SameParameterValue") String label, Node node){
+    protected void appendField(String label, Node node){
         int rowIndex = GridPane.getRowIndex(this.confirmText);
         ObservableList<Node> children = this.gridPane.getChildren();
         children.remove(this.confirmText);
@@ -75,6 +75,20 @@ public abstract class FormFX extends FX {
         children.remove(this.goBackButtonHBox);
         this.gridPane.add(new Label(label), 0, rowIndex);
         this.gridPane.add(node, 1, rowIndex);
+        this.gridPane.add(this.confirmText, 1, rowIndex + 1);
+        this.gridPane.add(this.submitButtonHBox, 0, rowIndex + 2);
+        this.gridPane.add(this.goBackButtonHBox, 2, rowIndex + 2);
+    }
+
+    protected void appendField(String label, Node node, Text error){
+        int rowIndex = GridPane.getRowIndex(this.confirmText);
+        ObservableList<Node> children = this.gridPane.getChildren();
+        children.remove(this.confirmText);
+        children.remove(this.submitButtonHBox);
+        children.remove(this.goBackButtonHBox);
+        this.gridPane.add(new Label(label), 0, rowIndex);
+        this.gridPane.add(node, 1, rowIndex);
+        this.gridPane.add(error, 2, rowIndex);
         this.gridPane.add(this.confirmText, 1, rowIndex + 1);
         this.gridPane.add(this.submitButtonHBox, 0, rowIndex + 2);
         this.gridPane.add(this.goBackButtonHBox, 2, rowIndex + 2);

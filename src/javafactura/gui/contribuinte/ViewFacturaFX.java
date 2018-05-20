@@ -33,9 +33,12 @@ public class ViewFacturaFX extends FX {
     private final Text value;
     private final Text econSector;
     private int historyIndex;
+    private final ShowReceiptsFx.TableRefresher tableRefresher;
 
-    public ViewFacturaFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene, boolean canEdit){
+    public ViewFacturaFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene,
+                         ShowReceiptsFx.TableRefresher tableRefresher){
         super(javaFactura, primaryStage, previousScene);
+        this.tableRefresher = tableRefresher;
 
         this.historyIndex = 0;
         this.history = new ArrayList<>();
@@ -82,7 +85,7 @@ public class ViewFacturaFX extends FX {
         this.gridPane.add(econSectorLabel, 0, row);
         this.gridPane.add(this.econSector, 1, row++);
 
-        if(canEdit){
+        if(tableRefresher != null){
             this.editSector = new MenuButton("Mudar Setor");
             this.gridPane.add(editSector, 0, row++);
         }else{
@@ -157,6 +160,7 @@ public class ViewFacturaFX extends FX {
         }
         updateFields(this.history.get(this.historyIndex));
         updateButtons();
+        if(this.tableRefresher != null) this.tableRefresher.refresh();
         return this;
     }
 

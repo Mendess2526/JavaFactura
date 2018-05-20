@@ -60,7 +60,7 @@ public class ContribuinteEmpresarial extends Contribuinte {
      * @return a list of NIFs of the clients
      */
     public List<String> getClientNIFs(){
-        return this.facturas.stream().map(Factura::getIssuerNif).collect(Collectors.toList());
+        return this.facturas.stream().map(Factura::getClientNif).collect(Collectors.toList());
     }
 
     /**

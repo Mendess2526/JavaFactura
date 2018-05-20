@@ -91,7 +91,7 @@ public class IndividualFX extends ShowReceiptsFx {
         });
     }
 
-    private void updateTotals(){
+    private boolean updateTotals(){
         long count = this.facturas
                 .stream()
                 .map(Factura::getType)
@@ -108,7 +108,14 @@ public class IndividualFX extends ShowReceiptsFx {
                     String.format("%.2f", this.javaFactura.getAccumulatedDeductionFamilyAggregate()));
         }catch(NotIndividualException e){
             goBack();
+            return false;
         }
+        return true;
+    }
+
+    @Override
+    public boolean show(){
+        return super.show() && updateTotals();
     }
 
     @Override

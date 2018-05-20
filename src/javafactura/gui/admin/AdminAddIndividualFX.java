@@ -9,9 +9,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
 public class AdminAddIndividualFX extends FormFX {
@@ -22,12 +27,16 @@ public class AdminAddIndividualFX extends FormFX {
 
     private final MenuButton sectorsBox;
     private final TextField familyAggregate;
+    private final Text familyAggregateError;
 
     public AdminAddIndividualFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene, defaultFields);
 
         this.familyAggregate = new TextField();
-        appendField("Agregado familiar\n(valores separados por virgulas)", this.familyAggregate);
+        this.familyAggregateError = new Text();
+        this.familyAggregateError.setFill(Color.RED);
+        appendField("Agregado familiar\n(valores separados por virgulas)", this.familyAggregate,
+                    this.familyAggregateError);
 
         this.sectorsBox = new MenuButton("Setores Económicos");
         Set<EconSector> econSectors = this.javaFactura.getAllSectors();
@@ -51,9 +60,9 @@ public class AdminAddIndividualFX extends FormFX {
                                                      .map(this.javaFactura::getSectorFromString)
                                                      .filter(Objects::nonNull)
                                                      .collect(Collectors.toSet());
-            List<String> familyAggregate = new ArrayList<>();
+            Set<String> familyAggregate = new HashSet<>();
             StringTokenizer st = new StringTokenizer(this.familyAggregate.getText(), ",");
-            while(st.hasMoreTokens()) familyAggregate.add(st.nextToken());
+            while(st.hasMoreTokens()) if(!familyAggregate.add(st.nextToken())) throw new IllegalArgumentException();
             this.javaFactura.registarIndividual(
                     this.textFields[field++].getText(),
                     this.textFields[field++].getText(),
@@ -67,14 +76,18 @@ public class AdminAddIndividualFX extends FormFX {
             );
             for(TextField t : this.textFields)
                 t.clear();
+            this.familyAggregate.setText("");
+            this.familyAggregateError.setText("");
             this.sectorsBox.getItems().stream().map(CheckMenuItem.class::cast).forEach(c -> c.setSelected(false));
             confirm("Individual adicionado");
         }catch(InvalidNumberOfDependantsException e){
-            this.errorTexts[5].setText("Too many dependents");
+            this.errorTexts[6].setText("Demasiados dependentes");
         }catch(NumberFormatException e){
-            this.errorTexts[field - 1].setText("Not a number");
+            this.errorTexts[field - 1].setText("Não é um número valido");
         }catch(ContribuinteAlreadyExistsException e){
             this.errorTexts[0].setText("Nif já existe");
+        }catch(IllegalArgumentException e){
+            this.familyAggregateError.setText("NIFs repetidos");
         }
     }
 }
