@@ -16,15 +16,44 @@ import javafx.stage.Stage;
 
 import java.util.Arrays;
 
+/**
+ * Class that represents a form
+ */
+@SuppressWarnings("SameParameterValue")
 public abstract class FormFX extends FX {
 
-    private final String[] fields;
+    /**
+     * The text fields
+     */
     protected final TextField[] textFields;
+    /**
+     * The error text fields
+     */
     protected final Text[] errorTexts;
+    /**
+     * The labels of the input fields
+     */
+    private final String[] fields;
+    /**
+     * The confirmation text
+     */
     private final Text confirmText;
+    /**
+     * The submit button box
+     */
     private final HBox submitButtonHBox;
+    /**
+     * The back button box
+     */
     private final HBox goBackButtonHBox;
 
+    /**
+     * Constructor for a application window
+     * @param javaFactura   The business logic instance
+     * @param primaryStage  The stage where the window exists
+     * @param previousScene The previous scene (null if this is the root window)
+     * @param fields        The text fields of the form
+     */
     protected FormFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene, String[] fields){
         super(javaFactura, primaryStage, previousScene);
         this.fields = Arrays.copyOf(fields, fields.length);
@@ -54,19 +83,28 @@ public abstract class FormFX extends FX {
         this.gridPane.add(this.goBackButtonHBox, 2, row);
     }
 
+    /**
+     * Checks if any field was left empty
+     * @return {@code true} if any field is empty {@code false} otherwise
+     */
     protected boolean fieldsNotFilled(){
-        boolean allFilled = false;
+        boolean fieldsMissing = false;
         for(int row = 0; row < fields.length; row++){
             if(this.textFields[row].getText().equals("")){
                 this.errorTexts[row].setText("Required field");
-                allFilled = true;
+                fieldsMissing = true;
             }else{
                 this.errorTexts[row].setText("");
             }
         }
-        return allFilled;
+        return fieldsMissing;
     }
 
+    /**
+     * Appends a field to the list of input fields
+     * @param label The field label
+     * @param node  The input field
+     */
     protected void appendField(String label, Node node){
         int rowIndex = GridPane.getRowIndex(this.confirmText);
         ObservableList<Node> children = this.gridPane.getChildren();
@@ -80,6 +118,12 @@ public abstract class FormFX extends FX {
         this.gridPane.add(this.goBackButtonHBox, 2, rowIndex + 2);
     }
 
+    /**
+     * Appends a field to the list of input fields
+     * @param label The field label
+     * @param node  The input field
+     * @param error The error text
+     */
     protected void appendField(String label, Node node, Text error){
         int rowIndex = GridPane.getRowIndex(this.confirmText);
         ObservableList<Node> children = this.gridPane.getChildren();
@@ -94,12 +138,22 @@ public abstract class FormFX extends FX {
         this.gridPane.add(this.goBackButtonHBox, 2, rowIndex + 2);
     }
 
+    /**
+     * Submits the data
+     */
     protected abstract void submitData();
 
+    /**
+     * Sets the confirm text
+     * @param text Text string
+     */
     protected void confirm(String text){
         this.confirmText.setText(text);
     }
 
+    /**
+     * Clears the confirm text
+     */
     protected void unconfirm(){
         this.confirmText.setText("");
     }

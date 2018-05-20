@@ -21,14 +21,32 @@ import java.util.stream.Collectors;
 
 public class AdminAddIndividualFX extends FormFX {
 
+    /**
+     * The form's fields
+     */
     private static final String[] defaultFields = new String[]{
             "NIF:", "Email:", "Nome", "Address", "Password", "Fiscal Coefficient", "Number of dependants",
             };
 
+    /**
+     * Menu button to pick {@link EconSector}s
+     */
     private final MenuButton sectorsBox;
+    /**
+     * Text field to input the family aggregate
+     */
     private final TextField familyAggregate;
+    /**
+     * Error text for the family aggregate
+     */
     private final Text familyAggregateError;
 
+    /**
+     * Constructor for a application window
+     * @param javaFactura   The business logic instance
+     * @param primaryStage  The stage where the window exists
+     * @param previousScene The previous scene (null if this is the root window)
+     */
     public AdminAddIndividualFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene, defaultFields);
 
@@ -47,6 +65,7 @@ public class AdminAddIndividualFX extends FormFX {
         appendField("Setores económicos", this.sectorsBox);
     }
 
+    /** {@inheritDoc} */
     protected void submitData(){
         unconfirm();
         if(fieldsNotFilled()) return;

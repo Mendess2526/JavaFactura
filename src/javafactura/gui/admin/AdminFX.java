@@ -1,5 +1,6 @@
 package javafactura.gui.admin;
 
+import javafactura.businessLogic.Admin;
 import javafactura.businessLogic.JavaFactura;
 import javafactura.gui.FX;
 import javafx.geometry.Pos;
@@ -10,14 +11,34 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-
+/**
+ * Class that represents the {@link Admin} screen
+ */
 public class AdminFX extends FX {
 
+    /**
+     * The add individual sub screen
+     */
     private final AdminAddIndividualFX addIndividual;
+    /**
+     * The add empresa sub screen
+     */
     private final AdminAddEmpresaFX addEmpresa;
+    /**
+     * The view top 10 contribuintes sub screen
+     */
     private final AdminTop10ContribuintesFX top10Contribuintes;
+    /**
+     * The view top X empresas sub screen
+     */
     private final AdminTopXEmpresasFX topXEmpresas;
 
+    /**
+     * Constructor for a application window
+     * @param javaFactura   The business logic instance
+     * @param primaryStage  The stage where the window exists
+     * @param previousScene The previous scene (null if this is the root window)
+     */
     public AdminFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene);
 
@@ -79,11 +100,15 @@ public class AdminFX extends FX {
         this.gridPane.add(makeHBox(logOutButton, Pos.CENTER), 0, row);
     }
 
+    /**
+     * Logs out from the application
+     */
     private void logOut(){
         this.javaFactura.logout();
         this.primaryStage.setScene(this.previousScene);
     }
 
+    /** Disables the {@link FX#goBack()} method */
     @Override
     protected void goBack(){
         throw new UnsupportedOperationException();

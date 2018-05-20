@@ -15,11 +15,26 @@ import javafx.stage.Stage;
 
 import java.util.List;
 
+/**
+ * Class that represents the view the top X {@link ContribuinteEmpresarial} screen
+ */
 public class AdminTopXEmpresasFX extends FX {
 
+    /**
+     * The prompt to pick the value of X
+     */
     private final TextField numberPrompt;
+    /**
+     * The top X {@link ContribuinteEmpresarial}
+     */
     private final ObservableList<Pair<ContribuinteEmpresarial,Double>> topX;
 
+    /**
+     * Constructor for a application window
+     * @param javaFactura   The business logic instance
+     * @param primaryStage  The stage where the window exists
+     * @param previousScene The previous scene (null if this is the root window)
+     */
     public AdminTopXEmpresasFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene);
 
@@ -63,6 +78,9 @@ public class AdminTopXEmpresasFX extends FX {
         this.gridPane.add(makeHBox(goBackButton, Pos.BOTTOM_RIGHT), 2, 2);
     }
 
+    /**
+     * Fills the list with the top X {@link ContribuinteEmpresarial}
+     */
     private void fillList(){
         int num = Integer.parseInt(this.numberPrompt.getText());
         System.out.println("Getting top " + num + " companies");

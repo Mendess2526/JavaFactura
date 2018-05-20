@@ -17,12 +17,24 @@ import java.util.stream.Collectors;
 
 public class AdminAddEmpresaFX extends FormFX {
 
+    /**
+     * The form's fields
+     */
     private static final String[] defaultFields = new String[]{
             "NIF:", "Email:", "Nome", "Address", "Password", "Fiscal Coefficient"
     };
 
+    /**
+     * Menu button to pick {@link EconSector}s
+     */
     private final MenuButton sectorsBox;
 
+    /**
+     * Constructor for a application window
+     * @param javaFactura   The business logic instance
+     * @param primaryStage  The stage where the window exists
+     * @param previousScene The previous scene (null if this is the root window)
+     */
     public AdminAddEmpresaFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene, defaultFields);
 
@@ -35,6 +47,9 @@ public class AdminAddEmpresaFX extends FormFX {
         appendField("Setores económicos", this.sectorsBox);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected void submitData(){
         unconfirm();
         if(fieldsNotFilled()) return;

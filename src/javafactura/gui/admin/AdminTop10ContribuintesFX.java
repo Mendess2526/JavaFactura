@@ -1,5 +1,6 @@
 package javafactura.gui.admin;
 
+import javafactura.businessLogic.ContribuinteIndividual;
 import javafactura.businessLogic.JavaFactura;
 import javafactura.businessLogic.exceptions.NotAdminException;
 import javafactura.gui.FX;
@@ -13,10 +14,22 @@ import javafx.stage.Stage;
 
 import java.util.stream.Collectors;
 
+/**
+ * Class that represents the view the top 10 {@link ContribuinteIndividual} screen
+ */
 public class AdminTop10ContribuintesFX extends FX {
 
+    /**
+     * The top 10 NIFs
+     */
     private final ObservableList<String> top10;
 
+    /**
+     * Constructor for a application window
+     * @param javaFactura   The business logic instance
+     * @param primaryStage  The stage where the window exists
+     * @param previousScene The previous scene (null if this is the root window)
+     */
     public AdminTop10ContribuintesFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene);
 
@@ -30,6 +43,12 @@ public class AdminTop10ContribuintesFX extends FX {
         this.gridPane.add(makeHBox(goBack, Pos.BOTTOM_RIGHT), 0, 2);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Also gets and updates the top 10 {@link ContribuinteIndividual} list
+     * @return {@inheritDoc}
+     */
     @Override
     public boolean show(){
         try{

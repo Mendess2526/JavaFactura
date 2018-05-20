@@ -3,6 +3,7 @@ package javafactura.gui.contribuinte;
 import javafactura.businessLogic.Contribuinte;
 import javafactura.businessLogic.JavaFactura;
 import javafactura.businessLogic.User;
+import javafactura.businessLogic.econSectors.EconSector;
 import javafactura.gui.FX;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -18,22 +19,66 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-
+/**
+ * Class that represents a {@link Contribuinte} profile page
+ */
 public abstract class ContribuinteProfileFX extends FX {
 
+    /**
+     * The nif
+     */
     private final Text nif;
+    /**
+     * The email
+     */
     private final Text email;
+    /**
+     * The set email field
+     */
     private final TextField setEmail;
+    /**
+     * The name field
+     */
     private final Text name;
+    /**
+     * The address field
+     */
     private final Text address;
+    /**
+     * The fiscal Coefficient field
+     */
     private final Text fiscalCoefficient;
+    /**
+     * The {@link EconSector}s list
+     */
     private final Text econSectors;
+    /**
+     * The change password field
+     */
     private final PasswordField setPassword;
+    /**
+     * The password changing error field
+     */
     private final Text passwordError;
+    /**
+     * The change address field
+     */
     private final TextField setAddress;
+    /**
+     * The save changes button box
+     */
     private final HBox saveChangesBox;
+    /**
+     * The back button box
+     */
     private final HBox backButtonBox;
 
+    /**
+     * Constructor for a application window
+     * @param javaFactura   The business logic instance
+     * @param primaryStage  The stage where the window exists
+     * @param previousScene The previous scene (null if this is the root window)
+     */
     protected ContribuinteProfileFX(JavaFactura javaFactura, Stage primaryStage,
                                     Scene previousScene){
         super(javaFactura, primaryStage, previousScene);
@@ -89,6 +134,11 @@ public abstract class ContribuinteProfileFX extends FX {
         this.gridPane.add(this.backButtonBox, 2, row);
     }
 
+    /**
+     * {@inheritDoc}
+     * Also sets all the field in the base profile
+     * @return {@inheritDoc}
+     */
     @Override
     public boolean show(){
         if(!super.show()) return false;
@@ -107,6 +157,9 @@ public abstract class ContribuinteProfileFX extends FX {
         return true;
     }
 
+    /**
+     * Saves the changes inserted in the change fields
+     */
     private void saveChanges(){
         if(this.setEmail.getText().length() > 0){
             this.javaFactura.changeEmail(this.setEmail.getText());
@@ -128,6 +181,11 @@ public abstract class ContribuinteProfileFX extends FX {
         }
     }
 
+    /**
+     * Appends a new field to the profile
+     * @param labelString The name of the field
+     * @return The text where the value will appear
+     */
     protected Text appendField(String labelString){
         int saveChangesIdx = GridPane.getRowIndex(this.saveChangesBox);
         int backButtonIdx = GridPane.getRowIndex(this.backButtonBox);

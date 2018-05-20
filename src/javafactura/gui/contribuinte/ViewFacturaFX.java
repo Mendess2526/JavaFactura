@@ -20,21 +20,70 @@ import java.util.LinkedList;
 
 public class ViewFacturaFX extends FX {
 
+    /**
+     * The {@link Factura}'s history
+     */
     private final ArrayList<Factura> history;
+    /**
+     * The previous version button
+     */
     private final Button previousButton;
+    /**
+     * The next version button
+     */
     private final Button nextButton;
+    /**
+     * The edit sector drop down
+     */
     private final MenuButton editSector;
+    /**
+     * The issuer's NIF
+     */
     private final Text issuerNif;
+    /**
+     * The issuer's name
+     */
     private final Text issuerName;
+    /**
+     * The {@link Factura}'s creation date
+     */
     private final Text date;
+    /**
+     * The {@link Factura}'s edit date
+     */
     private final Text editDate;
+    /**
+     * The client's name
+     */
     private final Text clientNif;
+    /**
+     * The {@link Factura}'s description
+     */
     private final Text description;
+    /**
+     * The {@link Factura}'s value
+     */
     private final Text value;
+    /**
+     * The {@link Factura} {@link EconSector}
+     */
     private final Text econSector;
-    private int historyIndex;
+    /**
+     * The table refresher
+     */
     private final ShowReceiptsFx.TableRefresher tableRefresher;
+    /**
+     * The current point in the history
+     */
+    private int historyIndex;
 
+    /**
+     * Constructor for a application window
+     * @param javaFactura    The business logic instance
+     * @param primaryStage   The stage where the window exists
+     * @param previousScene  The previous scene (null if this is the root window)
+     * @param tableRefresher The table refresher of the previous screen's table
+     */
     public ViewFacturaFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene,
                          ShowReceiptsFx.TableRefresher tableRefresher){
         super(javaFactura, primaryStage, previousScene);
@@ -106,6 +155,9 @@ public class ViewFacturaFX extends FX {
         this.gridPane.add(makeHBox(goBackButton, Pos.BOTTOM_RIGHT), 1, row);
     }
 
+    /**
+     * Goes back in time
+     */
     private void nextFactura(){
         if(this.hasNext()){
             updateFields(this.history.get(++this.historyIndex));
@@ -113,6 +165,9 @@ public class ViewFacturaFX extends FX {
         updateButtons();
     }
 
+    /**
+     * Goes forward in time
+     */
     private void previousFactura(){
         if(this.hasPrevious()){
             updateFields(this.history.get(--this.historyIndex));
@@ -120,19 +175,35 @@ public class ViewFacturaFX extends FX {
         updateButtons();
     }
 
+    /**
+     * Enables and disables the Next and Previous buttons as needed
+     */
     private void updateButtons(){
         this.nextButton.setDisable(!this.hasNext());
         this.previousButton.setDisable(!this.hasPrevious());
     }
 
+    /**
+     * Checks if there is an older version of the current {@link Factura}
+     * @return {@code true} if yes {@code false} otherwise
+     */
     private boolean hasNext(){
         return this.historyIndex < (this.history.size() - 1);
     }
 
+    /**
+     * Checks if there is an earlier version of the current {@link Factura}
+     * @return {@code true} if yes {@code false} otherwise
+     */
     private boolean hasPrevious(){
         return this.historyIndex > 0;
     }
 
+    /**
+     * Changes the current {@link Factura}
+     * @param factura The new factura
+     * @return The instance for chaining
+     */
     public ViewFacturaFX setFactura(Factura factura){
         LinkedList<Factura> linkedList = factura.getHistory();
         linkedList.addFirst(factura);
@@ -164,6 +235,10 @@ public class ViewFacturaFX extends FX {
         return this;
     }
 
+    /**
+     * Update the fields
+     * @param factura The {@link Factura} from where the values will be extracted
+     */
     private void updateFields(Factura factura){
         this.issuerNif.setText(factura.getIssuerNif());
         this.issuerName.setText(factura.getIssuerName());
@@ -175,15 +250,27 @@ public class ViewFacturaFX extends FX {
         this.econSector.setText(factura.getType().toString());
     }
 
+    /**
+     * Extension of a {@link MenuItem} to include an {@link EconSector} for later retrieval
+     */
     private class EconMenuItem extends MenuItem {
 
+        /** The {@link EconSector} */
         private final EconSector sector;
 
+        /**
+         * The constructor
+         * @param e The {@link EconSector}
+         */
         EconMenuItem(EconSector e){
             super(e.toString());
             this.sector = e;
         }
 
+        /**
+         * Returns the {@link EconSector}
+         * @return The {@link EconSector}
+         */
         private EconSector getSector(){
             return this.sector;
         }

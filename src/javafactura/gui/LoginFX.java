@@ -15,15 +15,42 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+/**
+ * Class that represent the login screen
+ */
 public class LoginFX extends FX {
 
+    /**
+     * The admin sub screen
+     */
     private final AdminFX adminScreen;
+    /**
+     * The individual sub screen
+     */
     private final IndividualFX individualScreen;
+    /**
+     * The empresa sub screen
+     */
     private final EmpresaFX empresaScreen;
+    /**
+     * User name text field
+     */
     private final TextField userNameTextField;
+    /**
+     * Password password field
+     */
     private final PasswordField pwField;
+    /**
+     * Error text
+     */
     private final Text errors;
 
+    /**
+     * Constructor for a application window
+     * @param javaFactura   The business logic instance
+     * @param primaryStage  The stage where the window exists
+     * @param previousScene The previous scene (null if this is the root window)
+     */
     public LoginFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene);
         this.adminScreen = new AdminFX(this.javaFactura, this.primaryStage, this.scene);
@@ -58,6 +85,9 @@ public class LoginFX extends FX {
         this.gridPane.add(errors, 1, 6);
     }
 
+    /**
+     * Attempts a login with the data in the text fields
+     */
     private void login(){
         try{
             this.errors.setText("");

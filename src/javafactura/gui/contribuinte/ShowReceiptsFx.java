@@ -20,8 +20,60 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+/**
+ * {@inheritDoc}
+ * Shows {@link Factura}s
+ */
 public abstract class ShowReceiptsFx extends FX {
 
+    /**
+     * The {@link Factura}s list
+     */
+    protected final ObservableList<Factura> facturas;
+    /**
+     * The {@link Factura} table
+     */
+    protected final TableView<Factura> receiptsTable;
+    /**
+     * The sort buttons box
+     */
+    protected final HBox sortBox;
+    /**
+     * The from date picker
+     */
+    protected final DatePicker datePickerFrom;
+    /**
+     * The to date picker
+     */
+    protected final DatePicker datePickerTo;
+    /**
+     * The view {@link Factura} sub screen
+     */
+    private final ViewFacturaFX viewFacturaFX;
+    /**
+     * The begin date to filter from
+     */
+    protected LocalDate from;
+    /**
+     * The end date to filter to
+     */
+    protected LocalDate to;
+    /**
+     * The value sort state
+     */
+    private SortState valueSort;
+    /**
+     * The date sort state
+     */
+    private SortState dateSort;
+
+    /**
+     * Constructor for a application window
+     * @param javaFactura   The business logic instance
+     * @param primaryStage  The stage where the window exists
+     * @param previousScene The previous scene (null if this is the root window)
+     * @param canEdit       If the {@link Factura}s can be edited
+     */
     protected ShowReceiptsFx(JavaFactura javaFactura, Stage primaryStage,
                              Scene previousScene, boolean canEdit){
         super(javaFactura, primaryStage, previousScene);
@@ -66,17 +118,12 @@ public abstract class ShowReceiptsFx extends FX {
                                                canEdit ? new TableRefresher() : null);
     }
 
-    private SortState valueSort;
-    protected final ObservableList<Factura> facturas;
-    protected final TableView<Factura> receiptsTable;
-    private final ViewFacturaFX viewFacturaFX;
-    protected final HBox sortBox;
-    protected LocalDate from;
-    protected LocalDate to;
-    protected final DatePicker datePickerFrom;
-    protected final DatePicker datePickerTo;
-    private SortState dateSort;
-
+    /**
+     * The comparator picker
+     * Picks a different comparator depending on the sort state
+     * Meant to be used by subclasses
+     * @return The comparator
+     */
     protected Comparator<Factura> getFacturaComparator(){
         Comparator<Factura> c;
         if(this.valueSort == SortState.ASCENDING)
@@ -92,20 +139,11 @@ public abstract class ShowReceiptsFx extends FX {
         return c;
     }
 
-    public enum SortState {
-        DESCENDING,
-        ASCENDING,
-        NONE;
-
-        static{
-            DESCENDING.reverse = ASCENDING;
-            ASCENDING.reverse = DESCENDING;
-            NONE.reverse = DESCENDING;
-        }
-
-        private SortState reverse;
-    }
-
+    /**
+     * Handles the creation of the {@link Factura}s table
+     *
+     * Creates the columns and adds listeners to open the {@link ViewFacturaFX} sub screen
+     */
     private void makeReceiptsTable(){
         this.receiptsTable.setMinWidth(this.gridPane.getMinWidth());
         this.receiptsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -144,18 +182,53 @@ public abstract class ShowReceiptsFx extends FX {
         this.receiptsTable.getColumns().add(name);
         this.receiptsTable.getColumns().add(value);
         this.receiptsTable.setItems(this.facturas);
-
     }
 
+    /**
+     * {@inheritDoc} and updates the {@link Factura}s table
+     * @return {@inheritDoc}
+     */
     @Override
     public boolean show(){
         return super.show() && updateReceipts();
     }
 
+    /**
+     * Updates the receipts table
+     * @return {@code true} on success {@code false} otherwise
+     */
     protected abstract boolean updateReceipts();
 
+    /**
+     * Enum to represent the state the sorting is in
+     */
+    public enum SortState {
+        /** Descending */
+        DESCENDING,
+        /** Ascending */
+        ASCENDING,
+        /** Unsorted */
+        NONE;
+
+        static{
+            DESCENDING.reverse = ASCENDING;
+            ASCENDING.reverse = DESCENDING;
+            NONE.reverse = DESCENDING;
+        }
+
+        /** The inverse of the current value */
+        private SortState reverse;
+    }
+
+    /**
+     * One method class that serves to refresh this table from other
+     * screens
+     */
     class TableRefresher {
 
+        /**
+         * Refreshes the {@link Factura}s table
+         */
         void refresh(){
             updateReceipts();
         }

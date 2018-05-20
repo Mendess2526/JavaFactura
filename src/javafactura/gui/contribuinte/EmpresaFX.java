@@ -1,5 +1,6 @@
 package javafactura.gui.contribuinte;
 
+import javafactura.businessLogic.ContribuinteEmpresarial;
 import javafactura.businessLogic.ContribuinteIndividual;
 import javafactura.businessLogic.Factura;
 import javafactura.businessLogic.JavaFactura;
@@ -20,12 +21,31 @@ import javafx.stage.Stage;
 import java.time.LocalDate;
 import java.util.Comparator;
 
+/**
+ * Class that represents the {@link ContribuinteEmpresarial} screen
+ * {@inheritDoc}
+ */
 public class EmpresaFX extends ShowReceiptsFx {
 
+    /**
+     * The total money made by the company
+     */
     private final TextFlow totalFacturado;
+    /**
+     * The company's clients
+     */
     private final TableView<ContribuinteIndividual> clients;
+    /**
+     * The view client sub screen
+     */
     private final EmpresaViewClientFX viewClientFX;
 
+    /**
+     * Constructor for a application window
+     * @param javaFactura   The business logic instance
+     * @param primaryStage  The stage where the window exists
+     * @param previousScene The previous scene (null if this is the root window)
+     */
     public EmpresaFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene, false);
 
@@ -68,6 +88,11 @@ public class EmpresaFX extends ShowReceiptsFx {
         this.gridPane.add(makeHBox(goBack, Pos.BOTTOM_RIGHT), 1, row);
     }
 
+    /**
+     * Handles the creation of the clients table
+     *
+     * Creates the columns and adds listeners to open the {@link EmpresaViewClientFX} sub screen
+     */
     private void makeClientsTable(){
         this.clients.setMinWidth(this.gridPane.getMinWidth());
         this.clients.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -102,11 +127,20 @@ public class EmpresaFX extends ShowReceiptsFx {
         this.clients.getColumns().add(numCompras);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Also updates receipts
+     * @return {@inheritDoc}
+     */
     @Override
     public boolean show(){
         return super.show() && updateReceipts();
     }
 
+    /**
+     * {@inheritDoc} and the total
+     */
     @Override
     protected boolean updateReceipts(){
         boolean noDates = this.from == null && this.to == null;

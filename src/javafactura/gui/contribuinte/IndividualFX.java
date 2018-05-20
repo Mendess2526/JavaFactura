@@ -1,5 +1,6 @@
 package javafactura.gui.contribuinte;
 
+import javafactura.businessLogic.ContribuinteIndividual;
 import javafactura.businessLogic.Factura;
 import javafactura.businessLogic.JavaFactura;
 import javafactura.businessLogic.econSectors.Pendente;
@@ -21,12 +22,31 @@ import javafx.stage.Stage;
 import java.time.LocalDate;
 import java.util.Comparator;
 
+/**
+ * Class that represents the {@link ContribuinteIndividual} screen
+ * {@inheritDoc}
+ */
 public class IndividualFX extends ShowReceiptsFx {
 
+    /**
+     * The total amount deducted from the user's {@link Factura}s
+     */
     private final TextFlow totalDeducted;
+    /**
+     * The number of pending {@link Factura}s
+     */
     private final Label pendingNum;
+    /**
+     * The total amount deducted by the user's family aggregate
+     */
     private final TextFlow totalDeductedFamily;
 
+    /**
+     * Constructor for a application window
+     * @param javaFactura   The business logic instance
+     * @param primaryStage  The stage where the window exists
+     * @param previousScene The previous scene (null if this is the root window)
+     */
     public IndividualFX(JavaFactura javaFactura, Stage primaryStage, Scene previousScene){
         super(javaFactura, primaryStage, previousScene, true);
 
@@ -91,6 +111,11 @@ public class IndividualFX extends ShowReceiptsFx {
         });
     }
 
+    /**
+     * Updates the number of pending {@link Factura}s, the total deducted by the user and the total deducted by the
+     * aggregate
+     * @return {@code true} on success, {@code false} otherwise
+     */
     private boolean updateTotals(){
         long count = this.facturas
                 .stream()
@@ -113,21 +138,16 @@ public class IndividualFX extends ShowReceiptsFx {
         return true;
     }
 
+    /**
+     * {@inheritDoc} and updates the totals
+     * @return {@inheritDoc}
+     */
     @Override
     public boolean show(){
         return super.show() && updateTotals();
     }
 
-    @Override
-    protected void goBack(){
-        throw new UnsupportedOperationException();
-    }
-
-    private void logOut(){
-        this.javaFactura.logout();
-        this.primaryStage.setScene(this.previousScene);
-    }
-
+    /** {@inheritDoc} */
     @Override
     protected boolean updateReceipts(){
         boolean noDates = this.from == null && this.to == null;
@@ -151,6 +171,22 @@ public class IndividualFX extends ShowReceiptsFx {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Disables the method
+     */
+    @Override
+    protected final void goBack(){
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Logs out and returns to the login screen
+     */
+    private void logOut(){
+        this.javaFactura.logout();
+        super.goBack();
     }
 
 }

@@ -12,11 +12,27 @@ import javafx.stage.Stage;
 
 import java.time.LocalDate;
 
+/**
+ * Class that represents the view {@link ContribuinteIndividual} screen
+ * {@inheritDoc}
+ */
 public class EmpresaViewClientFX extends ShowReceiptsFx {
 
+    /**
+     * The client's NIF label
+     */
     private final Label clientLabel;
+    /**
+     * The client instance
+     */
     private ContribuinteIndividual client;
 
+    /**
+     * Constructor for a application window
+     * @param javaFactura   The business logic instance
+     * @param primaryStage  The stage where the window exists
+     * @param previousScene The previous scene (null if this is the root window)
+     */
     public EmpresaViewClientFX(JavaFactura javaFactura, Stage primaryStage,
                                Scene previousScene){
         super(javaFactura, primaryStage, previousScene, false);
@@ -36,17 +52,18 @@ public class EmpresaViewClientFX extends ShowReceiptsFx {
         this.gridPane.add(makeHBox(goBackButton, Pos.BOTTOM_RIGHT), 0, row);
     }
 
+    /**
+     * {@inheritDoc}, sets the client label
+     * @return {@inheritDoc}
+     */
     @Override
     public boolean show(){
-        if(!super.show() || this.client == null) return false;
+        if(this.client == null || !super.show()) return false;
         this.clientLabel.setText("Client: " + this.client.getNif());
-        return updateReceipts();
+        return true;
     }
 
-    public void setClient(ContribuinteIndividual client){
-        this.client = client;
-    }
-
+    /** {@inheritDoc} */
     @Override
     protected boolean updateReceipts(){
         try{
@@ -57,5 +74,13 @@ public class EmpresaViewClientFX extends ShowReceiptsFx {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Changes the current client
+     * @param client The new client
+     */
+    public void setClient(ContribuinteIndividual client){
+        this.client = client;
     }
 }
