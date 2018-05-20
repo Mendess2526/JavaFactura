@@ -1,7 +1,7 @@
 package javafactura.businessLogic.econSectors;
 
 /**
- * Lares
+ * Lares.
  * {@inheritDoc}
  */
 public final class Lares extends EconSector {

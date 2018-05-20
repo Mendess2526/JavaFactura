@@ -1,7 +1,7 @@
 package javafactura.businessLogic.econSectors;
 
 /**
- * Pendente
+ * Pendente.
  * {@inheritDoc}
  */
 public final class Pendente extends EconSector {

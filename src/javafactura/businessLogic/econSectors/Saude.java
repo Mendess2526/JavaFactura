@@ -1,7 +1,7 @@
 package javafactura.businessLogic.econSectors;
 
 /**
- * Saude
+ * Saude.
  * {@inheritDoc}
  */
 public final class Saude extends EconSector implements Deductible {
@@ -34,9 +34,9 @@ public final class Saude extends EconSector implements Deductible {
 
     /** {@inheritDoc} */
     @Override
-    public float deduction(float value, boolean interior, int aggregateSize, float coeffEmpresa, float coeffIndividual){
+    public float deduction(float value, boolean interior, int numDependants, float coeffEmpresa, float coeffIndividual){
         float deduction = 0;
-        if(aggregateSize > 1) deduction += 0.3;
+        if(numDependants > 1) deduction += 0.3;
         if(interior) deduction += deduction * 1.5;
         deduction += coeffEmpresa + coeffIndividual;
         return value * deduction;

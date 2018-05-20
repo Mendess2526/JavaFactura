@@ -1,7 +1,7 @@
 package javafactura.businessLogic.econSectors;
 
 /**
- * Veterinario
+ * Veterin&aacute;rio.
  * {@inheritDoc}
  */
 public final class Veterinario extends EconSector {

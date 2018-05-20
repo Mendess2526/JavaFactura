@@ -1,7 +1,7 @@
 package javafactura.businessLogic.econSectors;
 
 /**
- * Alojamento e Restauração
+ * Alojamento e Restaura&ccedil;&atilde;o.
  * {@inheritDoc}
  */
 public final class AlojamentoRestauracao extends EconSector {

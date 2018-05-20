@@ -1,7 +1,7 @@
 package javafactura.businessLogic.econSectors;
 
 /**
- * Cabeleireiro
+ * Cabeleireiro.
  * {@inheritDoc}
  */
 public final class Cabeleireiro extends EconSector {

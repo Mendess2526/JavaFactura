@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * A representation of a economic sector.
+ * A representation of an economic sector.
  */
 public abstract class EconSector implements Serializable {
 
