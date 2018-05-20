@@ -2,7 +2,7 @@ package javafactura.gui.admin;
 
 import javafactura.businessLogic.JavaFactura;
 import javafactura.businessLogic.econSectors.EconSector;
-import javafactura.businessLogic.exceptions.EmpresarialAlreadyExistsException;
+import javafactura.businessLogic.exceptions.ContribuinteAlreadyExistsException;
 import javafactura.gui.FormFX;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckMenuItem;
@@ -63,7 +63,7 @@ public class AdminAddEmpresaFX extends FormFX {
             confirm("Empresa adicionada");
         }catch(NumberFormatException e){
             this.errorTexts[field].setText("Not a number");
-        }catch(EmpresarialAlreadyExistsException e){
+        }catch(ContribuinteAlreadyExistsException e){
             this.errorTexts[0].setText("Nif already exists");
         }
     }

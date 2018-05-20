@@ -19,7 +19,7 @@ public class Admin implements User,
     private String password;
 
     /**
-     * \brief The default constructor.
+     * The default constructor.
      * By default the username/nif and the password are {@code "admin"}
      */
     public Admin(){
@@ -76,7 +76,10 @@ public class Admin implements User,
                && this.password.equals(admin.getPassword());
     }
 
-    /** {@inheritDoc} */
+    /**
+     * A deep copy of the instance
+     * @return A deep copy of the instance
+     */
     @Override
     public Admin clone(){
         return new Admin(this);

@@ -52,7 +52,7 @@ public class EmpresaViewClientFX extends ShowReceiptsFx {
         try{
             LocalDate from = this.from != null ? this.from : LocalDate.MIN;
             LocalDate to = this.to != null ? this.to : LocalDate.MAX;
-            this.facturas.setAll(this.javaFactura.getFaturasOfIndividual(this.client.getNif(), from, to));
+            this.facturas.setAll(this.javaFactura.getFaturasOfIndividual(this.client, from, to));
         }catch(NotContribuinteException e){
             return false;
         }

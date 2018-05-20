@@ -66,7 +66,7 @@ public class AdminFX extends FX {
                 pwfErrorText.setFill(Color.RED);
                 pwfErrorText.setText("Password tem de ter mais\ndo que 4 caracteres.");
             }else{
-                this.javaFactura.setAdminPassword(pwf.getText());
+                this.javaFactura.changePassword(pwf.getText());
                 pwfErrorText.setFill(Color.GREEN);
                 pwfErrorText.setText("Password alterada com sucesso.");
             }

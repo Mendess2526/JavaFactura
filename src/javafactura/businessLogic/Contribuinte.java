@@ -3,10 +3,8 @@ package javafactura.businessLogic;
 import javafactura.businessLogic.econSectors.EconSector;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -151,7 +149,7 @@ public abstract class Contribuinte implements User,
     }
 
     /**
-     * \brief Returns the {@link EconSector}s associated with this {@link Contribuinte}
+     * Returns the {@link EconSector}s associated with this {@link Contribuinte}
      * <ul>
      * <li>
      * In the case of a {@link ContribuinteEmpresarial} they represent the sectors this company's
@@ -169,14 +167,53 @@ public abstract class Contribuinte implements User,
     }
 
     /**
-     * Returns the list of Facturas associated
-     * @return The list of Facturas associated
+     * Returns the list of all {@link Factura}s associated
+     * @return The list of all {@link Factura}s associated
      */
     public LinkedList<Factura> getFacturas(){
         return this.facturas
                 .stream()
                 .map(Factura::clone)
                 .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    /**
+     * Returns a sorted list of all {@link Factura}s associated
+     * @param c The comparator used for sorting
+     * @return a sorted list of {@link Factura}
+     */
+    public List<Factura> getFacturas(Comparator<Factura> c){
+        return this.facturas.stream().map(Factura::clone).sorted(c).collect(Collectors.toList());
+    }
+
+    /**
+     * Returns a list of all {@link Factura}s between 2 dates associated
+     * @param from The begin date
+     * @param to   The end date
+     * @return a list of {@link Factura}s
+     */
+    public List<Factura> getFacturas(LocalDateTime from, LocalDateTime to){
+        return this.facturas.stream()
+                            .filter(f -> f.getCreationDate().isAfter(from))
+                            .filter(f -> f.getCreationDate().isBefore(to))
+                            .map(Factura::clone)
+                            .collect(Collectors.toList());
+    }
+
+    /**
+     * Returns a sorted list of all {@link Factura}s between 2 dates associated
+     * @param c    The comparator used for sorting
+     * @param from The begin date
+     * @param to   The end date
+     * @return a list of {@link Factura}s
+     */
+    public List<Factura> getFacturas(Comparator<Factura> c, LocalDateTime from, LocalDateTime to){
+        return this.facturas.stream()
+                            .filter(f -> f.getCreationDate().isAfter(from))
+                            .filter(f -> f.getCreationDate().isBefore(to))
+                            .map(Factura::clone)
+                            .sorted(c)
+                            .collect(Collectors.toList());
     }
 
     /**
@@ -220,6 +257,10 @@ public abstract class Contribuinte implements User,
                + '}';
     }
 
+    /**
+     * Returns a deep copy of the instance
+     * @return A deep copy of the instance
+     */
     @Override
     public abstract Contribuinte clone();
 }

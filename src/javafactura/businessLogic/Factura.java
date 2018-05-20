@@ -25,68 +25,68 @@ public class Factura implements Comparable<Factura>,
     public static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyy\tkk:mm:ss");
 
     /**
-     * \brief The NIF of the entity that issued this Receipt
+     * The NIF of the entity that issued this Receipt
      */
     private final String issuerNif;
     /**
-     * \brief The name of the entity that issued this Receipt
+     * The name of the entity that issued this Receipt
      */
     private final String issuerName;
     /**
-     * \brief The date this Receipt was issued
+     * The date this Receipt was issued
      */
     private final LocalDateTime creationDate;
     /**
-     * \brief The date this Factura was last edited
-     */
-    private LocalDateTime lastEditDate;
-    /**
-     * \brief The NIF of the client to whom this Receipt was issued
+     * The NIF of the client to whom this Receipt was issued
      */
     private final String clientNif;
     /**
-     * \brief The description of the purchase
+     * The description of the purchase
      */
     private final String description;
     /**
-     * \brief The value of the purchase
+     * The value of the purchase
      */
     private final float value;
     /**
-     * \brief The economic sector
-     */
-    private EconSector econSector;
-    /**
-     * \brief The {@link EconSector}s of the company that issued this receipt
+     * The {@link EconSector}s of the company that issued this receipt
      */
     private final Set<EconSector> possibleEconSectors;
     /**
-     * \brief History of states of this {@link Factura}
+     * History of states of this {@link Factura}
      */
     private final LinkedList<Factura> history;
     /**
-     * \brief A boolean to store if the company the issued the Receipt is to benefited
+     * A boolean to store if the company the issued the Receipt is to benefited
      */
     private final boolean isEmpresaInterior;
     /**
-     * \brief The size of the aggregate at the time of emission
+     * The size of the aggregate at the time of emission
      */
     private final int aggregateSize;
     /**
-     * \brief The fiscal coefficient of the company at the time of emission
+     * The fiscal coefficient of the company at the time of emission
      */
     private final float coeffEmpresa;
     /**
-     * \brief The fiscal coefficient of the individual at the time of emission
+     * The fiscal coefficient of the individual at the time of emission
      */
     private final float coeffIndividual;
     /**
-     * \brief The economic sectors this is allowed to deduct
+     * The economic sectors this is allowed to deduct
      */
     private final Set<EconSector> individualEconSectors;
+    /**
+     * The date this Factura was last edited
+     */
+    private LocalDateTime lastEditDate;
+    /**
+     * The economic sector
+     */
+    private EconSector econSector;
 
     /**
-     * \brief Fully parametrised constructor for <tt>Factura</tt>
+     * Fully parametrised constructor for <tt>Factura</tt>
      * @param company     The company that issued the receipt
      * @param individual  The individual that made the purchase
      * @param description The description of the purchase
@@ -141,7 +141,7 @@ public class Factura implements Comparable<Factura>,
 
 
     /**
-     * \brief The NIF of the entity that issued this Receipt
+     * The NIF of the entity that issued this Receipt
      * @return The NIF of the entity that issued this Receipt
      */
     public String getIssuerNif(){
@@ -261,7 +261,7 @@ public class Factura implements Comparable<Factura>,
      * Returns if the issuing {@link ContribuinteEmpresarial} is to be benefited for being from the interior
      * @return If the issuing {@link ContribuinteEmpresarial} is to be benefited for being from the interior
      */
-    private boolean isEmpresaInterior(){
+    public boolean isEmpresaInterior(){
         return this.isEmpresaInterior;
     }
 

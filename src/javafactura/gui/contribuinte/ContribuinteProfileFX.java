@@ -95,8 +95,8 @@ public abstract class ContribuinteProfileFX extends FX {
         User u = this.javaFactura.getLoggedUser();
         if(!(u instanceof Contribuinte)) return false;
         Contribuinte c = (Contribuinte) u;
-        this.nif.setText(c.getNif());
-        this.name.setText(c.getName());
+        this.nif.setText(u.getNif());
+        this.name.setText(u.getName());
         this.email.setText(c.getEmail());
         this.address.setText(c.getAddress());
         this.fiscalCoefficient.setText(String.valueOf(c.getFiscalCoefficient()));

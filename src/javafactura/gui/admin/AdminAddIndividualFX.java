@@ -2,7 +2,7 @@ package javafactura.gui.admin;
 
 import javafactura.businessLogic.JavaFactura;
 import javafactura.businessLogic.econSectors.EconSector;
-import javafactura.businessLogic.exceptions.IndividualAlreadyExistsException;
+import javafactura.businessLogic.exceptions.ContribuinteAlreadyExistsException;
 import javafactura.businessLogic.exceptions.InvalidNumberOfDependantsException;
 import javafactura.gui.FormFX;
 import javafx.scene.Scene;
@@ -73,7 +73,7 @@ public class AdminAddIndividualFX extends FormFX {
             this.errorTexts[5].setText("Too many dependents");
         }catch(NumberFormatException e){
             this.errorTexts[field - 1].setText("Not a number");
-        }catch(IndividualAlreadyExistsException e){
+        }catch(ContribuinteAlreadyExistsException e){
             this.errorTexts[0].setText("Nif já existe");
         }
     }
