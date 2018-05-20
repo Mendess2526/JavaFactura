@@ -123,14 +123,22 @@ public class IndividualFX extends ShowReceiptsFx {
 
     @Override
     protected boolean updateReceipts(){
-        LocalDate from = this.from != null ? this.from : LocalDate.MIN;
-        LocalDate to = this.to != null ? this.to : LocalDate.MAX;
+        boolean nodates = this.from == null && this.to == null;
+        LocalDate from = null;
+        LocalDate to = null;
+        if(!nodates){
+            from = this.from != null ? this.from : LocalDate.MIN;
+            to = this.to != null ? this.to : LocalDate.MAX;
+        }
         try{
             Comparator<Factura> c = getFacturaComparator();
-            if(c == null)
-                this.facturas.setAll(this.javaFactura.getLoggedUserFacturas(from, to));
-            else
-                this.facturas.setAll(this.javaFactura.getLoggedUserFacturas(c, from, to));
+            if(c == null){
+                this.facturas.setAll(nodates ? this.javaFactura.getLoggedUserFacturas()
+                                             : this.javaFactura.getLoggedUserFacturas(from, to));
+            }else{
+                this.facturas.setAll(nodates ? this.javaFactura.getLoggedUserFacturas(c)
+                                             : this.javaFactura.getLoggedUserFacturas(c, from, to));
+            }
         }catch(NotContribuinteException e){
             goBack();
             return false;

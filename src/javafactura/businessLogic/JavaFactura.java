@@ -157,24 +157,27 @@ public class JavaFactura implements Serializable {
 
     public List<Factura> getLoggedUserFacturas() throws NotContribuinteException{
         if(!(this.loggedInUser instanceof Contribuinte)) throw new NotContribuinteException();
-        return ((Contribuinte) this.loggedInUser).getFacturas().stream().sorted().collect(Collectors.toList());
+        return new ArrayList<>(((Contribuinte) this.loggedInUser).getFacturas());
     }
 
-    public List<Factura> getLoggedUserFacturas(Comparator<Factura> comparator, LocalDate from, LocalDate to)
-            throws NotContribuinteException{
-        if(!(this.loggedInUser instanceof Contribuinte)) throw new NotContribuinteException();
-        return ((Contribuinte) this.loggedInUser).getFacturas()
-                                                 .stream()
-                                                 .filter(f -> f.getCreationDate().isAfter(from.atStartOfDay()))
-                                                 .filter(f -> f.getCreationDate().isBefore(to.atTime(LocalTime.MAX)))
-                                                 .sorted(comparator)
-                                                 .collect(Collectors.toList());
+    public List<Factura> getLoggedUserFacturas(Comparator<Factura> c) throws NotContribuinteException{
+        return getLoggedUserFacturas().stream().sorted(c).collect(Collectors.toList());
     }
 
     public List<Factura> getLoggedUserFacturas(LocalDate from, LocalDate to) throws NotContribuinteException{
         return getLoggedUserFacturas().stream()
                                       .filter(f -> f.getCreationDate().isAfter(from.atStartOfDay()))
                                       .filter(f -> f.getCreationDate().isBefore(to.atTime(LocalTime.MAX)))
+                                      .collect(Collectors.toList());
+    }
+
+    public List<Factura> getLoggedUserFacturas(Comparator<Factura> comparator, LocalDate from, LocalDate to)
+            throws NotContribuinteException{
+        if(!(this.loggedInUser instanceof Contribuinte)) throw new NotContribuinteException();
+        return getLoggedUserFacturas().stream()
+                                      .filter(f -> f.getCreationDate().isAfter(from.atStartOfDay()))
+                                      .filter(f -> f.getCreationDate().isBefore(to.atTime(LocalTime.MAX)))
+                                      .sorted(comparator)
                                       .collect(Collectors.toList());
     }
 
@@ -214,6 +217,14 @@ public class JavaFactura implements Serializable {
                                                             .filter(ContribuinteIndividual.class::isInstance)
                                                             .map(ContribuinteIndividual.class::cast)
                                                             .collect(Collectors.toSet());
+    }
+
+    public double totalFaturado() throws NotEmpresaException{
+        if(!(this.loggedInUser instanceof ContribuinteEmpresarial)) throw new NotEmpresaException();
+        return ((ContribuinteEmpresarial) this.loggedInUser).getFacturas()
+                                                            .stream()
+                                                            .mapToDouble(Factura::getValue)
+                                                            .sum();
     }
 
     public double totalFaturado(LocalDate from, LocalDate to) throws NotEmpresaException{
