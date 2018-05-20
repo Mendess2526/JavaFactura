@@ -219,4 +219,7 @@ public abstract class Contribuinte implements User,
                + ", facturas=" + facturas + '\''
                + '}';
     }
+
+    @Override
+    public abstract Contribuinte clone();
 }
