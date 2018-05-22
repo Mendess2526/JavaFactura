@@ -30,3 +30,5 @@ out/
 /javaFactura.dat
 src/com/
 /docs/
+report/
+tests/
