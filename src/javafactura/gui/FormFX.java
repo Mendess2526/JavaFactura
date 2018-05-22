@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -19,7 +20,6 @@ import java.util.Arrays;
 /**
  * Class that represents a form
  */
-@SuppressWarnings("SameParameterValue")
 public abstract class FormFX extends FX {
 
     /**
@@ -84,41 +84,6 @@ public abstract class FormFX extends FX {
     }
 
     /**
-     * Checks if any field was left empty
-     * @return {@code true} if any field is empty {@code false} otherwise
-     */
-    protected boolean fieldsNotFilled(){
-        boolean fieldsMissing = false;
-        for(int row = 0; row < fields.length; row++){
-            if(this.textFields[row].getText().equals("")){
-                this.errorTexts[row].setText("Required field");
-                fieldsMissing = true;
-            }else{
-                this.errorTexts[row].setText("");
-            }
-        }
-        return fieldsMissing;
-    }
-
-    /**
-     * Appends a field to the list of input fields
-     * @param label The field label
-     * @param node  The input field
-     */
-    protected void appendField(String label, Node node){
-        int rowIndex = GridPane.getRowIndex(this.confirmText);
-        ObservableList<Node> children = this.gridPane.getChildren();
-        children.remove(this.confirmText);
-        children.remove(this.submitButtonHBox);
-        children.remove(this.goBackButtonHBox);
-        this.gridPane.add(new Label(label), 0, rowIndex);
-        this.gridPane.add(node, 1, rowIndex);
-        this.gridPane.add(this.confirmText, 1, rowIndex + 1);
-        this.gridPane.add(this.submitButtonHBox, 0, rowIndex + 2);
-        this.gridPane.add(this.goBackButtonHBox, 2, rowIndex + 2);
-    }
-
-    /**
      * Appends a field to the list of input fields
      * @param label The field label
      * @param node  The input field
@@ -139,9 +104,29 @@ public abstract class FormFX extends FX {
     }
 
     /**
-     * Submits the data
+     * Checks if any field was left empty
+     * @return {@code true} if any field is empty {@code false} otherwise
      */
-    protected abstract void submitData();
+    protected boolean fieldsFilled(){
+        boolean allFiled = true;
+        for(int row = 0; row < fields.length; row++){
+            if(this.textFields[row].getText().equals("")){
+                this.errorTexts[row].setText("Campo obrigatório");
+                allFiled = false;
+            }
+        }
+        return allFiled;
+    }
+
+    /**
+     * Submits the data
+     * \return {@code true} if the data was submitted successfully {@code false} otherwise
+     */
+    protected boolean submitData(){
+        unconfirm();
+        clearErrors();
+        return fieldsFilled();
+    }
 
     /**
      * Sets the confirm text
@@ -154,7 +139,32 @@ public abstract class FormFX extends FX {
     /**
      * Clears the confirm text
      */
-    protected void unconfirm(){
+    private void unconfirm(){
         this.confirmText.setText("");
+    }
+
+    /**
+     * Clears all input fields
+     */
+    protected void clearFields(){
+        Arrays.stream(this.textFields).forEach(TextInputControl::clear);
+    }
+
+    /**
+     * Clears all error messages
+     */
+    protected void clearErrors(){
+        Arrays.stream(this.errorTexts).forEach(t -> t.setText(""));
+    }
+
+    /**
+     * Show the window
+     * @return {@code true} on success {@code false} otherwise
+     */
+    @Override
+    public boolean show(){
+        clearErrors();
+        clearFields();
+        return super.show();
     }
 }

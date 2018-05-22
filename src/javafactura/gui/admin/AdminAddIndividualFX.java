@@ -33,6 +33,10 @@ public class AdminAddIndividualFX extends FormFX {
      */
     private final MenuButton sectorsBox;
     /**
+     *
+     */
+    private final Text sectorsBoxError;
+    /**
      * Text field to input the family aggregate
      */
     private final TextField familyAggregate;
@@ -62,14 +66,35 @@ public class AdminAddIndividualFX extends FormFX {
             CheckMenuItem checkMenuItem = new CheckMenuItem(s.toString());
             this.sectorsBox.getItems().add(checkMenuItem);
         }
-        appendField("Setores económicos", this.sectorsBox);
+        this.sectorsBoxError = new Text();
+        this.sectorsBoxError.setFill(Color.RED);
+        appendField("Setores económicos", this.sectorsBox, this.sectorsBoxError);
+    }
+
+    /**
+     * Checks if any field was left empty
+     * @return {@code true} if all fields are filled {@code false} otherwise
+     */
+    @Override
+    protected boolean fieldsFilled(){
+        boolean allFiled = super.fieldsFilled();
+        if(this.sectorsBox.getItems()
+                          .stream()
+                          .map(CheckMenuItem.class::cast)
+                          .filter(CheckMenuItem::isSelected)
+                          .count() < 1){
+            this.sectorsBoxError.setText("Escolha pelo menos um sector");
+            allFiled = false;
+        }
+        return allFiled;
     }
 
     /** {@inheritDoc} */
-    protected void submitData(){
-        unconfirm();
-        if(fieldsNotFilled()) return;
+    protected boolean submitData(){
+        if(!super.submitData()) return false;
+        System.out.println("fuck");
         int field = 0;
+        boolean success = true;
         try{
             Set<EconSector> sectors = this.sectorsBox.getItems()
                                                      .stream()
@@ -93,20 +118,40 @@ public class AdminAddIndividualFX extends FormFX {
                     Integer.parseInt(this.textFields[field++].getText()),
                     sectors
             );
-            for(TextField t : this.textFields)
-                t.clear();
-            this.familyAggregate.setText("");
-            this.familyAggregateError.setText("");
-            this.sectorsBox.getItems().stream().map(CheckMenuItem.class::cast).forEach(c -> c.setSelected(false));
+            clearFields();
             confirm("Individual adicionado");
         }catch(InvalidNumberOfDependantsException e){
             this.errorTexts[6].setText("Demasiados dependentes");
+            success = false;
         }catch(NumberFormatException e){
             this.errorTexts[field - 1].setText("Não é um número valido");
+            success = false;
         }catch(ContribuinteAlreadyExistsException e){
             this.errorTexts[0].setText("Nif já existe");
+            success = false;
         }catch(IllegalArgumentException e){
             this.familyAggregateError.setText("NIFs repetidos");
+            success = false;
         }
+        return success;
+    }
+
+    /**
+     * Clears all input fields
+     */
+    @Override
+    protected void clearFields(){
+        super.clearFields();
+        this.familyAggregate.setText("");
+        this.sectorsBox.getItems().stream().map(CheckMenuItem.class::cast).forEach(c -> c.setSelected(false));
+    }
+
+    /**
+     * Clears all error messages
+     */
+    @Override
+    protected void clearErrors(){
+        super.clearErrors();
+        this.familyAggregateError.setText("");
     }
 }

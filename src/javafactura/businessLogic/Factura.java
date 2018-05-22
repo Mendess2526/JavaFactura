@@ -109,7 +109,7 @@ public class Factura implements Comparable<Factura>,
             this.econSector = company.getEconActivities().iterator().next();
             this.possibleEconSectors = new HashSet<>();
         }
-        this.isEmpresaInterior = false; //TODO empresa do interior
+        this.isEmpresaInterior = company.getConselho().isInterior();
         this.aggregateSize = individual.getNumDependants();
         this.coeffEmpresa = company.getFiscalCoefficient();
         this.coeffIndividual = individual.getFiscalCoefficient();

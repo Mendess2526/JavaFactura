@@ -57,17 +57,14 @@ public class JavaFactura implements Serializable {
             javaFactura = new JavaFactura();
         }catch(IOException | ClassNotFoundException e){
             File file = new File(SAVE_STATE_FILE);
-            if(file.exists() && file.delete())
+            if(file.exists() && file.delete()){
+                System.out.println("Deleted data");
                 javaFactura = new JavaFactura();
-            else{
-                System.out.println("Could not delete " + SAVE_STATE_FILE);
+            }else{
+                System.out.println("\033[31mCould not delete \033[0m" + SAVE_STATE_FILE);
                 javaFactura = new JavaFactura();
             }
         }
-        javaFactura.contribuintes.values()
-                                 .stream()
-                                 .sorted(Comparator.comparingInt(c -> Integer.parseInt(c.getNif())))
-                                 .forEachOrdered(System.out::println);
         return javaFactura;
     }
 
@@ -164,14 +161,14 @@ public class JavaFactura implements Serializable {
      * @param password          The password
      * @param fiscalCoefficient The fiscal coefficient
      * @param econSectors       The economic sectors this company operates on
+     * @param conselho          The conselho the {@link ContribuinteEmpresarial} is located in
      * @throws ContribuinteAlreadyExistsException if a {@link Contribuinte} with given {@code nif} already
      *                                            exists in the system
      */
     public void registarEmpresarial(String nif, String email, String nome,
-                                    String address, String password,
-                                    float fiscalCoefficient,
-                                    Set<EconSector> econSectors) throws
-                                                                 ContribuinteAlreadyExistsException{
+                                    String address, String password, float fiscalCoefficient,
+                                    Set<EconSector> econSectors, Conselho conselho) throws
+                                                                                    ContribuinteAlreadyExistsException{
         if(this.contribuintes.containsKey(nif)) throw new ContribuinteAlreadyExistsException();
         this.contribuintes.put(nif, new ContribuinteEmpresarial(
                 nif,
@@ -180,7 +177,8 @@ public class JavaFactura implements Serializable {
                 address,
                 password,
                 fiscalCoefficient,
-                econSectors));
+                econSectors,
+                conselho));
     }
 
     /**
@@ -507,7 +505,8 @@ public class JavaFactura implements Serializable {
                 }
             }else{
                 try{
-                    registarEmpresarial(nif, email, name, address, pass, fiscalCoefficient, econSectors);
+                    registarEmpresarial(nif, email, name, address, pass, fiscalCoefficient, econSectors,
+                                        Conselho.values()[r.nextInt(Conselho.values().length)]);
                 }catch(ContribuinteAlreadyExistsException e){
                     e.printStackTrace();
                 }

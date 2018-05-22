@@ -7,7 +7,6 @@ import javafactura.businessLogic.exceptions.NotEmpresaException;
 import javafactura.businessLogic.exceptions.NotIndividualException;
 import javafactura.gui.FormFX;
 import javafx.scene.Scene;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 /**
@@ -68,28 +67,33 @@ public class EmpresaIssueReceiptFX extends FormFX {
     /**
      * {@inheritDoc}
      */
-    protected void submitData(){
-        unconfirm();
-        if(fieldsNotFilled()) return;
+    @Override
+    protected boolean submitData(){
+        if(!super.submitData()) return false;
         int field = 0;
+        boolean success = true;
         try{
             this.javaFactura.emitirFactura(
                     this.textFields[field++].getText(),
                     Float.parseFloat(textFields[field++].getText().replace(",", ".")),
                     this.textFields[field++].getText()
             );
-            for(TextField t : this.textFields)
-                t.clear();
+            clearFields();
             confirm("Factura emitida");
             this.emitted = true;
         }catch(NumberFormatException e){
             this.errorTexts[field - 1].setText(this.textFields[field - 1].getText() + " não é um número");
+            success = false;
         }catch(NotEmpresaException e){
             goBack();
+            success = false;
         }catch(NoSuchIndividualException e){
             this.errorTexts[0].setText("Contribuinte não existe");
+            success = false;
         }catch(NotIndividualException e){
             this.errorTexts[0].setText("Não é um contribuinte individual");
+            success = false;
         }
+        return success;
     }
 }

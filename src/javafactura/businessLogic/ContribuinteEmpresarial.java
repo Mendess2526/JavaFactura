@@ -15,7 +15,9 @@ import java.util.stream.Collectors;
  */
 public class ContribuinteEmpresarial extends Contribuinte {
 
-    private static final long serialVersionUID = 6172164103937149552L;
+    private static final long serialVersionUID = -8963955761706471101L;
+
+    private final Conselho conselho;
 
     /**
      * Parameterized constructor
@@ -28,10 +30,10 @@ public class ContribuinteEmpresarial extends Contribuinte {
      * @param econActivities    The economic activities
      */
     public ContribuinteEmpresarial(String nif, String email, String name,
-                                   String address, String password,
-                                   float fiscalCoefficient,
-                                   Collection<EconSector> econActivities){
+                                   String address, String password, float fiscalCoefficient,
+                                   Collection<EconSector> econActivities, Conselho conselho){
         super(nif, email, name, address, password, fiscalCoefficient, econActivities);
+        this.conselho = conselho;
     }
 
     /**
@@ -40,6 +42,11 @@ public class ContribuinteEmpresarial extends Contribuinte {
      */
     private ContribuinteEmpresarial(ContribuinteEmpresarial contribuinteEmpresarial){
         super(contribuinteEmpresarial);
+        this.conselho = contribuinteEmpresarial.getConselho();
+    }
+
+    public Conselho getConselho(){
+        return this.conselho;
     }
 
     /**
