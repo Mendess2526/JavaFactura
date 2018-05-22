@@ -64,6 +64,8 @@
     lecionados nas aulas.
 
 \section{Principais entidades do Sistema}
+    \subsection{Factura}
+    A Factura 
     \subsection{User}
     A interface \textbf{User} é implementada por duas classes, \textbf{Admin} e
     \textbf{Contribuinte}. Esta ultima, sendo um classe abstrata é ainda
@@ -97,80 +99,14 @@
     o \textbf{Conselho} onde reside, este podendo ser do interior ou não. Para
     além disto vê as suas facturas como as vendas que realizou os sectores de
     actividade economica como os possiveis sectores que as facturas que emite
-    podem tomar.
+    podem tomar. Estes têm ainda a possibilidade de emitir facturas, processo
+    que será explicado em mais detalhe na seccção %TODO
 
     O \textbf{ContribuinteIndividual} acrescenta ao \textbf{Contribuinte}
     o agregado familiar e número destes que são dependentes. Este vê as suas
-    facturas como as suas despesas e os sectores economicos como os sectores
-    de onde pode deduzir das facturas.
-
-    \subsection{Factura}
-
-    Fazendo uma análise às queries, decidimos que seria necessário representar
-    as seguintes entidades:
-
-    \subsection{Posts}
-    Para representar os \textbf{posts} dividimos os atributos por duas
-     sub estruturas, cujos atributos de cada uma das sub estruturas são:
-        \subsubsection{Questões}
-        \begin{multicols}{2}
-        \begin{itemize}
-            \item Id
-            \item Score
-            \item Data
-            \item Título da questão
-            \item Id do autor da questão
-            \item Nome do autor da questão
-            \item Número de respostas
-            \item Lista das respostas
-            \item Tags
-        \end{itemize}
-        \end{multicols}
-
-        \subsubsection{Respostas}
-        \begin{multicols}{2}
-        \begin{itemize}
-            \item Id
-            \item Score
-            \item Data
-            \item Número de comentários
-            \item Id do autor da resposta
-            \item Id da questão a que responde
-            \item Nome do autor da resposta
-            \item Referência da questão a que responde
-        \end{itemize}
-        \end{multicols}
-    Além dos dados fornecidos diretamente pelos ficheiros xml, decidimos também
-    guardar na \textbf{questão} a lista das \textbf{respostas} de cada questão,
-    bem como uma contagem destas. Na \textbf{resposta}, inversamente, guardamos
-    uma referência para a pergunta a que esta responde. Com estas informações
-    extra as pesquisas que envolvem relacionar estas duas entidades tornam-se
-    mais eficientes.
-
-        \subsubsection{Post}
-        Ambas estas estruturas, questões e respostas, podem ser representadas de
-        forma abstrata por um \textbf{Post}.
-
-        Esta estrutura é necessária, pois o utilizador precisa de guardar
-        todas as questões e respostas, sem ser necessário uma distinção entre
-        os dois tipos.
-
-    \subsection{Utilizadores}
-    Para representar os \textbf{utilizadores} guardamos os seguintes atributos:
-    \begin{multicols}{3}
-    \begin{itemize}
-            \item Id
-            \item Biografia
-            \item Nome
-            \item Reputação
-            \item Número de posts
-            \item Lista dos posts
-    \end{itemize}
-    \end{multicols}
-    Mais uma vez foram guardadas mais informações para além das disponibilizadas
-    diretamente pelo xml. Foi guardado o número de \textbf{posts} do utilizador
-    (para determinar os utilizadores mais ativos de forma mais rápida) e a lista
-    destes para permitir pesquisas mais rápidas.
+    facturas como as suas despesas e os sectores economicos como o conjunto
+    de despesas de onde pode deduzir. Estes têm a capacidade de alterar o
+    sector ecnomico das suas facturas.
 
 \section{Estruturas de Dados}
     \subsection{Tipo concreto de dados}

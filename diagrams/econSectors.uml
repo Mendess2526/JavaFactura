@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>javafactura.businessLogic.econSectors</OriginalElement>
+  <nodes>
+    <node x="350.87713310580216" y="530.0204778156996">javafactura.businessLogic.econSectors.Lares</node>
+    <node x="872.428524149343" y="405.70066966594266">javafactura.businessLogic.econSectors.Pendente</node>
+    <node x="414.4505119453926" y="369.443686006826">javafactura.businessLogic.econSectors.EconSector</node>
+    <node x="798.6842589719724" y="251.1699684558899">javafactura.businessLogic.econSectors.Educacao</node>
+    <node x="97.65870307167233" y="531.5460750853242">javafactura.businessLogic.econSectors.Veterinario</node>
+    <node x="556.7747440273038" y="531.8464163822525">javafactura.businessLogic.econSectors.AlojamentoRestauracao</node>
+    <node x="-37.170847554038744" y="257.95590547109316">javafactura.businessLogic.econSectors.Saude</node>
+    <node x="385.771150067225" y="27.05689833488468">javafactura.businessLogic.econSectors.Deductible</node>
+    <node x="153.34954752301178" y="151.1163357120695">javafactura.businessLogic.econSectors.Familia</node>
+    <node x="890.4643939393939" y="530.6572913434688">javafactura.businessLogic.econSectors.Cabeleireiro</node>
+    <node x="387.96077153790463" y="254.31196607715378">javafactura.businessLogic.econSectors.Reparacoes</node>
+    <node x="613.3160021718895" y="150.55161081807847">javafactura.businessLogic.econSectors.Habitacao</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="javafactura.businessLogic.econSectors.AlojamentoRestauracao" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Lares" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Familia" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Habitacao" target="javafactura.businessLogic.econSectors.Deductible">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Educacao" target="javafactura.businessLogic.econSectors.Deductible">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Veterinario" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Reparacoes" target="javafactura.businessLogic.econSectors.Deductible">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Saude" target="javafactura.businessLogic.econSectors.Deductible">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Familia" target="javafactura.businessLogic.econSectors.Deductible">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Saude" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Pendente" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Reparacoes" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Educacao" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Cabeleireiro" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Habitacao" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="557.0" y="307.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>public</VISIBILITY>
+</Diagram>
+

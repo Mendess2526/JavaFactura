@@ -25,10 +25,13 @@ hs_err_pid*
 .idea/
 /JavaFactura.iml
 
-*Test.java
 out/
 /javaFactura.dat
 src/com/
 /docs/
-report/
+Report.*
+!Report.tex
 tests/
+
+#vim
+*.swp
