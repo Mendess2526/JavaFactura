@@ -1,4 +1,4 @@
-\documentclass[10pt,a4paper]{article}
+\documentclass[12pt,a4paper]{report}
 \usepackage[utf8]{inputenc}
 \usepackage[portuguese]{babel}
 \usepackage{titlesec}
@@ -10,6 +10,7 @@
 \usepackage{tikz}
 \usepackage{multirow}
 \usepackage{multicol}
+\usepackage{wrapfig}
 \usepackage{geometry}
 \usepackage[cache=false]{minted}
 \usepackage{pdflscape}
@@ -26,6 +27,7 @@
       \renewcommand{\contentsname}
           {Índice}
 }
+\titleformat{\chapter}{\normalfont\huge}{\thechapter.}{20pt}{\huge}
 
 \begin{document}
 \begin{titlepage}
@@ -55,26 +57,122 @@
 \end{titlepage}
 
 \tableofcontents
-\clearpage
+\listoffigures
 
-\section{Introdução}
+\chapter{Introdução}
     Este trabalho foi realizado no âmbito da unidade curricular programação
     orientada a objectos e teve como objetivo a implementação de um sistema
-    similar ao \href{www.efactura.pt}{EFatura} aplicando os conceitos
-    lecionados nas aulas.
+    similar ao \href{https://faturas.portaldasfinancas.gov.pt}{EFatura}
+    aplicando os conceitos lecionados nas aulas.
 
-\section{Principais entidades do Sistema}
-    \subsection{Factura}
-    A Factura 
-    \subsection{User}
+\chapter{Principais entidades do Sistema}
+    \section{Factura}
+
+    \begin{wrapfigure}{r}{5.5cm}
+        \includegraphics[width=5.5cm]{./images/Factura.png}
+        \caption{Diagrama de uma Factura}\label{fig:Factura}
+    \end{wrapfigure}
+
+    A classe \textbf{Factura} representa um documento de despesa no sistema.
+    Esta por si guarda todas as informações pedidas nos requisitos:
+    \begin{multicols}{2}
+        \begin{itemize}
+            \item NIF do emitente
+            \item NIF do cliente
+            \item Nome do emitente
+            \item Data de criação
+            \item Valor da despesa
+        \end{itemize}
+    \end{multicols}
+    Além destes é também guardado um histórico dos estados anteriores da factura
+    que é atualizado sempre que o sector de atividade economica desta é
+    alterado. Junto a esta é também alterada a data da ultima alteração.
+
+    A alteração do sector economico tem de obedecer a duas restrições para que
+    seja executada: 1º Uma factura não pode passar a ser Pendente depois de
+    emitida e 2º o sector escolhido tem de ser um dos sectores da empresa que a
+    emitiu.
+
+    Para além de todos estes dados uma instancia de \textbf{Factura} guarda
+    também alguns dados necessarios para calcular a sua dedução. Estes são:
+    \begin{itemize}
+        \item Se a empresa que a imitiu é uma empresa do interior
+        \item O coeficiente fiscal do emitente
+        \item O coeficiente fiscal do cliente
+        \item O tamanho do agregado familiar do cliente
+        \item Os sectores de actividade para os quais o cliente
+            pode deduzir.
+    \end{itemize}
+
+\pagebreak
+
+    \section{Sectores de Actividade Económica}
+    Todos os sectores economicos extendem a classe \textbf{EconSector} que serve
+    apenas para disponibilizar um conjunto de todos os sectores economicos e uma
+    metodo de converter o nome do sector na sua repetiva instancia da classe.
+    Estas sublcasses por outro lado implementam um padrão \textit{Singleton}, ou
+    seja, em qualquer momento exite apenas uma instancia de cada um destes
+    objectos em memória. Esta decisão foi tomada porque estes objectos não tem
+    estado e como tal são imutaveis, podendo-se assim poupar memória, mas
+    sobretudo ter a garantia que as implementações por defeito do
+    \mintinline{java}{equals()} e \mintinline{java}{hashcode()} funcionam
+    perfeitamente.
+    \begin{figure}[h]
+        \begin{minted}{java}
+public final class Pendente extends EconSector {
+
+    private static final Pendente instance = new Pendente();
+    private Pendente(){}
+    public static Pendente getInstance(){
+        return instance;
+    }
+    protected Object readResolve(){
+        return getInstance();
+    }
+}
+        \end{minted}
+        \caption{Implementação \textit{Singleton} da classe \textbf{Pendente}}
+        \label{fig:singleton}
+    \end{figure}
+
+    Os sectores economicos estão dividos em duas categorias, deduziveis
+    e não deduziveis. Esta distinção é feita atravez de uma interface que
+    obriga à implementação do metodo \mintinline{java}{deduction()} que calcula
+    o valor que é deduzido do valor inicial da despesa.
+    \begin{figure}[h]
+        \begin{minted}{java}
+public interface Deductible {
+    float deduction(float value, boolean interior, int numDependants,
+                    float coeffEmpresa, float coeffIndividual);
+}
+        \end{minted}
+        \caption{Implementação da interface \textbf{Deductible}}
+        \label{fig:deductible}
+    \end{figure}
+
+    Os dados necessarios a este calculo são:
+    \begin{itemize}
+        \item Valor da despesa
+        \item Se a factura foi emitida por uma empresa do interior
+        \item O numero de dependentes do agregado familiar
+        \item O coeficiente fiscal do cliente
+        \item O coeficiente fiscal da empresa
+    \end{itemize}
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=\textwidth]{./images/econSectors.png}
+        \caption{Diagrama de classes dos sectores de actividade economica}
+        \label{fig:sectors}
+    \end{figure}
+
+\pagebreak
+
+    \section{User}
     A interface \textbf{User} é implementada por duas classes, \textbf{Admin} e
     \textbf{Contribuinte}. Esta ultima, sendo um classe abstrata é ainda
     estendida por \textbf{ContribuinteEmpresarial} e
     \textbf{ContribuinteIndividual}.
-
-    \begin{figure}[h]
-        \includegraphics[width=\textwidth]{./images/UserHierarquy.png}
-    \end{figure}
 
     Um \textbf{User} tem obrigatoriamente de implementar
     \begin{multicols}{3}
@@ -108,133 +206,49 @@
     de despesas de onde pode deduzir. Estes têm a capacidade de alterar o
     sector ecnomico das suas facturas.
 
-\section{Estruturas de Dados}
-    \subsection{Tipo concreto de dados}
-    Para armazenar as entidades descritas acima foi implementado um TCD que
-    as armazena de diferentes formas.
-    \begin{minted}{C}
-struct TCD_community{
-    QUESTIONS_HTABLE questions;
-    ANSWERS_HTABLE answers;
-    SO_USERS_HTABLE users;
-    TAGS_HTABLE tags;
-    CALENDARIO calendarioQuestions;
-    CALENDARIO calendarioAnswers;
-};
-    \end{minted}
-    \subsection{Hashtables}
-        Todas as entidades são armazenadas numa tabela de hash pois para todas
-        são necessárias pesquisas por id (ou nome no caso das tags).
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=11cm]{./images/UserHierarquy.png}
+        \caption{Hierarquia de Classes do \textbf{User}}\label{fig:Hierarquia}
+    \end{figure}
 
-        \subsubsection{Tags}
-        A tabela de hash das \textit{tags} serve para criar uma associação
-        $Nome \to Id$ visto que as questões guardam uma lista com os nomes das
-        tags e para responder à query 11 é necessário obter os ids das mesmas.
+\chapter{Emissão de Facturas e Calculo de Deduções}
 
-    \subsection{Calendário}
-        Para ser possivel manter as questões e respostas ordenadas por data
-        foi pensada a utilização de árvores binárias ordenadas por data,
-        mas isto foi considerado ineficiente quando comparada à solução
-        escolhida. Foi então concebida uma estrutura à qual demos o nome
-        de \textbf{Calendário} que permite acessos em tempo constante $O(1)$
-        a todos os elementos associados a uma determinada data. Guardamos assim
-        duas instâncias desta na TCD, uma para perguntas e outra para respostas.
+\section{Emissão de Facturas}
+    Para garantir a consistencia do estado interno da aplicação decidi que
+    quando uma factura é emitida tanto o emissor da factura como o cliente
+    deviam guardar a mesma instancia do objecto, assim quando o cliente
+    eventualmente alterar o sector economico da factura esta alteração é
+    automáticamente verificada pela empresa. Para que esta arquitetura não
+    pusesse em causa o encapsulamento dos dados apenas instancias de
+    \textbf{ContribuinteIndividual} podem alterar facturas. Esta alteração
+    é também muito pequena tendo muito pouco impacto para a empresa dados
+    os requisitos pedidos.
 
-        Esta estrutura permite:
-        \begin{itemize}
-                \item Guardar qualquer objeto desde que seja
-                      passada uma data associada ao mesmo.
-                \item Iterar sobre os objetos, dado um intervalo de tempo,
-                      por ordem cronológica normal ou inversa, conforme a
-                      ordem dos argumentos.
-        \end{itemize}
+\section{Calculo de Deduções}
+    O a formula de calculo de dedução, como foi referido anterioremente
+    \ref{fig:deductible}, a formula de dedução das despesas fica a cargo dos
+    sectores economicos, desta forma, para que uma despesa seja deduzivel
+    a correspondente factura tera de ser de um sector \textbf{Deductible}
+    e de este sector pertencer a lista de sectores a que o cliente esta
+    autorizado a deduzir. Um exemplo de uma destas formulas de calculo pode
+    ser vista na \textbf{Saude}:
+    \begin{figure}[h]
+        \begin{minted}{java}
+public float deduction(float value, boolean interior, int numDependants,
+                       float coeffEmpresa, float coeffIndividual){
+    float deduction = 0;
+    if(numDependants > 1) deduction += 0.3;
+    if(interior) deduction += deduction * 1.5;
+    deduction += coeffEmpresa + coeffIndividual;
+    return value * deduction;
+}
+        \end{minted}
+        \caption{Formula de calculo implementada para o Sector \textbf{Saude}}
+        \label{fig:formulaDeduct}
+    \end{figure}
 
-        A estrutura em si consiste numa matriz de quatro dimensões com um lista
-        ligada em cada célula desta.
 
-        No primeiro nível temos uma lista de \textbf{anos}. Cada um destes,
-        é constituído por uma lista de \textbf{meses} que são constituídos por
-        uma lista de \textbf{dias}, cujo tamanho varia entre 29 e 31. Cada
-        \textbf{dia} é constituido por 24 \textbf{horas}, e cada uma destas horas
-        é uma lista ligada de elementos ordenada por data.
-
-        A utilização de uma lista ligada para representar uma hora é mais
-        eficiente, pois é necessário fazer inserções ordenadas, que são, em quase
-        todos os casos, feitas à cabeça devido aos posts serem inseridos quase
-        cronologicamente.
-
-        \subsubsection{DateTime}
-        Para a implementação da estrutura \textbf{Calendário} foi necessário
-        extender o \textbf{Date} para incluir a hora, minuto, segundo e
-        milissegundo garantindo assim uma ordenação mais consistente. Foi
-        então criado o \textbf{DateTime}.
-    \begin{minted}{C}
-struct _dateTime{
-    int year, month, day;
-    int hours, minutes, seconds, milisseconds;
-};
-    \end{minted}
-
-    \subsection{String Rose Tree}
-    \label{sec:str_rose_tree}
-    Para auxiliar à resolução da query 11 foi implementada uma estrutura para
-    contar \textit{strings}. Esta, consiste numa árvore n-ária em que qualquer
-    string representa um caminho único sobre a árvore. Assim, quando é inserida
-    uma string, efetivamente, é guardado o número de vezes que esse caminho é
-    percorrido.
-
-\section{Modularização Funcional e Resolução das queries}
-    Para aceder aos dados da estrutura principal foi definida uma API
-    simples que permite:
-    \begin{enumerate}[1.]
-        \item Pesquisas por id de \textbf{questões}, \textbf{respostas} e
-        \textbf{utilizadores}.
-        \item Pesquisas de ids de \textbf{tags} dada a designação.
-        \item Pesquisa de listas, ordenadas por qualquer critério, de
-        \textbf{utilizadores}, \textbf{questões} e \textbf{respostas}.
-        \item Pesquisas de \textbf{questões} filtradas por qualquer critério.
-        \item Pesquisas genéricas de \textbf{questões}/\textbf{respostas}
-        num determinado intervalo de tempo.
-    \end{enumerate}
-
-    Com estas funções a resolução da maioria das queries mostrou-se
-    trivial.
-
-    Para as queries que necessitam de pesquisas por id (queries: 1, 5, 9 e 10)
-    são resolvidas por \textbf{1}.
-
-    Para as queries que necessitam de pesquisas de utilizadores ordenados
-    (queries: 2 e 11) são conseguidas através de \textbf{3}, sendo que assim
-    basta fornecer uma função de comparação para definir o critério de ordenação.
-
-    Para as queries que necessitam de pesquisas de
-    \textbf{perguntas}/\textbf{respostas} num intervalo de tempo ordenadas
-    (queries: 6 e 7) são também resolvidas através de \textbf{3}. No caso de não
-    ser necessária a filtragem do intervalo de tempo, simplesmente passamos as
-    datas máximas definidas pelas macros \mintinline{C}{dateTime_get_epoch()} e
-    \mintinline{C}{dateTime_get_year2038()} em $dateTime.h$.
-
-    Para as queries que necessitam de listas de questões que obedeçam a um
-    determinado critério (queries: 4 e 8), são conseguidas através de \textbf{4}.
-
-    Nos casos em que estes métodos especializados não são necessários (query: 3)
-    fizemos uso de uma iteração genérica através de \textbf{5}.
-
-    Como referido anteriormente, (\ref{sec:str_rose_tree}) para a resolução da
-    query 11 foi implementada uma estrutura para contar tags, para que esta
-    contagem fosse eficiente. Com isto, o único trabalho necessário foi obter as
-    \textbf{tags} das \textbf{questões} dos \textbf{utilizadores} com melhor
-    reputação por \textbf{1}. Em seguida, obtemos a lista ordenada por ocorrência
-    das tags e através de \textbf{2} obtemos os ids das mesmas.
-
-\section{Conclusões e Trabalho Futuro}
-    Em suma, o grupo considera que o trabalho foi realizado na sua
-    totalidade de forma eficiente e correta, respondendo a todas as queries.
-
-    Um aspeto que poderia ser melhorado é a ordenação de utilizadores. Estes,
-    foram guardados apenas numa tabela de hash e quando é necessária um lista
-    ordenada dos mesmos, esta, tem de ser percorrida na sua totalidade. Esta
-    decisão, centrou-se no facto de que nenhuma única ordenação se apresenta
-    particularmente vantajosa, face às demais.
+\chapter{Conclusões e Trabalho Futuro}
 
 \end{document}
