@@ -17,6 +17,9 @@ public class ContribuinteEmpresarial extends Contribuinte {
 
     private static final long serialVersionUID = -8963955761706471101L;
 
+    /**
+     * The company's district
+     */
     private final Conselho conselho;
 
     /**
@@ -45,6 +48,10 @@ public class ContribuinteEmpresarial extends Contribuinte {
         this.conselho = contribuinteEmpresarial.getConselho();
     }
 
+    /**
+     * Returns the company's district
+     * @return The company's district
+     */
     public Conselho getConselho(){
         return this.conselho;
     }
