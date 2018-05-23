@@ -141,15 +141,14 @@ public class JavaFactura implements Serializable {
                                                                 InvalidNumberOfDependantsException,
                                                                 ContribuinteAlreadyExistsException{
         if(this.contribuintes.containsKey(nif)) throw new ContribuinteAlreadyExistsException();
-        this.contribuintes.put(nif, new ContribuinteIndividual(
-                nif,
-                email,
-                nome,
-                address,
-                password,
-                numDependants, familyAggregate,
-                fiscalCoefficient,
-                econSectors));
+        if(numDependants > 3)
+            this.contribuintes.put(nif, new ContribuinteIndividualFamiliaNumerosa(
+                    nif, email, nome, address, password, numDependants, familyAggregate, fiscalCoefficient, econSectors
+            ));
+        else
+            this.contribuintes.put(nif, new ContribuinteIndividual(
+                    nif, email, nome, address, password, numDependants, familyAggregate, fiscalCoefficient, econSectors
+            ));
     }
 
     /**
@@ -469,7 +468,7 @@ public class JavaFactura implements Serializable {
         Random r = new Random();
         Set<EconSector> allSectors = getAllSectors();
         Iterator<EconSector> it = allSectors.iterator();
-        for(int i = 0; i < 100; i++){ //Change this to change the amount of people
+        for(int i = 0; i < 35; i++){ //Change this to change the amount of people
             if(!it.hasNext()) it = allSectors.iterator();
             int j = i;
             StringBuilder nameBuilder = new StringBuilder();

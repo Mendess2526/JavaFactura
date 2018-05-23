@@ -146,20 +146,6 @@ public class ContribuinteIndividual extends Contribuinte {
      * @return The deduction accumulated over time
      */
     public double getAccumulatedDeduction(){
-        return reducaoImposto(this.facturas.stream().mapToDouble(Factura::deducao).sum());
-    }
-
-    /**
-     * Increases the amount deducted by 5% for each dependant beyond 3 and 1% for each purchase made to a
-     * interior company
-     * @param sum The initial deduction
-     * @return The increased deduction
-     */
-    private double reducaoImposto(double sum){
-        if(this.numDependants > 3){
-            sum += sum * 0.05 * (this.numDependants - 3);
-            sum += sum * 0.01 * this.facturas.stream().filter(Factura::isEmpresaInterior).count();
-        }
-        return sum;
+        return this.facturas.stream().mapToDouble(Factura::deducao).sum();
     }
 }
