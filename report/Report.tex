@@ -194,11 +194,12 @@ public interface Deductible {
     vistos de forma diferente dependendo da subclasse que a extende.
 
     O \textbf{ContribuinteEmpresarial} acrescenta ao \textbf{Contribuinte}
-    o \textbf{Conselho} onde reside, este podendo ser do interior ou não. Para
-    além disto vê as suas facturas como as vendas que realizou os sectores de
-    actividade economica como os possiveis sectores que as facturas que emite
-    podem tomar. Estes têm ainda a possibilidade de emitir facturas, processo
-    que será explicado em mais detalhe na seccção %TODO
+    o \textbf{Conselho}\(\ref{sec:conselho}\) onde reside, este podendo ser
+    do interior ou não. Para além disto vê as suas facturas como as vendas que
+    realizou os sectores de actividade economica como os possiveis sectores que
+    as facturas que emite podem tomar. Estes têm ainda a possibilidade de emitir
+    facturas, processo que será explicado em mais detalhe na seccção
+     \ref{sec:emissao}.
 
     O \textbf{ContribuinteIndividual} acrescenta ao \textbf{Contribuinte}
     o agregado familiar e número destes que são dependentes. Este vê as suas
@@ -206,15 +207,44 @@ public interface Deductible {
     de despesas de onde pode deduzir. Estes têm a capacidade de alterar o
     sector ecnomico das suas facturas.
 
-    \begin{figure}[h]
+    \begin{figure}[H]
         \centering
         \includegraphics[width=11cm]{./images/UserHierarquy.png}
         \caption{Hierarquia de Classes do \textbf{User}}\label{fig:Hierarquia}
     \end{figure}
 
+\section{Conselhos}
+\label{sec:conselho}
+    Os conselhos disponiveis são mantidos pela aplicação na forma de um
+    \textbf{Enum} que associa a cada um \textit{boolean} a indicar se é um
+    conselho do interior ou não. Desta forma simplifica-se bastante o processo
+    de distinção das empresa que são ou não do interior. Para além disto, devido
+    ao metodo como vai ser utilizado não compromete a extensibilidade do codigo,
+    sendo apenas necessario adicionar novas entradas no enum e toda a aplicação
+    mantem o um comportamento correto.
+
+    \begin{figure}[h]
+        \begin{minted}{java}
+public enum Conselho {
+    PORTO(false),
+    BEJA(true);
+    private boolean interior;
+    Conselho(boolean interior){
+        this.interior = interior;
+    }
+    public boolean isInterior(){
+        return this.interior;
+    }
+}
+        \end{minted}
+        \caption{Excerto do enum \textbf{Conselho}}
+        \label{fig:conselhos}
+    \end{figure}
+
 \chapter{Emissão de Facturas e Calculo de Deduções}
 
 \section{Emissão de Facturas}
+\label{sec:emissao}
     Para garantir a consistencia do estado interno da aplicação decidi que
     quando uma factura é emitida tanto o emissor da factura como o cliente
     deviam guardar a mesma instancia do objecto, assim quando o cliente
@@ -248,6 +278,73 @@ public float deduction(float value, boolean interior, int numDependants,
         \label{fig:formulaDeduct}
     \end{figure}
 
+\chapter{Interface Grafica}
+
+    Quando a aplicação inicia o primeiro ecra com que nos deparamos é o de log
+    in. Este, se introduzir-mos as credenciais corretas leva-nos a um dos três
+    ecras principais.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{./images/login.png}
+    \caption{Ecra de login}
+    \label{fig:login}
+\end{figure}
+
+    \section{Admin} %TODO rever
+    O ecra do administrador, que pode registar novos contribuintes, individuais
+    ou empresariais, ver os 10 contribuintes individuais que gastaram mais
+    dinheiro até ao momento ou ver os X contribuintes empresariais que mais
+    facturas emitiram junto da quantidade monetaria facturada.
+    Este pode ainda alterar a sua password.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{./images/AdminScreen.png}
+    \caption{Ecra do Admin}
+    \label{fig:admin}
+\end{figure}
+
+\pagebreak
+
+    \section{Contribuinte Individual}
+    O ecra do contribuinte individual permite consultar o total deduzido por
+    si e pelo seu agregado familiar, consultar as suas facturas ordenadas por
+    data ou valor, consultar em detalhe cada factura \(\ref{sec:viewFactura}\)
+    e alterar o seu sector economico. Pode ainda consultar o seu perfil onde
+    pode alterar o seu email, morada, e password.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{./images/IndividualScreen.png}
+    \caption{Ecra do individual}
+    \label{fig:individual}
+\end{figure}
+
+    \section{Contribuinte Empresarial}
+    O ecra do contribuinte empresarial permite consultar o total facturado
+    e facturas emitidas e filtrar ambos por data, para além de as poder ordenar
+    como o contribuinte individual pode. Para além disto pode emitir facturas
+    novas e ver a lista dos seus clientes. Ao clicar num dos seus clientes pode
+    ver todas as facturas deste que foram emitidas por si e, aqui também, pode
+    filtrar por data.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{./images/empresaScreen.png}
+    \caption{Ecra do individual}
+    \label{fig:individual}
+\end{figure}
+
+    \section{Consultar uma Factura}
+    \label{sec:viewFactura}
+\begin{wrapfigure}{r}{7cm}
+    \centering
+    \includegraphics[width=7cm]{./images/facturaView.png}
+    \caption{Vista de uma Factura}
+    \label{fig:viewFactura}
+\end{wrapfigure}
+    A consulta de uma factura permite ver todas as alterações que a factura
+    sofreu ao longo do tempo e, no caso de o utilizador autenticado ser
+    um contribuinte individual, pode também alterar o sector economico desta.
 
 \chapter{Conclusões e Trabalho Futuro}
 
