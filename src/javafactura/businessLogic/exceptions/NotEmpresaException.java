@@ -8,4 +8,8 @@ import javafactura.businessLogic.ContribuinteEmpresarial;
 public class NotEmpresaException extends NotContribuinteException {
 
     private static final long serialVersionUID = 8761213073125896080L;
+
+    public NotEmpresaException(String message){
+        super(message);
+    }
 }

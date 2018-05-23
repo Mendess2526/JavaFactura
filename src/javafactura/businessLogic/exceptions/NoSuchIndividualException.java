@@ -8,4 +8,8 @@ import javafactura.businessLogic.ContribuinteIndividual;
 public class NoSuchIndividualException extends Exception {
 
     private static final long serialVersionUID = -4958389397051034003L;
+
+    public NoSuchIndividualException(String message){
+        super(message);
+    }
 }

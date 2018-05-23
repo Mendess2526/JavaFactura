@@ -95,18 +95,18 @@ public class LoginFX extends FX {
             Class<? extends User> loggedUser = this.javaFactura.getLoggedUserType();
             if(loggedUser == Admin.class){
                 if(!this.adminScreen.show())
-                    throw new InvalidCredentialsException();
+                    throw new InvalidCredentialsException(loggedUser.getName());
 
             }else if(loggedUser == ContribuinteEmpresarial.class){
                 if(!this.empresaScreen.show())
-                    throw new InvalidCredentialsException();
+                    throw new InvalidCredentialsException(loggedUser.getName());
 
             }else if(loggedUser == ContribuinteIndividual.class){
                 if(!this.individualScreen.show())
-                    throw new InvalidCredentialsException();
+                    throw new InvalidCredentialsException(loggedUser.getName());
 
             }else{
-                throw new InvalidCredentialsException();
+                throw new InvalidCredentialsException(loggedUser.getName());
             }
         }catch(InvalidCredentialsException e){
             this.errors.setText("Wrong username or password");

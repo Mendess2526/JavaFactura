@@ -107,7 +107,7 @@ public class JavaFactura implements Serializable {
         }else{
             Contribuinte user = this.contribuintes.get(nif);
             if(user == null || !user.getPassword().equals(password))
-                throw new InvalidCredentialsException();
+                throw new InvalidCredentialsException(nif + password);
             this.loggedInUser = user;
         }
     }
@@ -140,7 +140,7 @@ public class JavaFactura implements Serializable {
                                    Set<EconSector> econSectors) throws
                                                                 InvalidNumberOfDependantsException,
                                                                 ContribuinteAlreadyExistsException{
-        if(this.contribuintes.containsKey(nif)) throw new ContribuinteAlreadyExistsException();
+        if(this.contribuintes.containsKey(nif)) throw new ContribuinteAlreadyExistsException(nif);
         if(numDependants > 3)
             this.contribuintes.put(nif, new ContribuinteIndividualFamiliaNumerosa(
                     nif, email, nome, address, password, numDependants, familyAggregate, fiscalCoefficient, econSectors
@@ -168,7 +168,7 @@ public class JavaFactura implements Serializable {
                                     String address, String password, float fiscalCoefficient,
                                     Set<EconSector> econSectors, Conselho conselho) throws
                                                                                     ContribuinteAlreadyExistsException{
-        if(this.contribuintes.containsKey(nif)) throw new ContribuinteAlreadyExistsException();
+        if(this.contribuintes.containsKey(nif)) throw new ContribuinteAlreadyExistsException(nif);
         this.contribuintes.put(nif, new ContribuinteEmpresarial(
                 nif,
                 email,
@@ -242,10 +242,11 @@ public class JavaFactura implements Serializable {
                                                                                     NotEmpresaException,
                                                                                     NoSuchIndividualException,
                                                                                     NotIndividualException{
-        if(!(this.loggedInUser instanceof ContribuinteEmpresarial)) throw new NotEmpresaException();
+        if(!(this.loggedInUser instanceof ContribuinteEmpresarial))
+            throw new NotEmpresaException(this.loggedInUser.getClass().getName());
         Contribuinte client = this.contribuintes.get(clientNif);
-        if(client == null) throw new NoSuchIndividualException();
-        if(!(client instanceof ContribuinteIndividual)) throw new NotIndividualException();
+        if(client == null) throw new NoSuchIndividualException(clientNif);
+        if(!(client instanceof ContribuinteIndividual)) throw new NotIndividualException(client.getClass().getName());
         return ((ContribuinteEmpresarial) this.loggedInUser)
                 .issueFactura((ContribuinteIndividual) client, description, value);
     }
@@ -262,7 +263,8 @@ public class JavaFactura implements Serializable {
      */
     public Factura changeFactura(Factura factura, EconSector econSector) throws NotIndividualException,
                                                                                 InvalidEconSectorException{
-        if(!(this.loggedInUser instanceof ContribuinteIndividual)) throw new NotIndividualException();
+        if(!(this.loggedInUser instanceof ContribuinteIndividual))
+            throw new NotIndividualException(this.loggedInUser.getClass().getName());
         return ((ContribuinteIndividual) this.loggedInUser).changeFatura(factura, econSector);
     }
 
@@ -273,7 +275,8 @@ public class JavaFactura implements Serializable {
      * @throws NotContribuinteException if the logged user is not a {@link Contribuinte}
      */
     public List<Factura> getLoggedUserFacturas() throws NotContribuinteException{
-        if(!(this.loggedInUser instanceof Contribuinte)) throw new NotContribuinteException();
+        if(!(this.loggedInUser instanceof Contribuinte))
+            throw new NotContribuinteException(this.loggedInUser.getClass().getName());
         return new ArrayList<>(((Contribuinte) this.loggedInUser).getFacturas());
     }
 
@@ -285,7 +288,8 @@ public class JavaFactura implements Serializable {
      * @throws NotContribuinteException if the logged user is not a {@link Contribuinte}
      */
     public List<Factura> getLoggedUserFacturas(Comparator<Factura> c) throws NotContribuinteException{
-        if(!(this.loggedInUser instanceof Contribuinte)) throw new NotContribuinteException();
+        if(!(this.loggedInUser instanceof Contribuinte))
+            throw new NotContribuinteException(this.loggedInUser.getClass().getName());
         return ((Contribuinte) this.loggedInUser).getFacturas(c);
     }
 
@@ -298,7 +302,8 @@ public class JavaFactura implements Serializable {
      * @throws NotContribuinteException if the logged user is not a {@link Contribuinte}
      */
     public List<Factura> getLoggedUserFacturas(LocalDate from, LocalDate to) throws NotContribuinteException{
-        if(!(this.loggedInUser instanceof Contribuinte)) throw new NotContribuinteException();
+        if(!(this.loggedInUser instanceof Contribuinte))
+            throw new NotContribuinteException(this.loggedInUser.getClass().getName());
         return ((Contribuinte) this.loggedInUser).getFacturas(from.atStartOfDay(), to.atTime(LocalTime.MAX));
     }
 
@@ -313,7 +318,8 @@ public class JavaFactura implements Serializable {
      */
     public List<Factura> getLoggedUserFacturas(Comparator<Factura> c, LocalDate from, LocalDate to)
             throws NotContribuinteException{
-        if(!(this.loggedInUser instanceof Contribuinte)) throw new NotContribuinteException();
+        if(!(this.loggedInUser instanceof Contribuinte))
+            throw new NotContribuinteException(this.loggedInUser.getClass().getName());
         return ((Contribuinte) this.loggedInUser).getFacturas(c, from.atStartOfDay(), to.atTime(LocalTime.MAX));
     }
 
@@ -329,7 +335,8 @@ public class JavaFactura implements Serializable {
      */
     public List<Factura> getFaturasOfIndividual(ContribuinteIndividual client, LocalDate from, LocalDate to) throws
                                                                                                              NotEmpresaException{
-        if(!(this.loggedInUser instanceof ContribuinteEmpresarial)) throw new NotEmpresaException();
+        if(!(this.loggedInUser instanceof ContribuinteEmpresarial))
+            throw new NotEmpresaException(this.loggedInUser.getClass().getName());
         return ((ContribuinteEmpresarial) this.loggedInUser).getFacturasOfClient(client, from.atStartOfDay(),
                                                                                  to.atTime(LocalTime.MAX));
     }
@@ -341,7 +348,8 @@ public class JavaFactura implements Serializable {
      * @throws NotIndividualException if the logged in user is not a {@link ContribuinteIndividual}
      */
     public double getAccumulatedDeduction() throws NotIndividualException{
-        if(!(this.loggedInUser instanceof ContribuinteIndividual)) throw new NotIndividualException();
+        if(!(this.loggedInUser instanceof ContribuinteIndividual))
+            throw new NotIndividualException(this.loggedInUser.getClass().getName());
         return ((ContribuinteIndividual) this.loggedInUser).getAccumulatedDeduction();
     }
 
@@ -352,7 +360,8 @@ public class JavaFactura implements Serializable {
      * @throws NotIndividualException if the logged in user is not a {@link ContribuinteIndividual}
      */
     public double getAccumulatedDeductionFamilyAggregate() throws NotIndividualException{
-        if(!(this.loggedInUser instanceof ContribuinteIndividual)) throw new NotIndividualException();
+        if(!(this.loggedInUser instanceof ContribuinteIndividual))
+            throw new NotIndividualException(this.loggedInUser.getClass().getSimpleName());
         Set<String> nifList = ((ContribuinteIndividual) this.loggedInUser).getFamilyAggregate();
         double total = 0.0;
         for(String nif : nifList){
@@ -371,7 +380,8 @@ public class JavaFactura implements Serializable {
      * @throws NotEmpresaException if the logged in user is not a {@link ContribuinteEmpresarial}
      */
     public Set<ContribuinteIndividual> getClients() throws NotEmpresaException{
-        if(!(this.loggedInUser instanceof ContribuinteEmpresarial)) throw new NotEmpresaException();
+        if(!(this.loggedInUser instanceof ContribuinteEmpresarial))
+            throw new NotEmpresaException(this.loggedInUser.getClass().getSimpleName());
         return ((ContribuinteEmpresarial) this.loggedInUser).getClientNIFs()
                                                             .stream()
                                                             .map(this.contribuintes::get)
@@ -388,7 +398,8 @@ public class JavaFactura implements Serializable {
      * @throws NotEmpresaException if the logged in user is not a {@link ContribuinteEmpresarial}
      */
     public double totalFaturado() throws NotEmpresaException{
-        if(!(this.loggedInUser instanceof ContribuinteEmpresarial)) throw new NotEmpresaException();
+        if(!(this.loggedInUser instanceof ContribuinteEmpresarial))
+            throw new NotEmpresaException(this.loggedInUser.getClass().getSimpleName());
         return ((ContribuinteEmpresarial) this.loggedInUser).totalFacturado();
     }
 
@@ -401,7 +412,8 @@ public class JavaFactura implements Serializable {
      * @throws NotEmpresaException if the logged in user is not a {@link ContribuinteEmpresarial}
      */
     public double totalFaturado(LocalDate from, LocalDate to) throws NotEmpresaException{
-        if(!(this.loggedInUser instanceof ContribuinteEmpresarial)) throw new NotEmpresaException();
+        if(!(this.loggedInUser instanceof ContribuinteEmpresarial))
+            throw new NotEmpresaException(this.loggedInUser.getClass().getSimpleName());
         return ((ContribuinteEmpresarial) this.loggedInUser).totalFacturado(from, to);
     }
 
@@ -413,7 +425,7 @@ public class JavaFactura implements Serializable {
      */
     public List<ContribuinteIndividual> getTop10Contrib() throws NotAdminException{
         if(!(this.loggedInUser instanceof Admin)){
-            throw new NotAdminException();
+            throw new NotAdminException(this.loggedInUser.getClass().getName());
         }
         PriorityQueue<ContribuinteIndividual> top10
                 = new PriorityQueue<>(10, new ContribuinteSpendingComparator().reversed());
@@ -433,7 +445,8 @@ public class JavaFactura implements Serializable {
      * @throws NotAdminException if the logged in user is not an {@link Admin}
      */
     public List<Pair<ContribuinteEmpresarial,Double>> getTopXEmpresas(int x) throws NotAdminException{
-        if(!(this.loggedInUser instanceof Admin)) throw new NotAdminException();
+        if(!(this.loggedInUser instanceof Admin))
+            throw new NotAdminException(this.loggedInUser.getClass().getSimpleName());
 
         PriorityQueue<ContribuinteEmpresarial> topX =
                 new PriorityQueue<>(x, new ContribuinteFacturaCountComparator().reversed());

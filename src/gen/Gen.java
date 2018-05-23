@@ -18,12 +18,12 @@ public class Gen {
         try{
             Random r = new Random();
             for(int i = 0; i < 20; i++){
-                String nif = String.format("%d", r.nextInt(18) * 2);
+                String nif = String.format("%d", r.nextInt(17) * 2);
                 try{
                     javaFactura.login(nif, "pass");
                 }catch(InvalidCredentialsException ignored){
                 }
-                String client = String.format("%d", (r.nextInt(18) * 2) - 1);
+                String client = String.format("%d", (r.nextInt(17) * 2) + 1);
                 try{
                     out.println(javaFactura.emitirFactura(client, r.nextFloat() * 200, nif + "->" + client));
                 }catch(NotContribuinteException | NoSuchIndividualException e){
