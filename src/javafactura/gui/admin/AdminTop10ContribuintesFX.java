@@ -38,7 +38,7 @@ public class AdminTop10ContribuintesFX extends FX {
         top10ListView.setFocusTraversable(false);
         this.gridPane.add(top10ListView, 0, 1);
 
-        Button goBack = new Button("Back");
+        Button goBack = new Button("Voltar");
         goBack.setOnAction(event -> goBack());
         this.gridPane.add(makeHBox(goBack, Pos.BOTTOM_RIGHT), 0, 2);
     }

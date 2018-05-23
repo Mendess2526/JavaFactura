@@ -60,7 +60,7 @@ public class IndividualFX extends ShowReceiptsFx {
         FilteredList<Factura> filteredFacturas = new FilteredList<>(this.facturas, p -> true);
         this.receiptsTable.setItems(filteredFacturas);
 
-        Button profileButton = new Button("Profile");
+        Button profileButton = new Button("Perfil");
         profileButton.setOnAction(e -> individualProfileFx.show());
         this.gridPane.add(makeHBox(profileButton, Pos.CENTER_RIGHT), 0, row++);
 

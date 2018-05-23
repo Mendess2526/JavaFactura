@@ -47,7 +47,7 @@ public class EmpresaViewClientFX extends ShowReceiptsFx {
 
         this.gridPane.add(receiptsTable, 0, row++);
 
-        Button goBackButton = new Button("Back");
+        Button goBackButton = new Button("Voltar");
         goBackButton.setOnAction(e -> goBack());
         this.gridPane.add(makeHBox(goBackButton, Pos.BOTTOM_RIGHT), 0, row);
     }
@@ -59,7 +59,7 @@ public class EmpresaViewClientFX extends ShowReceiptsFx {
     @Override
     public boolean show(){
         if(this.client == null || !super.show()) return false;
-        this.clientLabel.setText("Client: " + this.client.getNif());
+        this.clientLabel.setText("Cliente: " + this.client.getNif());
         return true;
     }
 

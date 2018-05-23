@@ -63,7 +63,7 @@ public class LoginFX extends FX {
         this.userNameTextField = new TextField();
         this.gridPane.add(this.userNameTextField, 1, 1);
 
-        Label userName = new Label("User Name");
+        Label userName = new Label("NIF");
         this.gridPane.add(userName, 0, 1);
 
         this.pwField = new PasswordField();
@@ -76,7 +76,7 @@ public class LoginFX extends FX {
         loginButton.setOnAction(event -> login());
         this.gridPane.add(makeHBox(loginButton, Pos.BOTTOM_RIGHT), 1, 4);
 
-        Button exitButton = new Button("Exit");
+        Button exitButton = new Button("Sair");
         exitButton.setOnAction(event -> this.primaryStage.close());
         this.gridPane.add(makeHBox(exitButton, Pos.BOTTOM_LEFT), 0, 4);
 
@@ -109,7 +109,7 @@ public class LoginFX extends FX {
                 throw new InvalidCredentialsException(loggedUser.getName());
             }
         }catch(InvalidCredentialsException e){
-            this.errors.setText("Wrong username or password");
+            this.errors.setText("NIF ou Password errada");
         }
     }
 }

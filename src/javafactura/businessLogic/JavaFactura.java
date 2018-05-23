@@ -58,10 +58,10 @@ public class JavaFactura implements Serializable {
         }catch(IOException | ClassNotFoundException e){
             File file = new File(SAVE_STATE_FILE);
             if(file.exists() && file.delete()){
-                System.out.println("Deleted data");
+                System.err.println("Deleted data");
                 javaFactura = new JavaFactura();
             }else{
-                System.out.println("\033[31mCould not delete \033[0m" + SAVE_STATE_FILE);
+                System.err.println("\033[31mCould not delete \033[0m" + SAVE_STATE_FILE);
                 javaFactura = new JavaFactura();
             }
         }

@@ -58,9 +58,9 @@ public class EmpresaFX extends ShowReceiptsFx {
         this.viewClientFX = new EmpresaViewClientFX(this.javaFactura, this.primaryStage, this.scene);
 
         int row = 0;
-        Button profileButton = new Button("Profile");
+        Button profileButton = new Button("Perfil");
         profileButton.setOnAction(e -> empresaProfileFX.show());
-        this.gridPane.add(makeHBox(profileButton, Pos.TOP_LEFT), 1, row);
+        this.gridPane.add(makeHBox(profileButton, Pos.TOP_RIGHT), 1, row);
 
         Button issueReceipt = new Button("Emitir Factura");
         issueReceipt.setOnAction(e -> empresaIssueReceiptFX.show());
@@ -83,7 +83,7 @@ public class EmpresaFX extends ShowReceiptsFx {
         toFactBox.setSpacing(10);
         this.gridPane.add(toFactBox, 0, row++);
 
-        Button goBack = new Button("Back");
+        Button goBack = new Button("Logout");
         goBack.setOnAction(event -> goBack());
         this.gridPane.add(makeHBox(goBack, Pos.BOTTOM_RIGHT), 1, row);
     }
@@ -102,7 +102,7 @@ public class EmpresaFX extends ShowReceiptsFx {
         nif.setCellValueFactory(
                 param -> new ReadOnlyObjectWrapper<>(param.getValue().getNif()));
 
-        TableColumn<ContribuinteIndividual,String> name = new TableColumn<>("Name");
+        TableColumn<ContribuinteIndividual,String> name = new TableColumn<>("Nome");
         name.setMinWidth(100);
         name.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().getName()));
 

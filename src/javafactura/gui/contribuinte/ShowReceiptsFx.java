@@ -113,7 +113,7 @@ public abstract class ShowReceiptsFx extends FX {
         });
 
         this.receiptsTable = new TableView<>();
-        makeReceiptsTable();
+        makeReceiptsTable(canEdit);
         this.viewFacturaFX = new ViewFacturaFX(this.javaFactura, this.primaryStage, this.scene,
                                                canEdit ? new TableRefresher() : null);
     }
@@ -144,24 +144,31 @@ public abstract class ShowReceiptsFx extends FX {
      *
      * Creates the columns and adds listeners to open the {@link ViewFacturaFX} sub screen
      */
-    private void makeReceiptsTable(){
+    private void makeReceiptsTable(boolean individual){
         this.receiptsTable.setMinWidth(this.gridPane.getMinWidth());
         this.receiptsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        TableColumn<Factura,String> date = new TableColumn<>("Date");
+        TableColumn<Factura,String> date = new TableColumn<>("Data");
         date.setMinWidth(LocalDateTime.now().format(Factura.dateFormat).length() * 10);
         date.setCellValueFactory(
                 param -> new ReadOnlyObjectWrapper<>(param.getValue().getCreationDate().format(Factura.dateFormat)));
 
-        TableColumn<Factura,EconSector> type = new TableColumn<>("Type");
+        TableColumn<Factura,EconSector> type = new TableColumn<>("Sector");
         type.setMinWidth(100);
         type.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().getType()));
 
-        TableColumn<Factura,String> name = new TableColumn<>("Empresa");
-        name.setMinWidth(100);
-        name.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().getIssuerName()));
+        TableColumn<Factura,String> name;
+        if(individual){
+            name = new TableColumn<>("Empresa");
+            name.setMinWidth(100);
+            name.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().getIssuerName()));
+        }else{
+            name = new TableColumn<>("Cliente");
+            name.setMinWidth(100);
+            name.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().getClientNif()));
+        }
 
-        TableColumn<Factura,String> value = new TableColumn<>("Value");
+        TableColumn<Factura,String> value = new TableColumn<>("Valor");
         value.setMinWidth(100);
         value.setCellValueFactory(
                 param -> new ReadOnlyObjectWrapper<>(String.format("%.2f", param.getValue().getValue())));

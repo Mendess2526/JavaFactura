@@ -25,7 +25,7 @@ public class AdminAddIndividualFX extends FormFX {
      * The form's fields
      */
     private static final String[] defaultFields = new String[]{
-            "NIF:", "Email:", "Nome", "Address", "Password", "Fiscal Coefficient", "Number of dependants",
+            "NIF:", "Email:", "Nome", "Morada", "Password", "Fiscal Coefficient", "Número de dependentes",
             };
 
     /**
@@ -92,7 +92,6 @@ public class AdminAddIndividualFX extends FormFX {
     /** {@inheritDoc} */
     protected boolean submitData(){
         if(!super.submitData()) return false;
-        System.out.println("fuck");
         int field = 0;
         boolean success = true;
         try{

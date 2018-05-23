@@ -72,12 +72,12 @@ public abstract class FormFX extends FX {
         this.confirmText.setFill(Color.GREEN);
         this.gridPane.add(this.confirmText, 1, row++);
 
-        Button submitButton = new Button("Submit");
+        Button submitButton = new Button("Submeter");
         submitButton.setOnAction(event -> submitData());
         this.submitButtonHBox = makeHBox(submitButton, Pos.BOTTOM_RIGHT);
         this.gridPane.add(this.submitButtonHBox, 0, row++);
 
-        Button goBackButton = new Button("Back");
+        Button goBackButton = new Button("Voltar");
         goBackButton.setOnAction(event -> goBack());
         this.goBackButtonHBox = makeHBox(goBackButton, Pos.BOTTOM_RIGHT);
         this.gridPane.add(this.goBackButtonHBox, 2, row);

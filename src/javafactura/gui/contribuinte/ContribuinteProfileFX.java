@@ -94,11 +94,11 @@ public abstract class ContribuinteProfileFX extends FX {
         this.setEmail = new TextField();
         this.gridPane.add(this.setEmail, 2, row++);
 
-        this.gridPane.add(new Label("Name: "), 0, row);
+        this.gridPane.add(new Label("Nome: "), 0, row);
         this.name = new Text();
         this.gridPane.add(this.name, 1, row++);
 
-        this.gridPane.add(new Label("Address: "), 0, row);
+        this.gridPane.add(new Label("Morada: "), 0, row);
         this.address = new Text();
         this.gridPane.add(this.address, 1, row);
         this.setAddress = new TextField();
@@ -128,7 +128,7 @@ public abstract class ContribuinteProfileFX extends FX {
         this.saveChangesBox = makeHBox(saveChangesButton, Pos.BOTTOM_RIGHT);
         this.gridPane.add(this.saveChangesBox, 2, row++);
 
-        Button goBackButton = new Button("Back");
+        Button goBackButton = new Button("Voltar");
         goBackButton.setOnAction(e -> goBack());
         this.backButtonBox = makeHBox(goBackButton, Pos.BOTTOM_RIGHT);
         this.gridPane.add(this.backButtonBox, 2, row);

@@ -47,7 +47,7 @@ public class AdminTopXEmpresasFX extends FX {
         this.gridPane.add(this.numberPrompt, 1, 0);
 
         // [BUTTON] Search button
-        Button searchButton = new Button("Search");
+        Button searchButton = new Button("Procurar");
         searchButton.setOnAction(event -> fillList());
         this.gridPane.add(makeHBox(searchButton, Pos.CENTER), 2, 0);
 
@@ -73,7 +73,7 @@ public class AdminTopXEmpresasFX extends FX {
         this.gridPane.add(topX, 0, 2);
 
         // [BUTTON] Back button
-        Button goBackButton = new Button("Back");
+        Button goBackButton = new Button("Voltar");
         goBackButton.setOnAction(event -> goBack());
         this.gridPane.add(makeHBox(goBackButton, Pos.BOTTOM_RIGHT), 2, 2);
     }
@@ -83,7 +83,6 @@ public class AdminTopXEmpresasFX extends FX {
      */
     private void fillList(){
         int num = Integer.parseInt(this.numberPrompt.getText());
-        System.out.println("Getting top " + num + " companies");
         List<Pair<ContribuinteEmpresarial,Double>> listDoublePair;
         try{
             listDoublePair = this.javaFactura.getTopXEmpresas(num);

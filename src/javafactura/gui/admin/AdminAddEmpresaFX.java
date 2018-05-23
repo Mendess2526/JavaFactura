@@ -25,7 +25,7 @@ public class AdminAddEmpresaFX extends FormFX {
      * The form's fields
      */
     private static final String[] defaultFields = new String[]{
-            "NIF:", "Email:", "Nome", "Address", "Password", "Fiscal Coefficient"
+            "NIF:", "Email:", "Nome", "Morada", "Password", "Fiscal Coefficient"
     };
 
     /**

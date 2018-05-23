@@ -94,42 +94,42 @@ public class ViewFacturaFX extends FX {
 
         int row = 0;
 
-        Label issuerNifLabel = new Label("IssuerNif:");
+        Label issuerNifLabel = new Label("NIF do Emitente:");
         this.issuerNif = new Text();
         this.gridPane.add(issuerNifLabel, 0, row);
         this.gridPane.add(this.issuerNif, 1, row++);
 
-        Label issuerNameLabel = new Label("IssuerName:");
+        Label issuerNameLabel = new Label("Nome do Emitente:");
         this.issuerName = new Text();
         this.gridPane.add(issuerNameLabel, 0, row);
         this.gridPane.add(this.issuerName, 1, row++);
 
-        Label dateLabel = new Label("Date:");
+        Label dateLabel = new Label("Data de emissão:");
         this.date = new Text();
         this.gridPane.add(dateLabel, 0, row);
         this.gridPane.add(this.date, 1, row++);
 
-        Label editDateLabel = new Label("Last Edit Date:");
+        Label editDateLabel = new Label("Data de edição:");
         this.editDate = new Text();
         this.gridPane.add(editDateLabel, 0, row);
         this.gridPane.add(this.editDate, 1, row++);
 
-        Label clientNifLabel = new Label("ClientNif:");
+        Label clientNifLabel = new Label("NIF do Cliente:");
         this.clientNif = new Text();
         this.gridPane.add(clientNifLabel, 0, row);
         this.gridPane.add(this.clientNif, 1, row++);
 
-        Label descriptionLabel = new Label("Description:");
+        Label descriptionLabel = new Label("Descrição:");
         this.description = new Text();
         this.gridPane.add(descriptionLabel, 0, row);
         this.gridPane.add(this.description, 1, row++);
 
-        Label valueLabel = new Label("Value:");
+        Label valueLabel = new Label("Valor:");
         this.value = new Text();
         this.gridPane.add(valueLabel, 0, row);
         this.gridPane.add(this.value, 1, row++);
 
-        Label econSectorLabel = new Label("Economic Sector:");
+        Label econSectorLabel = new Label("Sector Económico:");
         this.econSector = new Text();
         this.gridPane.add(econSectorLabel, 0, row);
         this.gridPane.add(this.econSector, 1, row++);
@@ -141,16 +141,16 @@ public class ViewFacturaFX extends FX {
             this.editSector = null;
         }
 
-        this.previousButton = new Button("Previous");
+        this.previousButton = new Button("Mais Recente");
         this.previousButton.setOnAction(event1 -> previousFactura());
         this.previousButton.setDisable(true);
         this.gridPane.add(makeHBox(this.previousButton, Pos.CENTER_LEFT), 0, row);
 
-        this.nextButton = new Button("Next");
+        this.nextButton = new Button("Mais Antiga");
         this.nextButton.setOnAction(event -> nextFactura());
         this.gridPane.add(makeHBox(this.nextButton, Pos.CENTER_RIGHT), 1, row++);
 
-        Button goBackButton = new Button("Back");
+        Button goBackButton = new Button("Voltar");
         goBackButton.setOnAction(event -> goBack());
         this.gridPane.add(makeHBox(goBackButton, Pos.BOTTOM_RIGHT), 1, row);
     }
