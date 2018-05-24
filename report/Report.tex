@@ -194,11 +194,11 @@ public interface Deductible {
     vistos de forma diferente dependendo da subclasse que a extende.
 
     O \textbf{ContribuinteEmpresarial} acrescenta ao \textbf{Contribuinte}
-    o \textbf{Conselho}\(\ref{sec:conselho}\) onde reside, este podendo ser
-    do interior ou não. Para além disto vê as suas facturas como as vendas que
-    realizou os sectores de actividade economica como os possiveis sectores que
-    as facturas que emite podem tomar. Estes têm ainda a possibilidade de emitir
-    facturas, processo que será explicado em mais detalhe na seccção
+    o \textbf{Conselho} (secção \ref{sec:conselho}) onde reside, este podendo
+    ser do interior ou não. Para além disto vê as suas facturas como as vendas
+    que realizou os sectores de actividade economica como os possiveis sectores
+    que as facturas que emite podem tomar. Estes têm ainda a possibilidade de
+    emitir facturas, processo que será explicado em mais detalhe na seccção
      \ref{sec:emissao}.
 
     O \textbf{ContribuinteIndividual} acrescenta ao \textbf{Contribuinte}
@@ -206,7 +206,7 @@ public interface Deductible {
     facturas como as suas despesas e os sectores economicos como o conjunto
     de despesas de onde pode deduzir. Estes têm a capacidade de alterar o
     sector ecnomico das suas facturas.
-
+%TODO FamNum
     \begin{figure}[H]
         \centering
         \includegraphics[width=11cm]{./images/UserHierarquy.png}
@@ -308,9 +308,9 @@ public float deduction(float value, boolean interior, int numDependants,
     \section{Contribuinte Individual}
     O ecra do contribuinte individual permite consultar o total deduzido por
     si e pelo seu agregado familiar, consultar as suas facturas ordenadas por
-    data ou valor, consultar em detalhe cada factura \(\ref{sec:viewFactura}\)
-    e alterar o seu sector economico. Pode ainda consultar o seu perfil onde
-    pode alterar o seu email, morada, e password.
+    data ou valor, consultar em detalhe cada factura
+    (secção \ref{sec:viewFactura}) e alterar o seu sector economico. Pode ainda
+    consultar o seu perfil onde pode alterar o seu email, morada, e password.
 
 \begin{figure}[h]
     \centering
@@ -346,6 +346,15 @@ public float deduction(float value, boolean interior, int numDependants,
     sofreu ao longo do tempo e, no caso de o utilizador autenticado ser
     um contribuinte individual, pode também alterar o sector economico desta.
 
-\chapter{Conclusões e Trabalho Futuro}
+\chapter{Extenção da aplicação}
+    A modularidade da arquitetura concebida permite que seja facilmente
+    extendida para incluir novos sectores económicos. Basta que sejam
+    adicionada um classe que implemente o mesmo padrão \textit{Singleton}
+    e adicionar esta à lista interna da super classe
+    \mintinline{java}{EconSector}. Se esta fosse deduzivel bastaria implementar
+    a interface \mintinline{java}{Deductible}.
 
+\chapter{Conclusões e Trabalho Futuro}
+    Em suma, considero que o trabalho realizado implementa todos os requisitos
+    pedidos de forma estruturada, e mantendo encapsulamento dos dados.
 \end{document}
