@@ -15,7 +15,7 @@
 \usepackage[cache=false]{minted}
 \usepackage{pdflscape}
 \usepackage[titletoc]{appendix}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 \geometry{
  a4paper,
  top=2cm,
@@ -206,7 +206,11 @@ public interface Deductible {
     facturas como as suas despesas e os sectores economicos como o conjunto
     de despesas de onde pode deduzir. Estes têm a capacidade de alterar o
     sector ecnomico das suas facturas.
-%TODO FamNum
+
+    Mais tarde foi também adicionada a noção de \textbf{familia numerosa}, esta
+    introduz a noção de familias com mais apoio social, sendo que implementam um
+    metodo que permite reduzir o imposto pago.
+
     \begin{figure}[H]
         \centering
         \includegraphics[width=11cm]{./images/UserHierarquy.png}
