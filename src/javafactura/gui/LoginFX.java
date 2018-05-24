@@ -101,7 +101,8 @@ public class LoginFX extends FX {
                 if(!this.empresaScreen.show())
                     throw new InvalidCredentialsException(loggedUser.getName());
 
-            }else if(loggedUser == ContribuinteIndividual.class){
+            }else if(loggedUser == ContribuinteIndividual.class
+                     || loggedUser == ContribuinteIndividualFamiliaNumerosa.class){
                 if(!this.individualScreen.show())
                     throw new InvalidCredentialsException(loggedUser.getName());
 
