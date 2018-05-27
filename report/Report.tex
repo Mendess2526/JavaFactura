@@ -73,7 +73,7 @@
 
     \begin{wrapfigure}{r}{5.5cm}
         \includegraphics[width=5.5cm]{./images/Factura.png}
-        \caption{Diagrama de uma Factura}\label{fig:Factura}
+        \caption{Diagrama de uma \mintinline{java}{Factura}}\label{fig:Factura}
     \end{wrapfigure}
 
     A classe \mintinline{java}{Factura} representa um documento de despesa no
@@ -237,14 +237,19 @@ public interface Deductible {
     \begin{figure}[h]
         \begin{minted}{java}
 public enum Concelho {
-    PORTO(false),
-    BEJA(true);
+    PORTO(false, "Porto"),
+    BEJA(true, "Beja");
     private boolean interior;
-    Concelho(boolean interior){
+    private final String name;
+    Concelho(boolean interior, String name){
         this.interior = interior;
+        this.name = name;
     }
     public boolean isInterior(){
         return this.interior;
+    }
+    public String toString(){
+        return this.name;
     }
 }
         \end{minted}
