@@ -92,7 +92,7 @@
     alterado. A data de edição é também actualizada.
 
     A alteração do sector económico tem de obedecer a duas restrições para que
-    seja executada: 1º Uma factura não pode passar a ser Pendente depois de
+    seja executada: 1º uma factura não pode passar a ser Pendente depois de
     emitida e 2º o sector escolhido tem de ser um dos sectores da empresa que a
     emitiu.
 
@@ -117,7 +117,7 @@
     Estas sublcasses por outro lado implementam um padrão \textit{Singleton}, ou
     seja, em qualquer momento existe apenas uma instância de cada um destes
     objectos em memória. A opção pelo padrão \textit{Singleton} foi tomada porque
-    estes objectos não têm estado e, como tal, são imutaveis, podendo-se assim
+    estes objectos não têm estado e, como tal, são imutáveis, podendo-se assim
     poupar memória, mas, sobretudo, para ter a garantia que as implementações por
     defeito do \mintinline{java}{equals()} e \mintinline{java}{hashcode()}
     funcionam perfeitamente.
@@ -203,7 +203,7 @@ public interface Deductible {
     \mintinline{java}{Contribuinte} o \mintinline{java}{Concelho} (secção
     \ref{sec:concelho}) onde reside, este podendo ser do interior ou não. Para além
     disto vê as suas facturas como as vendas que realizou e os sectores de
-    actividade económica como os possiveis sectores a que essas facturas podem
+    actividade económica como os possíveis sectores a que essas facturas podem
     pertencer. Este processo de emissão de facturas será explicado em mais detalhe
     na seccção \ref{chp:emissao}.
 
@@ -232,7 +232,7 @@ public interface Deductible {
     de distinção das empresas que são ou não do interior. Para além disto, devido
     ao método como vai ser utilizado, não compromete a extensibilidade do código,
     sendo apenas necessário adicionar novas entradas ao \mintinline{java}{enum}, e
-    toda a aplicação mantem o um comportamento correcto.
+    toda a aplicação mantem o correcto comportamento.
 
     \begin{figure}[h]
         \begin{minted}{java}
@@ -259,21 +259,21 @@ public enum Concelho {
 
 \section{Diagrama de classes}
     Devido à dimensão e complexidade do diagrama este não pode ser apresentado numa só imagem,
-    por isso este foi dividido em duas seccões.
-    \subsection{Logica de negocio}
+    por isso este foi dividido em duas secções.
+    \subsection{Lógica de negócio}
     \begin{figure}[H]
         \centering
         \includegraphics[width=\textwidth]{./images/businessFull.png}
-        \caption{Logica de negocio}
+        \caption{Diagrama de classes da lógica de negócio}
     \end{figure}
-    \subsection{Interface grafica}
+    \subsection{Interface gráfica}
     \begin{figure}[H]
         \centering
         \includegraphics[width=\textwidth]{./images/guiFull.png}
-        \caption{Interface grafica}
+        \caption{Diagrama de classes da Interface gráfica}
     \end{figure}
 
-\chapter{Emissão de Facturas e Calculo de Deduções}
+\chapter{Emissão de Facturas e Cálculo de Deduções}
 \label{chp:emissao}
 
 \section{Emissão de Facturas}
@@ -287,7 +287,7 @@ public enum Concelho {
     alteração é também muito pequena, tendo muito pouco impacto para a empresa,
     dados os requisitos pedidos.
 
-\section{Calculo de Deduções}
+\section{Cálculo de Deduções}
     A fórmula de cálculo de dedução, como foi referido anterioremente (secção
     \ref{fig:deductible}), fica a cargo dos sectores económicos. Desta forma,
     para que uma despesa seja dedutível, a correspondente factura terá de ser de um
@@ -311,10 +311,10 @@ public float deduction(float value, boolean interior, int numDependants,
         \label{fig:formulaDeduct}
     \end{figure}
 
-\chapter{Interface Grafica}
+\chapter{Interface Gráfica}
 
     Quando a aplicação inicia, o primeiro ecrã com que nos deparamos é o de
-    \textit{login}. Neste, se introduzir-mos as credênciais corretas, leva-nos a um
+    \textit{login}. Neste, se introduzirmos as credênciais corretas, leva-nos a um
     dos três ecrãs principais.
 \begin{figure}[h]
     \centering
@@ -342,7 +342,7 @@ public float deduction(float value, boolean interior, int numDependants,
     O ecrã do contribuinte individual permite consultar o total deduzido por
     si e pelo seu agregado familiar, consultar as suas facturas ordenadas por
     data ou valor e consultar em detalhe cada factura
-    (secção \ref{sec:viewFactura}) e alterar o seu sector economico. Pode ainda
+    (secção \ref{sec:viewFactura}) e alterar o seu sector económico. Pode ainda
     consultar o seu perfil e alterar o seu email, morada e password.
 
 \begin{figure}[h]
@@ -369,15 +369,15 @@ public float deduction(float value, boolean interior, int numDependants,
 
     \section{Consultar uma Factura}
     \label{sec:viewFactura}
-\begin{wrapfigure}{r}{7cm}
+    A consulta de uma factura permite ver todas as alterações que a factura
+    sofreu ao longo do tempo e, no caso de o utilizador autenticado ser
+    um contribuinte individual, pode também alterar o sector económico desta.
+\begin{figure}[h]
     \centering
     \includegraphics[width=7cm]{./images/facturaView.png}
     \caption{Vista de uma Factura}
     \label{fig:viewFactura}
-\end{wrapfigure}
-    A consulta de uma factura permite ver todas as alterações que a factura
-    sofreu ao longo do tempo e, no caso de o utilizador autenticado ser
-    um contribuinte individual, pode também alterar o sector económico desta.
+\end{figure}
 
 \chapter{Extensibilidade da aplicação}
     A modularidade da arquitetura concebida permite que seja facilmente
