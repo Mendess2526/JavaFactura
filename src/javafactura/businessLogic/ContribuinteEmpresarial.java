@@ -20,7 +20,7 @@ public class ContribuinteEmpresarial extends Contribuinte {
     /**
      * The company's district
      */
-    private final Conselho conselho;
+    private final Concelho concelho;
 
     /**
      * Parameterized constructor
@@ -34,9 +34,9 @@ public class ContribuinteEmpresarial extends Contribuinte {
      */
     public ContribuinteEmpresarial(String nif, String email, String name,
                                    String address, String password, float fiscalCoefficient,
-                                   Collection<EconSector> econActivities, Conselho conselho){
+                                   Collection<EconSector> econActivities, Concelho concelho){
         super(nif, email, name, address, password, fiscalCoefficient, econActivities);
-        this.conselho = conselho;
+        this.concelho = concelho;
     }
 
     /**
@@ -45,15 +45,15 @@ public class ContribuinteEmpresarial extends Contribuinte {
      */
     private ContribuinteEmpresarial(ContribuinteEmpresarial contribuinteEmpresarial){
         super(contribuinteEmpresarial);
-        this.conselho = contribuinteEmpresarial.getConselho();
+        this.concelho = contribuinteEmpresarial.getConcelho();
     }
 
     /**
      * Returns the company's district
      * @return The company's district
      */
-    public Conselho getConselho(){
-        return this.conselho;
+    public Concelho getConcelho(){
+        return this.concelho;
     }
 
     /**

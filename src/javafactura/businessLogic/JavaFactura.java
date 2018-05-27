@@ -160,13 +160,13 @@ public class JavaFactura implements Serializable {
      * @param password          The password
      * @param fiscalCoefficient The fiscal coefficient
      * @param econSectors       The economic sectors this company operates on
-     * @param conselho          The conselho the {@link ContribuinteEmpresarial} is located in
+     * @param concelho          The concelho the {@link ContribuinteEmpresarial} is located in
      * @throws ContribuinteAlreadyExistsException if a {@link Contribuinte} with given {@code nif} already
      *                                            exists in the system
      */
     public void registarEmpresarial(String nif, String email, String nome,
                                     String address, String password, float fiscalCoefficient,
-                                    Set<EconSector> econSectors, Conselho conselho) throws
+                                    Set<EconSector> econSectors, Concelho concelho) throws
                                                                                     ContribuinteAlreadyExistsException{
         if(this.contribuintes.containsKey(nif)) throw new ContribuinteAlreadyExistsException(nif);
         this.contribuintes.put(nif, new ContribuinteEmpresarial(
@@ -177,7 +177,7 @@ public class JavaFactura implements Serializable {
                 password,
                 fiscalCoefficient,
                 econSectors,
-                conselho));
+                concelho));
     }
 
     /**
@@ -379,7 +379,7 @@ public class JavaFactura implements Serializable {
      *
      * @throws NotEmpresaException if the logged in user is not a {@link ContribuinteEmpresarial}
      */
-    public Set<ContribuinteIndividual> getClients() throws NotEmpresaException{
+    public List<ContribuinteIndividual> getClients() throws NotEmpresaException{
         if(!(this.loggedInUser instanceof ContribuinteEmpresarial))
             throw new NotEmpresaException(this.loggedInUser.getClass().getSimpleName());
         return ((ContribuinteEmpresarial) this.loggedInUser).getClientNIFs()
@@ -388,7 +388,7 @@ public class JavaFactura implements Serializable {
                                                             .filter(ContribuinteIndividual.class::isInstance)
                                                             .map(ContribuinteIndividual.class::cast)
                                                             .map(ContribuinteIndividual::clone)
-                                                            .collect(Collectors.toSet());
+                                                            .collect(Collectors.toList());
     }
 
     /**
@@ -518,7 +518,7 @@ public class JavaFactura implements Serializable {
             }else{
                 try{
                     registarEmpresarial(nif, email, name, address, pass, fiscalCoefficient, econSectors,
-                                        Conselho.values()[r.nextInt(Conselho.values().length)]);
+                                        Concelho.values()[r.nextInt(Concelho.values().length)]);
                 }catch(ContribuinteAlreadyExistsException e){
                     e.printStackTrace();
                 }

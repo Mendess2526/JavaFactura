@@ -1,7 +1,7 @@
 package javafactura.gui.admin;
 
 import com.sun.javafx.collections.ObservableListWrapper;
-import javafactura.businessLogic.Conselho;
+import javafactura.businessLogic.Concelho;
 import javafactura.businessLogic.JavaFactura;
 import javafactura.businessLogic.econSectors.EconSector;
 import javafactura.businessLogic.exceptions.ContribuinteAlreadyExistsException;
@@ -33,7 +33,7 @@ public class AdminAddEmpresaFX extends FormFX {
      */
     private final MenuButton sectorsBox;
     private final Text sectorsBoxError;
-    private final ComboBox<Conselho> conselhoDropDown;
+    private final ComboBox<Concelho> conselhoDropDown;
     private final Text conselhoError;
 
     /**
@@ -54,10 +54,10 @@ public class AdminAddEmpresaFX extends FormFX {
         this.sectorsBoxError = new Text();
         this.sectorsBoxError.setFill(Color.RED);
         appendField("Setores económicos", this.sectorsBox, this.sectorsBoxError);
-        this.conselhoDropDown = new ComboBox<>(new ObservableListWrapper<>(Arrays.asList(Conselho.values())));
+        this.conselhoDropDown = new ComboBox<>(new ObservableListWrapper<>(Arrays.asList(Concelho.values())));
         this.conselhoError = new Text();
         this.conselhoError.setFill(Color.RED);
-        appendField("Conselho", this.conselhoDropDown, this.conselhoError);
+        appendField("Concelho", this.conselhoDropDown, this.conselhoError);
     }
 
     /**

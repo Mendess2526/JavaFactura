@@ -51,4 +51,13 @@ public class ContribuinteIndividualFamiliaNumerosa extends ContribuinteIndividua
         sum += sum * 0.01 * this.facturas.stream().filter(Factura::isEmpresaInterior).count();
         return sum;
     }
+
+    /**
+     * Creates a deep copy of the instance
+     * @return a deep copy of the instance
+     */
+    @Override
+    public ContribuinteIndividual clone(){
+        return super.clone();
+    }
 }
