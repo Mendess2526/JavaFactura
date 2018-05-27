@@ -62,7 +62,7 @@
 \chapter{Introdução}
     Este trabalho foi realizado no âmbito da unidade curricular programação
     orientada a objectos e teve como objetivo a implementação de um sistema
-    similar ao \href{https://faturas.portaldasfinancas.gov.pt}{EFatura}
+    similar ao \href{https://faturas.portaldasfinancas.gov.pt}{EFatura},
     aplicando os conceitos lecionados nas aulas.
 
 \chapter{Principais entidades do Sistema}
@@ -73,8 +73,8 @@
         \caption{Diagrama de uma Factura}\label{fig:Factura}
     \end{wrapfigure}
 
-    A classe \textbf{Factura} representa um documento de despesa no sistema.
-    Esta por si guarda todas as informações pedidas nos requisitos:
+    A classe \mintinline{java}{Factura} representa um documento de despesa no
+    sistema. Esta guarda todas as informações pedidas nos requisitos:
     \begin{multicols}{2}
         \begin{itemize}
             \item NIF do emitente
@@ -84,17 +84,17 @@
             \item Valor da despesa
         \end{itemize}
     \end{multicols}
-    Além destes é também guardado um histórico dos estados anteriores da factura
+    Além destes, é também guardado um histórico dos estados anteriores da factura
     que é atualizado sempre que o sector de atividade economica desta é
-    alterado. Junto a esta é também alterada a data da ultima alteração.
+    alterado. A data de edição é também atualizada.
 
     A alteração do sector economico tem de obedecer a duas restrições para que
     seja executada: 1º Uma factura não pode passar a ser Pendente depois de
     emitida e 2º o sector escolhido tem de ser um dos sectores da empresa que a
     emitiu.
 
-    Para além de todos estes dados uma instancia de \textbf{Factura} guarda
-    também alguns dados necessarios para calcular a sua dedução. Estes são:
+    Para além de todos estes dados, uma instância de \mintinline{java}{Factura}
+    guarda também alguns dados necessarios para calcular a sua dedução. Estes são:
     \begin{itemize}
         \item Se a empresa que a imitiu é uma empresa do interior
         \item O coeficiente fiscal do emitente
@@ -107,16 +107,17 @@
 \pagebreak
 
     \section{Sectores de Actividade Económica}
-    Todos os sectores economicos extendem a classe \textbf{EconSector} que serve
-    apenas para disponibilizar um conjunto de todos os sectores economicos e uma
-    metodo de converter o nome do sector na sua repetiva instancia da classe.
+    \label{sec:econsector}
+    Todos os sectores economicos extendem a classe \mintinline{java}{EconSector}
+    que serve apenas para disponibilizar um conjunto de todos esses sectores e um
+    metodo de converter o nome do sector na sua repetiva instância.
     Estas sublcasses por outro lado implementam um padrão \textit{Singleton}, ou
     seja, em qualquer momento exite apenas uma instancia de cada um destes
-    objectos em memória. Esta decisão foi tomada porque estes objectos não tem
-    estado e como tal são imutaveis, podendo-se assim poupar memória, mas
-    sobretudo ter a garantia que as implementações por defeito do
-    \mintinline{java}{equals()} e \mintinline{java}{hashcode()} funcionam
-    perfeitamente.
+    objectos em memória. A opção pelo padrão \textit{Singleton} foi tomada porque
+    estes objectos não tem estado e, como tal, são imutaveis, podendo-se assim
+    poupar memória, mas, sobretudo, para ter a garantia que as implementações por
+    defeito do \mintinline{java}{equals()} e \mintinline{java}{hashcode()}
+    funcionam perfeitamente.
     \begin{figure}[h]
         \begin{minted}{java}
 public final class Pendente extends EconSector {
@@ -131,11 +132,12 @@ public final class Pendente extends EconSector {
     }
 }
         \end{minted}
-        \caption{Implementação \textit{Singleton} da classe \textbf{Pendente}}
+        \caption{Implementação \textit{Singleton} da classe
+                \mintinline{java}{Pendente}}
         \label{fig:singleton}
     \end{figure}
 
-    Os sectores economicos estão dividos em duas categorias, deduziveis
+    Os sectores economicos estão dividos em duas categorias: deduziveis
     e não deduziveis. Esta distinção é feita atravez de uma interface que
     obriga à implementação do metodo \mintinline{java}{deduction()} que calcula
     o valor que é deduzido do valor inicial da despesa.
@@ -146,11 +148,11 @@ public interface Deductible {
                     float coeffEmpresa, float coeffIndividual);
 }
         \end{minted}
-        \caption{Implementação da interface \textbf{Deductible}}
+        \caption{Implementação da interface \mintinline{java}{Deductible}}
         \label{fig:deductible}
     \end{figure}
 
-    Os dados necessarios a este calculo são:
+    Os dados necessários a este cálculo são:
     \begin{itemize}
         \item Valor da despesa
         \item Se a factura foi emitida por uma empresa do interior
@@ -169,12 +171,13 @@ public interface Deductible {
 \pagebreak
 
     \section{User}
-    A interface \textbf{User} é implementada por duas classes, \textbf{Admin} e
-    \textbf{Contribuinte}. Esta ultima, sendo um classe abstrata é ainda
-    estendida por \textbf{ContribuinteEmpresarial} e
-    \textbf{ContribuinteIndividual}.
+    A interface \mintinline{java}{User} é implementada por duas classes:
+    \mintinline{java}{Admin} e \mintinline{java}{Contribuinte}. Esta última, sendo
+    um classe abstrata, é ainda estendida por
+    \mintinline{java}{ContribuinteEmpresarial} e
+    \mintinline{java}{ContribuinteIndividual}.
 
-    Um \textbf{User} tem obrigatoriamente de implementar
+    Um \mintinline{java}{User} tem obrigatoriamente de implementar
     \begin{multicols}{3}
     \begin{itemize}
         \item \mintinline{java}{getNif()}
@@ -184,56 +187,57 @@ public interface Deductible {
         \item \mintinline{java}{clone()}.
     \end{itemize}
     \end{multicols}
-    Um \textbf{Admin} implementa apenas a interface, não adicionando mais
-    nenhuma funcionalidade, note-se, no entanto, que o nif e nome do admin são
+    Um \mintinline{java}{Admin} implementa apenas a interface, não adicionando mais
+    nenhuma funcionalidade. Note-se, no entanto, que o nif e nome do admin são
     sempre iguais a "\mintinline{java}{admin}".
 
-    A classe \textbf{Contribuinte} para além de implementar a interface
+    A classe \mintinline{java}{Contribuinte}, para além de implementar a interface,
     guarda também como variaveis o email, morada, coeficiente fiscal, sectores
-    de actividade economica, as facturas. Estes ultimos dois atributos são
+    de actividade económica e as facturas. Estes últimos dois atributos são
     vistos de forma diferente dependendo da subclasse que a extende.
 
-    O \textbf{ContribuinteEmpresarial} acrescenta ao \textbf{Contribuinte}
-    o \textbf{Conselho} (secção \ref{sec:conselho}) onde reside, este podendo
-    ser do interior ou não. Para além disto vê as suas facturas como as vendas
-    que realizou os sectores de actividade economica como os possiveis sectores
-    que as facturas que emite podem tomar. Estes têm ainda a possibilidade de
-    emitir facturas, processo que será explicado em mais detalhe na seccção
-     \ref{sec:emissao}.
+    O \mintinline{java}{ContribuinteEmpresarial} acrescenta ao
+    \mintinline{java}{Contribuinte} o \mintinline{java}{Concelho} (secção
+    \ref{sec:concelho}) onde reside, este podendo ser do interior ou não. Para além
+    disto vê as suas facturas como as vendas que realizou e os sectores de
+    actividade económica como os possiveis sectores a que essas facturas podem
+    pertencer. Este processo de emissão de facturas sera explicado em mais detalhe
+    na seccção \ref{chp:emissao}.
 
-    O \textbf{ContribuinteIndividual} acrescenta ao \textbf{Contribuinte}
-    o agregado familiar e número destes que são dependentes. Este vê as suas
-    facturas como as suas despesas e os sectores economicos como o conjunto
-    de despesas de onde pode deduzir. Estes têm a capacidade de alterar o
-    sector ecnomico das suas facturas.
+    O \mintinline{java}{ContribuinteIndividual} acrescenta ao
+    \mintinline{java}{Contribuinte} o agregado familiar e define quantos dos seus
+    elementos são dependentes. Este vê as suas facturas como as suas despesas e os
+    sectores economicos como o conjunto de despesas de onde pode deduzir, tendo a
+    capacidade de alterar o sector ecnomico das suas facturas.
 
-    Mais tarde foi também adicionada a noção de \textbf{familia numerosa}, esta
+    Mais tarde foi também adicionada a noção de \textbf{familia numerosa}, que
     introduz a noção de familias com mais apoio social, sendo que implementam um
     metodo que permite reduzir o imposto pago.
 
     \begin{figure}[H]
         \centering
         \includegraphics[width=11cm]{./images/UserHierarquy.png}
-        \caption{Hierarquia de Classes do \textbf{User}}\label{fig:Hierarquia}
+        \caption{Hierarquia de Classes do \mintinline{java}{User}}
+        \label{fig:Hierarquia}
     \end{figure}
 
-\section{Conselhos}
-\label{sec:conselho}
-    Os conselhos disponiveis são mantidos pela aplicação na forma de um
-    \textbf{Enum} que associa a cada um \textit{boolean} a indicar se é um
-    conselho do interior ou não. Desta forma simplifica-se bastante o processo
-    de distinção das empresa que são ou não do interior. Para além disto, devido
-    ao metodo como vai ser utilizado não compromete a extensibilidade do codigo,
-    sendo apenas necessario adicionar novas entradas no enum e toda a aplicação
-    mantem o um comportamento correto.
+\section{Concelhos}
+\label{sec:concelho}
+    Os concelhos disponiveis são mantidos pela aplicação na forma de um
+    \mintinline{java}{enum} que associa a cada um um \textit{boolean} a indicar se
+    é um concelho do interior ou não. Desta forma simplifica-se bastante o processo
+    de distinção das empresas que são ou não do interior. Para além disto, devido
+    ao metodo como vai ser utilizado, não compromete a extensibilidade do codigo,
+    sendo apenas necessario adicionar novas entradas ao \mintinline{java}{enum}, e
+    toda a aplicação mantem o um comportamento correto.
 
     \begin{figure}[h]
         \begin{minted}{java}
-public enum Conselho {
+public enum Concelho {
     PORTO(false),
     BEJA(true);
     private boolean interior;
-    Conselho(boolean interior){
+    Concelho(boolean interior){
         this.interior = interior;
     }
     public boolean isInterior(){
@@ -241,32 +245,32 @@ public enum Conselho {
     }
 }
         \end{minted}
-        \caption{Excerto do enum \textbf{Conselho}}
-        \label{fig:conselhos}
+        \caption{Excerto do \mintinline{R}{enum Concelho}}
+        \label{fig:concelhos}
     \end{figure}
 
 \chapter{Emissão de Facturas e Calculo de Deduções}
+\label{chp:emissao}
 
 \section{Emissão de Facturas}
-\label{sec:emissao}
-    Para garantir a consistencia do estado interno da aplicação decidi que
-    quando uma factura é emitida tanto o emissor da factura como o cliente
-    deviam guardar a mesma instancia do objecto, assim quando o cliente
-    eventualmente alterar o sector economico da factura esta alteração é
+    Para garantir a consistência do estado interno da aplicação decidiu-se que,
+    quando uma factura é emitida, tanto o emissor da factura como o cliente
+    deviam guardar a mesma instancia do objecto, assim, quando o cliente
+    eventualmente alterar o sector economico da factura, esta alteração é
     automáticamente verificada pela empresa. Para que esta arquitetura não
     pusesse em causa o encapsulamento dos dados apenas instancias de
-    \textbf{ContribuinteIndividual} podem alterar facturas. Esta alteração
-    é também muito pequena tendo muito pouco impacto para a empresa dados
-    os requisitos pedidos.
+    \mintinline{java}{ContribuinteIndividual} podem alterar facturas. Esta
+    alteração é também muito pequena, tendo muito pouco impacto para a empresa,
+    dados os requisitos pedidos.
 
 \section{Calculo de Deduções}
-    O a formula de calculo de dedução, como foi referido anterioremente
-    \ref{fig:deductible}, a formula de dedução das despesas fica a cargo dos
-    sectores economicos, desta forma, para que uma despesa seja deduzivel
-    a correspondente factura tera de ser de um sector \textbf{Deductible}
-    e de este sector pertencer a lista de sectores a que o cliente esta
-    autorizado a deduzir. Um exemplo de uma destas formulas de calculo pode
-    ser vista na \textbf{Saude}:
+    A formula de cálculo de dedução, como foi referido anterioremente (secção
+    \ref{fig:deductible}), fica a cargo dos sectores economicos. Desta forma,
+    para que uma despesa seja dedutível, a correspondente factura terá de ser de um
+    sector \mintinline{java}{Deductible}
+    e de este sector pertencer à lista de sectores para os quais o cliente esta
+    autorizado a deduzir. Um exemplo de uma destas fórmulas de cálculo pode
+    ser vista na \mintinline{java}{Saude}:
     \begin{figure}[h]
         \begin{minted}{java}
 public float deduction(float value, boolean interior, int numDependants,
@@ -278,24 +282,25 @@ public float deduction(float value, boolean interior, int numDependants,
     return value * deduction;
 }
         \end{minted}
-        \caption{Formula de calculo implementada para o Sector \textbf{Saude}}
+        \caption{Fórmula de cálculo implementada para o Sector
+                    \mintinline{java}{Saude}}
         \label{fig:formulaDeduct}
     \end{figure}
 
 \chapter{Interface Grafica}
 
-    Quando a aplicação inicia o primeiro ecra com que nos deparamos é o de log
-    in. Este, se introduzir-mos as credenciais corretas leva-nos a um dos três
-    ecras principais.
+    Quando a aplicação inicia, o primeiro ecra com que nos deparamos é o de
+    \textit{login}. Este, se introduzir-mos as credenciais corretas, leva-nos a um
+    dos três ecras principais.
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.5\textwidth]{./images/login.png}
-    \caption{Ecra de login}
+    \includegraphics[width=0.4\textwidth]{./images/login.png}
+    \caption{Ecra de \textit{login}}
     \label{fig:login}
 \end{figure}
 
-    \section{Admin} %TODO rever
-    O ecra do administrador, que pode registar novos contribuintes, individuais
+    \section{Admin}
+    O ecra do administrador permite registar novos contribuintes, individuais
     ou empresariais, ver os 10 contribuintes individuais que gastaram mais
     dinheiro até ao momento ou ver os X contribuintes empresariais que mais
     facturas emitiram junto da quantidade monetaria facturada.
@@ -312,9 +317,9 @@ public float deduction(float value, boolean interior, int numDependants,
     \section{Contribuinte Individual}
     O ecra do contribuinte individual permite consultar o total deduzido por
     si e pelo seu agregado familiar, consultar as suas facturas ordenadas por
-    data ou valor, consultar em detalhe cada factura
+    data ou valor e consultar em detalhe cada factura
     (secção \ref{sec:viewFactura}) e alterar o seu sector economico. Pode ainda
-    consultar o seu perfil onde pode alterar o seu email, morada, e password.
+    consultar o seu perfil e alterar o seu email, morada e password.
 
 \begin{figure}[h]
     \centering
@@ -325,11 +330,11 @@ public float deduction(float value, boolean interior, int numDependants,
 
     \section{Contribuinte Empresarial}
     O ecra do contribuinte empresarial permite consultar o total facturado
-    e facturas emitidas e filtrar ambos por data, para além de as poder ordenar
-    como o contribuinte individual pode. Para além disto pode emitir facturas
-    novas e ver a lista dos seus clientes. Ao clicar num dos seus clientes pode
-    ver todas as facturas deste que foram emitidas por si e, aqui também, pode
-    filtrar por data.
+    e as facturas emitidas, filtrar ambos por data e ordenar de
+    forma analoga ao ecra do contribuinte individual. Para além disto, permite
+    emitir facturas novas e ver a lista dos seus clientes. Ao clicar num dos seus
+    clientes pode ver todas as facturas que lhe foram emitidas e, aqui
+    também, pode filtrar por data.
 
 \begin{figure}[h]
     \centering
@@ -350,15 +355,15 @@ public float deduction(float value, boolean interior, int numDependants,
     sofreu ao longo do tempo e, no caso de o utilizador autenticado ser
     um contribuinte individual, pode também alterar o sector economico desta.
 
-\chapter{Extenção da aplicação}
+\chapter{Estensibilidade da aplicação}
     A modularidade da arquitetura concebida permite que seja facilmente
-    extendida para incluir novos sectores económicos. Basta que sejam
-    adicionada um classe que implemente o mesmo padrão \textit{Singleton}
-    e adicionar esta à lista interna da super classe
-    \mintinline{java}{EconSector}. Se esta fosse deduzivel bastaria implementar
-    a interface \mintinline{java}{Deductible}.
+    estendida para incluir novos sectores económicos. Basta que seja
+    adicionada uma classe que implemente o mesmo padrão \textit{Singleton},
+    referido anteriormente (seccao \ref{sec:econsector}), e adicionar esta à lista
+    interna da super classe \mintinline{java}{EconSector}. Se esta for dedutivel
+    basta implementar a interface \mintinline{java}{Deductible}.
 
 \chapter{Conclusões e Trabalho Futuro}
-    Em suma, considero que o trabalho realizado implementa todos os requisitos
-    pedidos de forma estruturada, e mantendo encapsulamento dos dados.
+    O trabalho realizado implementa todos os requisitos
+    pedidos de forma estruturada, mantendo o encapsulamento dos dados.
 \end{document}
