@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>javafactura.businessLogic</OriginalElement>
+  <nodes>
+    <node x="994.0290906351036" y="511.877034358047">javafactura.businessLogic.exceptions</node>
+    <node x="493.3176406926408" y="327.0">javafactura.businessLogic.econSectors.EconSector</node>
+    <node x="325.4684343434345" y="724.0">javafactura.businessLogic.Contribuinte</node>
+    <node x="758.8000609491252" y="925.552983081033">javafactura.businessLogic.ContribuinteIndividualFamiliaNumerosa</node>
+    <node x="163.99116161616178" y="833.0">javafactura.businessLogic.comparators.ContribuinteFacturaCountComparator</node>
+    <node x="68.99431818181824" y="625.0">javafactura.businessLogic.User</node>
+    <node x="553.0676406926407" y="89.0">javafactura.businessLogic.econSectors.Veterinario</node>
+    <node x="467.1568181818184" y="833.0">javafactura.businessLogic.comparators.ContribuinteSpendingComparator</node>
+    <node x="335.5396774483546" y="0.0">javafactura.businessLogic.econSectors.Deductible</node>
+    <node x="356.789862914863" y="516.0">javafactura.businessLogic.ContribuinteEmpresarial</node>
+    <node x="634.0675324675328" y="625.0">javafactura.businessLogic.Factura</node>
+    <node x="211.0676406926408" y="89.0">javafactura.businessLogic.econSectors.Reparacoes</node>
+    <node x="1003.0676406926407" y="89.0">javafactura.businessLogic.econSectors.Habitacao</node>
+    <node x="53.619318181818244" y="922.0">javafactura.businessLogic.Admin</node>
+    <node x="1125.0676406926407" y="89.0">javafactura.businessLogic.econSectors.Pendente</node>
+    <node x="809.0676406926407" y="89.0">javafactura.businessLogic.econSectors.AlojamentoRestauracao</node>
+    <node x="900.9213604368329" y="822.8486197684773">javafactura.businessLogic.ContribuinteIndividual</node>
+    <node x="458.0676406926408" y="89.0">javafactura.businessLogic.econSectors.Lares</node>
+    <node x="483.8176406926408" y="208.0">javafactura.businessLogic.econSectors.EconSector.SectorWrapper</node>
+    <node x="176.3176406926408" y="327.0">javafactura.businessLogic.Concelho</node>
+    <node x="339.0676406926408" y="89.0">javafactura.businessLogic.econSectors.Educacao</node>
+    <node x="111.0676406926408" y="89.0">javafactura.businessLogic.econSectors.Saude</node>
+    <node x="640.6436722560139" y="1093.103074141049">javafactura.businessLogic.collections.Pair</node>
+    <node x="5.0676406926407935" y="89.0">javafactura.businessLogic.econSectors.Familia</node>
+    <node x="295.3176406926408" y="327.0">javafactura.businessLogic.comparators.FacturaValorComparator</node>
+    <node x="678.0676406926407" y="89.0">javafactura.businessLogic.econSectors.Cabeleireiro</node>
+    <node x="464.6568181818184" y="1091.0">javafactura.businessLogic.JavaFactura</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="javafactura.businessLogic.ContribuinteIndividual" target="javafactura.businessLogic.exceptions">
+      <point x="69.58333333333326" y="-14.5" />
+      <point x="1054.135027946737" y="811.969258589512" />
+      <point x="1041.56605841416" y="814.0307414104882" />
+      <point x="1043.6275412351363" y="607.0614828209764" />
+      <point x="1044.6540906351033" y="563.7703435804702" />
+      <point x="-16.875" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.AlojamentoRestauracao" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="43.5" y="14.5" />
+      <point x="939.5676406926407" y="287.0" />
+      <point x="579.7407176157177" y="287.0" />
+      <point x="32.923076923076906" y="-14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.EconSector.SectorWrapper" target="javafactura.businessLogic.econSectors.Cabeleireiro">
+      <point x="18.899999999999977" y="-14.5" />
+      <point x="565.7176406926408" y="158.0" />
+      <point x="705.8176406926407" y="158.0" />
+      <point x="-27.75" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.ContribuinteIndividual" target="javafactura.businessLogic.Factura">
+      <point x="-41.75" y="-14.5" />
+      <point x="942.6713604368324" y="774.0151380231523" />
+      <point x="728.6568181818184" y="773.0" />
+      <point x="728.6568181818184" y="684.0" />
+      <point x="702.4246753246757" y="684.0" />
+      <point x="24.85714285714289" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.JavaFactura" target="javafactura.businessLogic.ContribuinteIndividual">
+      <point x="22.295454545454504" y="-14.5" />
+      <point x="541.4522727272729" y="1011.0" />
+      <point x="1045.398410546118" y="1011.507569011576" />
+      <point x="1043.8757035113895" y="1012.1424755120213" />
+      <point x="1045.016084390528" y="1010.1121994657168" />
+      <point x="62.625" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.Factura" target="javafactura.businessLogic.ContribuinteEmpresarial">
+      <point x="-39.14999999999998" y="-14.5" />
+      <point x="638.4175324675327" y="605.0" />
+      <point x="444.789862914863" y="605.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Veterinario" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="26.25" y="14.5" />
+      <point x="631.8176406926407" y="148.0" />
+      <point x="639.1676406926408" y="148.0" />
+      <point x="639.1676406926408" y="267.0" />
+      <point x="563.2791791541792" y="267.0" />
+      <point x="16.461538461538453" y="-14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.comparators.ContribuinteFacturaCountComparator" target="javafactura.businessLogic.Contribuinte">
+      <point x="0.0" y="-14.5" />
+      <point x="289.4911616161618" y="813.0" />
+      <point x="336.9684343434345" y="813.0" />
+      <point x="-46.0" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Familia" target="javafactura.businessLogic.econSectors.Deductible">
+      <point x="0.0" y="-14.5" />
+      <point x="48.06764069264079" y="49.0" />
+      <point x="344.2896774483546" y="49.0" />
+      <point x="-43.75" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.comparators.FacturaValorComparator" target="javafactura.businessLogic.Factura">
+      <point x="44.5" y="14.5" />
+      <point x="428.8176406926408" y="436.0" />
+      <point x="568.0398629148631" y="436.0" />
+      <point x="568.0398629148631" y="575.0" />
+      <point x="664.5175324675329" y="575.0" />
+      <point x="-13.049999999999955" y="-14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Pendente" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="-12.25" y="14.5" />
+      <point x="1161.8176406926407" y="188.0" />
+      <point x="1168.5676406926407" y="188.0" />
+      <point x="1168.5676406926407" y="307.0" />
+      <point x="596.2022560772562" y="307.0" />
+      <point x="49.38461538461536" y="-14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.JavaFactura" target="javafactura.businessLogic.User">
+      <point x="-17.340909090909122" y="-14.5" />
+      <point x="501.81590909090926" y="1001.0" />
+      <point x="148.11931818181824" y="1001.0" />
+      <point x="148.11931818181824" y="704.0" />
+      <point x="113.36931818181824" y="704.0" />
+      <point x="8.875" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.Factura" target="javafactura.businessLogic.econSectors.Pendente">
+      <point x="21.75" y="-14.5" />
+      <point x="699.3175324675328" y="585.0" />
+      <point x="1179.5676406926407" y="585.0" />
+      <point x="1179.5676406926407" y="188.0" />
+      <point x="1186.3176406926407" y="188.0" />
+      <point x="12.25" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Cabeleireiro" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="27.75" y="14.5" />
+      <point x="761.3176406926407" y="277.0" />
+      <point x="571.5099483849485" y="277.0" />
+      <point x="24.692307692307736" y="-14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Habitacao" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="25.5" y="14.5" />
+      <point x="1079.5676406926407" y="297.0" />
+      <point x="587.971486846487" y="297.0" />
+      <point x="41.15384615384619" y="-14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.EconSector.SectorWrapper" target="javafactura.businessLogic.econSectors.AlojamentoRestauracao">
+      <point x="31.5" y="-14.5" />
+      <point x="578.3176406926408" y="168.0" />
+      <point x="852.5676406926407" y="168.0" />
+      <point x="-43.5" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.JavaFactura" target="javafactura.businessLogic.Factura">
+      <point x="7.43181818181813" y="-14.5" />
+      <point x="526.5886363636365" y="981.0" />
+      <point x="706.6568181818184" y="981.0" />
+      <point x="706.6568181818184" y="704.0" />
+      <point x="677.5675324675328" y="704.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.Contribuinte" target="javafactura.businessLogic.Factura">
+      <point x="28.75" y="-14.5" />
+      <point x="411.7184343434345" y="684.0" />
+      <point x="640.2818181818184" y="684.0" />
+      <point x="-37.285714285714334" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.ContribuinteEmpresarial" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="66.0" y="-14.5" />
+      <point x="510.789862914863" y="496.0" />
+      <point x="523.039862914863" y="496.0" />
+      <point x="-23.77777777777783" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.ContribuinteEmpresarial" target="javafactura.businessLogic.comparators.FacturaValorComparator">
+      <point x="22.0" y="-14.5" />
+      <point x="466.789862914863" y="446.0" />
+      <point x="339.8176406926408" y="446.0" />
+      <point x="-44.5" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.JavaFactura" target="javafactura.businessLogic.Contribuinte">
+      <point x="-7.431818181818187" y="-14.5" />
+      <point x="511.7250000000002" y="981.0" />
+      <point x="425.4911616161618" y="981.0" />
+      <point x="425.4911616161618" y="813.0" />
+      <point x="359.9684343434345" y="813.0" />
+      <point x="-23.0" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.JavaFactura" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="37.15909090909088" y="-14.5" />
+      <point x="556.3159090909093" y="1041.0" />
+      <point x="1254.972128609787" y="1042.0307414104884" />
+      <point x="1257.0336114307634" y="377.03074141048825" />
+      <point x="594.3731962481963" y="376.0" />
+      <point x="47.55555555555554" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.ContribuinteIndividualFamiliaNumerosa" target="javafactura.businessLogic.ContribuinteIndividual">
+      <point x="32.5" y="-14.5" />
+      <point x="921.8076299607011" y="895.0454140694569" />
+      <point x="922.3039294484088" y="895.552983081033" />
+      <point x="-62.625" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.JavaFactura" target="javafactura.businessLogic.ContribuinteIndividualFamiliaNumerosa">
+      <point x="12.386363636363626" y="-14.5" />
+      <point x="531.543181818182" y="991.0" />
+      <point x="887.6739283357417" y="993.5378450578805" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.Factura" target="javafactura.businessLogic.exceptions">
+      <point x="39.14999999999998" y="-14.5" />
+      <point x="716.7175324675327" y="605.0" />
+      <point x="1011.9348320455915" y="606.0307414104882" />
+      <point x="-50.625" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.ContribuinteEmpresarial" target="javafactura.businessLogic.Contribuinte">
+      <point x="-25.14285714285711" y="14.5" />
+      <point x="419.6470057720059" y="674.0" />
+      <point x="392.55176767676784" y="674.0" />
+      <point x="9.583333333333314" y="-14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Saude" target="javafactura.businessLogic.econSectors.Deductible">
+      <point x="0.0" y="-14.5" />
+      <point x="151.0676406926408" y="59.0" />
+      <point x="361.7896774483546" y="59.0" />
+      <point x="-26.25" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.ContribuinteIndividualFamiliaNumerosa" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="-32.5" y="-14.5" />
+      <point x="857.3151989722774" y="702.8281389136245" />
+      <point x="861.3530369526588" y="396.76402493321484" />
+      <point x="853.2319327674405" y="396.5075690115762" />
+      <point x="570.5954184704186" y="396.0" />
+      <point x="23.77777777777783" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Educacao" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="-24.75" y="14.5" />
+      <point x="363.8176406926408" y="277.0" />
+      <point x="522.1253330003331" y="277.0" />
+      <point x="-24.692307692307736" y="-14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.comparators.ContribuinteSpendingComparator" target="javafactura.businessLogic.Contribuinte">
+      <point x="-57.25" y="-14.5" />
+      <point x="524.4068181818184" y="793.0" />
+      <point x="405.9684343434345" y="793.0" />
+      <point x="23.0" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.EconSector.SectorWrapper" target="javafactura.businessLogic.econSectors.Pendente">
+      <point x="56.700000000000045" y="-14.5" />
+      <point x="603.5176406926408" y="188.0" />
+      <point x="1137.3176406926407" y="188.0" />
+      <point x="-36.75" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.ContribuinteIndividual" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="41.75" y="-14.5" />
+      <point x="1027.1864984599847" y="799.9545859305431" />
+      <point x="1129.894370924434" y="801.9692585895118" />
+      <point x="1131.9558537454109" y="388.0614828209765" />
+      <point x="582.4843073593074" y="386.0" />
+      <point x="35.66666666666663" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.Factura" target="javafactura.businessLogic.ContribuinteIndividual">
+      <point x="37.28571428571422" y="14.5" />
+      <point x="714.853246753247" y="674.0" />
+      <point x="969.2775492168861" y="675.0151380231523" />
+      <point x="971.3078252631904" y="673.926090828139" />
+      <point x="969.9971247585896" y="762.2430988423865" />
+      <point x="-13.916666666666742" y="-14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.ContribuinteIndividual" target="javafactura.businessLogic.Contribuinte">
+      <point x="-69.58333333333326" y="-14.5" />
+      <point x="915.8531651266518" y="782.492430988424" />
+      <point x="428.9684343434345" y="783.0" />
+      <point x="46.0" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.EconSector.SectorWrapper" target="javafactura.businessLogic.econSectors.Habitacao">
+      <point x="44.10000000000002" y="-14.5" />
+      <point x="590.9176406926408" y="178.0" />
+      <point x="1028.5676406926407" y="178.0" />
+      <point x="-25.5" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Lares" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="-18.75" y="14.5" />
+      <point x="476.8176406926408" y="188.0" />
+      <point x="461.96764069264077" y="188.0" />
+      <point x="461.96764069264077" y="267.0" />
+      <point x="530.3561022311023" y="267.0" />
+      <point x="-16.461538461538453" y="-14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.Admin" target="javafactura.businessLogic.User">
+      <point x="0.0" y="-14.5" />
+      <point x="-8.875" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Familia" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="-21.5" y="14.5" />
+      <point x="26.567640692640794" y="307.0" />
+      <point x="497.43302530802544" y="307.0" />
+      <point x="-49.38461538461536" y="-14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.JavaFactura" target="javafactura.businessLogic.econSectors.Pendente">
+      <point x="42.113636363636374" y="-14.5" />
+      <point x="561.2704545454548" y="1051.0" />
+      <point x="1241.373328675544" y="1053.0614828209764" />
+      <point x="1242.404070086032" y="188.0" />
+      <point x="1210.8176406926407" y="188.0" />
+      <point x="36.75" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Habitacao" target="javafactura.businessLogic.econSectors.Deductible">
+      <point x="0.0" y="-14.5" />
+      <point x="1054.0676406926407" y="69.0" />
+      <point x="414.2896774483546" y="69.0" />
+      <point x="26.25" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Reparacoes" target="javafactura.businessLogic.econSectors.Deductible">
+      <point x="0.0" y="-14.5" />
+      <point x="265.0676406926408" y="69.0" />
+      <point x="379.2896774483546" y="69.0" />
+      <point x="-8.75" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.JavaFactura" target="javafactura.businessLogic.Admin">
+      <point x="-32.20454545454544" y="-14.5" />
+      <point x="486.95227272727294" y="1031.0" />
+      <point x="67.61931818181824" y="1031.0" />
+      <point x="-28.0" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.ContribuinteEmpresarial" target="javafactura.businessLogic.ContribuinteIndividual">
+      <point x="75.42857142857144" y="14.5" />
+      <point x="520.2184343434344" y="565.0" />
+      <point x="988.9062224136803" y="567.0302760463045" />
+      <point x="987.891084390528" y="566.8290293855745" />
+      <point x="999.3531651266517" y="567.3365983971506" />
+      <point x="13.916666666666742" y="-14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.JavaFactura" target="javafactura.businessLogic.comparators.ContribuinteSpendingComparator">
+      <point x="2.477272727272748" y="-14.5" />
+      <point x="521.6340909090911" y="971.0" />
+      <point x="581.6568181818184" y="971.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.comparators.ContribuinteSpendingComparator" target="javafactura.businessLogic.Factura">
+      <point x="57.25" y="-14.5" />
+      <point x="638.9068181818184" y="704.0" />
+      <point x="665.1389610389613" y="704.0" />
+      <point x="-12.428571428571445" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.JavaFactura" target="javafactura.businessLogic.ContribuinteEmpresarial">
+      <point x="-47.06818181818181" y="-14.5" />
+      <point x="472.08863636363657" y="1061.0" />
+      <point x="26.0" y="1061.0" />
+      <point x="26.0" y="595.0" />
+      <point x="369.3612914862916" y="595.0" />
+      <point x="-75.42857142857144" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.Factura" target="javafactura.businessLogic.econSectors.Deductible">
+      <point x="30.450000000000045" y="-14.5" />
+      <point x="708.0175324675329" y="595.0" />
+      <point x="1233.5676406926407" y="595.0" />
+      <point x="1233.5676406926407" y="59.0" />
+      <point x="431.7896774483546" y="59.0" />
+      <point x="43.75" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.EconSector.SectorWrapper" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="42.0" y="14.5" />
+      <point x="588.8176406926408" y="257.0" />
+      <point x="555.04840992341" y="257.0" />
+      <point x="8.23076923076917" y="-14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.JavaFactura" target="javafactura.businessLogic.exceptions">
+      <point x="27.25" y="-14.5" />
+      <point x="546.4068181818184" y="1021.0" />
+      <point x="1078.0152371362813" y="1023.0614828209764" />
+      <point x="1078.0152371362815" y="608.0922242314647" />
+      <point x="1079.4348320455917" y="592.631103074141" />
+      <point x="16.875" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.ContribuinteEmpresarial" target="javafactura.businessLogic.Factura">
+      <point x="50.285714285714334" y="14.5" />
+      <point x="495.07557720057736" y="585.0" />
+      <point x="655.8175324675328" y="585.0" />
+      <point x="-21.75" y="-14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.EconSector.SectorWrapper" target="javafactura.businessLogic.econSectors.Reparacoes">
+      <point x="-31.5" y="-14.5" />
+      <point x="515.3176406926408" y="158.0" />
+      <point x="292.0676406926408" y="158.0" />
+      <point x="27.0" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Educacao" target="javafactura.businessLogic.econSectors.Deductible">
+      <point x="0.0" y="-14.5" />
+      <point x="388.5676406926408" y="69.0" />
+      <point x="396.7896774483546" y="69.0" />
+      <point x="8.75" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.EconSector.SectorWrapper" target="javafactura.businessLogic.econSectors.Familia">
+      <point x="-56.69999999999993" y="-14.5" />
+      <point x="490.11764069264086" y="178.0" />
+      <point x="69.5676406926408" y="178.0" />
+      <point x="21.5" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.JavaFactura" target="javafactura.businessLogic.comparators.ContribuinteFacturaCountComparator">
+      <point x="-12.386363636363626" y="-14.5" />
+      <point x="506.77045454545475" y="991.0" />
+      <point x="289.4911616161618" y="991.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.EconSector.SectorWrapper" target="javafactura.businessLogic.econSectors.Veterinario">
+      <point x="6.2999999999999545" y="-14.5" />
+      <point x="553.1176406926407" y="148.0" />
+      <point x="579.3176406926407" y="148.0" />
+      <point x="-26.25" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.EconSector.SectorWrapper" target="javafactura.businessLogic.econSectors.Saude">
+      <point x="-44.099999999999966" y="-14.5" />
+      <point x="502.7176406926408" y="168.0" />
+      <point x="171.0676406926408" y="168.0" />
+      <point x="20.0" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Saude" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="-20.0" y="14.5" />
+      <point x="131.0676406926408" y="297.0" />
+      <point x="505.6637945387946" y="297.0" />
+      <point x="-41.15384615384619" y="-14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.EconSector.SectorWrapper" target="javafactura.businessLogic.econSectors.Lares">
+      <point x="-6.2999999999999545" y="-14.5" />
+      <point x="540.5176406926408" y="138.0" />
+      <point x="514.3176406926408" y="138.0" />
+      <point x="18.75" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.ContribuinteEmpresarial" target="javafactura.businessLogic.Concelho">
+      <point x="-66.0" y="-14.5" />
+      <point x="378.789862914863" y="466.0" />
+      <point x="225.8176406926408" y="466.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.Reparacoes" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="-27.0" y="14.5" />
+      <point x="238.0676406926408" y="287.0" />
+      <point x="513.8945637695639" y="287.0" />
+      <point x="-32.923076923076906" y="-14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.Factura" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="4.350000000000023" y="-14.5" />
+      <point x="681.9175324675327" y="416.0" />
+      <point x="546.8176406926408" y="416.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.Contribuinte" target="javafactura.businessLogic.econSectors.EconSector">
+      <point x="-9.583333333333314" y="-14.5" />
+      <point x="373.3851010101012" y="674.0" />
+      <point x="346.289862914863" y="674.0" />
+      <point x="346.289862914863" y="486.0" />
+      <point x="511.1509740259741" y="486.0" />
+      <point x="-35.666666666666686" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.EconSector.SectorWrapper" target="javafactura.businessLogic.econSectors.Educacao">
+      <point x="-18.899999999999977" y="-14.5" />
+      <point x="527.9176406926408" y="148.0" />
+      <point x="413.3176406926408" y="148.0" />
+      <point x="24.75" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.Contribuinte" target="javafactura.businessLogic.User">
+      <point x="-47.916666666666686" y="-14.5" />
+      <point x="335.05176767676784" y="694.0" />
+      <point x="131.11931818181824" y="694.0" />
+      <point x="26.625" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.ContribuinteIndividualFamiliaNumerosa" target="javafactura.businessLogic.Factura">
+      <point x="-97.5" y="-14.5" />
+      <point x="791.387931666391" y="901.775698432242" />
+      <point x="717.6568181818184" y="902.0" />
+      <point x="717.6568181818184" y="694.0" />
+      <point x="689.9961038961042" y="694.0" />
+      <point x="12.428571428571445" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.JavaFactura" target="javafactura.businessLogic.collections.Pair">
+      <point x="52.02272727272725" y="-14.5" />
+      <point x="571.1795454545456" y="1071.0" />
+      <point x="692.6744136665025" y="1072.0307414104882" />
+      <point x="17.0" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.econSectors.EconSector" target="javafactura.businessLogic.econSectors.EconSector.SectorWrapper">
+      <point x="-8.230769230769283" y="-14.5" />
+      <point x="538.5868714618715" y="257.0" />
+      <point x="504.8176406926408" y="257.0" />
+      <point x="-42.0" y="14.5" />
+    </edge>
+    <edge source="javafactura.businessLogic.JavaFactura" target="javafactura.businessLogic.Concelho">
+      <point x="-52.02272727272725" y="-14.5" />
+      <point x="467.1340909090911" y="1071.0" />
+      <point x="21.045454545454618" y="1071.0" />
+      <point x="21.045454545454618" y="496.0" />
+      <point x="192.8176406926408" y="496.0" />
+      <point x="-33.0" y="14.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.9701754385964914" x="923.8354430379745" y="615.49547920434" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>public</VISIBILITY>
+</Diagram>
+
