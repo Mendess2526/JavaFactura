@@ -135,7 +135,7 @@ public class ViewFacturaFX extends FX {
         this.gridPane.add(this.econSector, 1, row++);
 
         if(tableRefresher != null){
-            this.editSector = new MenuButton("Mudar Setor");
+            this.editSector = new MenuButton("Mudar Sector");
             this.gridPane.add(editSector, 0, row++);
         }else{
             this.editSector = null;
